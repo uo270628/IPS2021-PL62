@@ -1,0 +1,394 @@
+package ui;
+
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import business.Articulo;
+import business.Autor;
+
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+import java.awt.event.ActionEvent;
+
+public class UploadWindow extends JDialog {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField textFieldTitle;
+	private JLabel lblTitle;
+	private JTextField textFieldAuthor;
+	private JLabel lblAuthor;
+	private JTextArea textAreaResumen;
+	private JLabel lblResumen;
+	private JScrollPane scrollPaneResumen;
+	private JLabel lblOtherAuthors;
+	private JTextField textFieldOtherAutors;
+	private JButton btnAddAuthor;
+	private JScrollPane scrollPaneOtherAuthors;
+	private JTextArea textAreaOtherAuthors;
+	private JLabel lblKeywords;
+	private JTextField textFieldKeywords;
+	private JButton btnAddKeyword;
+	private JScrollPane scrollPaneKeywords;
+	private JTextArea textAreaKeywords;
+	private JButton btnBack;
+	private JButton btnNext;
+	private JButton btnDeleteOtherAuthors;
+	private JButton btnDeleteKeywords;
+	
+	private IdArticleWindow iaw;
+	private List<Autor> authors;
+	private List<String> keywords;
+	private Articulo article;
+	
+	/**
+	 * Create the frame.
+	 * @param idArticleWindow 
+	 * @param idArticleWindow 
+	 */
+	public UploadWindow(IdArticleWindow idArticleWindow, Articulo article) {
+		this.iaw = idArticleWindow;
+		this.article = article;
+		if(article != null) {
+			this.authors = article.getAuthors();
+			this.keywords = article.getKeywords();
+		}else {
+			this.authors = new LinkedList<>();
+			this.keywords = new LinkedList<>();
+		}
+		
+		setModal(true);
+		setResizable(false);
+		setTitle("Ventana de confirmaci\u00F3n");
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 599, 485);
+		setLocationRelativeTo(null);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		contentPane.add(getTextFieldTitle());
+		contentPane.add(getLblTitle());
+		contentPane.add(getTextFieldAuthor());
+		contentPane.add(getLblAuthor());
+		contentPane.add(getLblResumen());
+		contentPane.add(getScrollPaneResumen());
+		contentPane.add(getLblOtherAuthors());
+		contentPane.add(getTextFieldOtherAutors());
+		contentPane.add(getBtnAddAuthor());
+		contentPane.add(getScrollPaneOtherAuthors());
+		contentPane.add(getLblKeywords());
+		contentPane.add(getTextFieldKeywords());
+		contentPane.add(getBtnAddKeyword());
+		contentPane.add(getScrollPaneKeywords());
+		contentPane.add(getBtnBack());
+		contentPane.add(getBtnNext());
+		contentPane.add(getBtnDeleteOtherAuthors());
+		contentPane.add(getBtnDeleteKeywords());
+	}
+	public JTextField getTextFieldTitle() {
+		if (textFieldTitle == null) {
+			textFieldTitle = new JTextField();
+			textFieldTitle.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			textFieldTitle.setBounds(167, 24, 205, 25);
+			textFieldTitle.setColumns(10);
+			if(article != null)
+				if(article.getTitle() != null)
+					textFieldTitle.setText(article.getTitle());
+		}
+		return textFieldTitle;
+	}
+	public JLabel getLblTitle() {
+		if (lblTitle == null) {
+			lblTitle = new JLabel("T\u00EDtulo:");
+			lblTitle.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lblTitle.setBounds(37, 30, 60, 13);
+		}
+		return lblTitle;
+	}
+	public JTextField getTextFieldAuthor() {
+		if (textFieldAuthor == null) {
+			textFieldAuthor = new JTextField();
+			textFieldAuthor.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			textFieldAuthor.setBounds(167, 59, 205, 25);
+			textFieldAuthor.setColumns(10);
+			if(article != null)
+				if(article.getAuthor() != null)
+					textFieldAuthor.setText(article.getAuthor().getName());
+		}
+		return textFieldAuthor;
+	}
+	public JLabel getLblAuthor() {
+		if (lblAuthor == null) {
+			lblAuthor = new JLabel("Autor principal:");
+			lblAuthor.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lblAuthor.setBounds(37, 60, 94, 13);
+		}
+		return lblAuthor;
+	}
+	public JTextArea getTextAreaResumen() {
+		if (textAreaResumen == null) {
+			textAreaResumen = new JTextArea();
+			textAreaResumen.setLineWrap(true);
+			textAreaResumen.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			if(article != null)
+				if(article.getResumen() != null)
+					textAreaResumen.setText(article.getResumen());
+		}
+		return textAreaResumen;
+	}
+	public JLabel getLblResumen() {
+		if (lblResumen == null) {
+			lblResumen = new JLabel("Resumen:");
+			lblResumen.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lblResumen.setBounds(37, 196, 60, 13);
+		}
+		return lblResumen;
+	}
+	public JScrollPane getScrollPaneResumen() {
+		if (scrollPaneResumen == null) {
+			scrollPaneResumen = new JScrollPane();
+			scrollPaneResumen.setBounds(167, 192, 205, 65);
+			scrollPaneResumen.setViewportView(getTextAreaResumen());
+		}
+		return scrollPaneResumen;
+	}
+	public JLabel getLblOtherAuthors() {
+		if (lblOtherAuthors == null) {
+			lblOtherAuthors = new JLabel("Otros autores:");
+			lblOtherAuthors.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lblOtherAuthors.setBounds(37, 120, 94, 13);
+		}
+		return lblOtherAuthors;
+	}
+	public JTextField getTextFieldOtherAutors() {
+		if (textFieldOtherAutors == null) {
+			textFieldOtherAutors = new JTextField();
+			textFieldOtherAutors.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			textFieldOtherAutors.setBounds(167, 114, 129, 25);
+			textFieldOtherAutors.setColumns(10);
+		}
+		return textFieldOtherAutors;
+	}
+	public JButton getBtnAddAuthor() {
+		if (btnAddAuthor == null) {
+			btnAddAuthor = new JButton("A\u00F1adir");
+			btnAddAuthor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					addAuthor();
+				}
+			});
+			btnAddAuthor.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnAddAuthor.setBounds(306, 114, 85, 25);
+		}
+		return btnAddAuthor;
+	}
+	public JScrollPane getScrollPaneOtherAuthors() {
+		if (scrollPaneOtherAuthors == null) {
+			scrollPaneOtherAuthors = new JScrollPane();
+			scrollPaneOtherAuthors.setBounds(401, 116, 172, 53);
+			scrollPaneOtherAuthors.setViewportView(getTextAreaOtherAuthors());
+		}
+		return scrollPaneOtherAuthors;
+	}
+	public JTextArea getTextAreaOtherAuthors() {
+		if (textAreaOtherAuthors == null) {
+			textAreaOtherAuthors = new JTextArea();
+			textAreaOtherAuthors.setEditable(false);
+			textAreaOtherAuthors.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			if(article != null)
+				textAreaOtherAuthors.setText(listAuthors());
+		}
+		return textAreaOtherAuthors;
+	}
+	public JLabel getLblKeywords() {
+		if (lblKeywords == null) {
+			lblKeywords = new JLabel("Palabras clave:");
+			lblKeywords.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lblKeywords.setBounds(37, 321, 85, 13);
+		}
+		return lblKeywords;
+	}
+	public JTextField getTextFieldKeywords() {
+		if (textFieldKeywords == null) {
+			textFieldKeywords = new JTextField();
+			textFieldKeywords.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			textFieldKeywords.setBounds(167, 319, 129, 25);
+			textFieldKeywords.setColumns(10);
+		}
+		return textFieldKeywords;
+	}
+	public JButton getBtnAddKeyword() {
+		if (btnAddKeyword == null) {
+			btnAddKeyword = new JButton("A\u00F1adir");
+			btnAddKeyword.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					addKeyword();
+				}
+			});
+			btnAddKeyword.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnAddKeyword.setBounds(306, 321, 85, 24);
+		}
+		return btnAddKeyword;
+	}
+	public JScrollPane getScrollPaneKeywords() {
+		if (scrollPaneKeywords == null) {
+			scrollPaneKeywords = new JScrollPane();
+			scrollPaneKeywords.setBounds(401, 321, 172, 65);
+			scrollPaneKeywords.setViewportView(getTextAreaKeywords());
+		}
+		return scrollPaneKeywords;
+	}
+	public JTextArea getTextAreaKeywords() {
+		if (textAreaKeywords == null) {
+			textAreaKeywords = new JTextArea();
+			textAreaKeywords.setEditable(false);
+			textAreaKeywords.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			if(article != null)
+				textAreaKeywords.setText(listKeywords());
+		}
+		return textAreaKeywords;
+	}
+	public JButton getBtnBack() {
+		if (btnBack == null) {
+			btnBack = new JButton("Atr\u00E1s");
+			btnBack.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
+			btnBack.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnBack.setBounds(488, 418, 85, 21);
+		}
+		return btnBack;
+	}
+	public JButton getBtnNext() {
+		if (btnNext == null) {
+			btnNext = new JButton("Siguiente");
+			btnNext.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					checkFields();
+				}
+			});
+			btnNext.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnNext.setBounds(393, 418, 85, 21);
+		}
+		return btnNext;
+	}
+	public JButton getBtnDeleteOtherAuthors() {
+		if (btnDeleteOtherAuthors == null) {
+			btnDeleteOtherAuthors = new JButton("Borrar");
+			btnDeleteOtherAuthors.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					removeAuthor();
+				}
+			});
+			btnDeleteOtherAuthors.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnDeleteOtherAuthors.setBounds(306, 149, 85, 21);
+		}
+		return btnDeleteOtherAuthors;
+	}
+	public JButton getBtnDeleteKeywords() {
+		if (btnDeleteKeywords == null) {
+			btnDeleteKeywords = new JButton("Borrar");
+			btnDeleteKeywords.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					removeKeyword();
+				}
+			});
+			btnDeleteKeywords.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnDeleteKeywords.setBounds(306, 355, 85, 21);
+		}
+		return btnDeleteKeywords;
+	}
+	
+	private String listAuthors() {
+		String str = "";
+		for(Autor author: authors) {
+			str += author.getName() + "\n";
+		}
+		return str.trim();
+	}
+	
+	private String listKeywords() {
+		String str = "";
+		for(String keyword: keywords) {
+			str += keyword + "\n";
+		}
+		return str.trim();
+	}
+	
+	public void disposeAll() {
+		if(iaw != null)
+			iaw.dispose();
+		this.dispose();
+	}
+	
+	private void openDocWindow() {
+		String id;
+		if(article == null) {
+			id = UUID.randomUUID().toString().substring(0, 20);
+		}else {
+			id = article.getId();
+		}
+		DocumentsWindow dw = new DocumentsWindow(this, 
+				new Articulo(id, 
+						getTextFieldTitle().getText(), 
+						new Autor(getTextFieldAuthor().getText()),
+						authors, getTextAreaResumen().getText(), 
+						keywords), article);
+		dw.setVisible(true);
+	}
+	
+	private void addAuthor() {
+		if(! getTextFieldOtherAutors().getText().trim().equals("")) {
+			authors.add(new Autor(getTextFieldOtherAutors().getText().trim()));
+			getTextFieldOtherAutors().setText("");
+			getTextAreaOtherAuthors().setText(listAuthors());
+		}
+	}
+	
+	private void addKeyword() {
+		if(! getTextFieldKeywords().getText().trim().equals("")) {
+			keywords.add(getTextFieldKeywords().getText().trim());
+			getTextFieldKeywords().setText("");
+			getTextAreaKeywords().setText(listKeywords());
+		}
+	}
+	
+	private void checkFields() {
+		if(getTextFieldAuthor().getText().trim().equals("")) {
+			JOptionPane.showMessageDialog(null, "Necesitas por lo menos identificarte como autor.");
+		}else {
+			openDocWindow();
+		}
+	}
+	
+	private void removeAuthor() {
+		if(listAuthors().contains(getTextFieldOtherAutors().getText().trim())) {
+			authors.remove(new Autor(getTextFieldOtherAutors().getText().trim()));
+			getTextAreaOtherAuthors().setText(listAuthors());
+			getTextFieldOtherAutors().setText("");
+		}
+	}
+	
+	private void removeKeyword() {
+		if(listKeywords().contains(getTextFieldKeywords().getText().trim())) {
+			keywords.remove(getTextFieldKeywords().getText().trim());
+			getTextAreaKeywords().setText(listKeywords());
+			getTextFieldKeywords().setText("");
+		}
+	}
+}
