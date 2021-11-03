@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.CardLayout;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +29,6 @@ public class VentanaEditor extends JFrame {
 	private JPanel panelCard;
 	private JPanel panelGestor;
 	private JComboBox<Articulo> comboBoxArticulosConEditor;
-	private JButton btnOrdenarArticulos;
 	private JTextField textFieldFiltrarPorTitulo;
 	private JTextField textFieldFiltrarPorAutor;
 	private JButton btnFiltrarPorTitulo;
@@ -37,7 +37,7 @@ public class VentanaEditor extends JFrame {
 	private JLabel lblInsertarID;
 	private JTextField textFieldIdEditor;
 	private JButton btnAccederEditor;
-	
+
 	private Editor editor;
 	private JLabel lblEditor;
 	private JPanel panelANuevos;
@@ -48,10 +48,26 @@ public class VentanaEditor extends JFrame {
 	private JLabel lblResumen;
 	private JButton btnVisto;
 	private JButton btnElegirRevisores;
-	
+
 	private List<Articulo> articulos;
 	private JButton btnVerNuevosArticulos;
 	private JButton btnAtras;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					VentanaEditor window = new VentanaEditor();
+					window.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Create the frame.
@@ -59,12 +75,12 @@ public class VentanaEditor extends JFrame {
 	public VentanaEditor() {
 		articulos = DataBaseArticle.loadArticles();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 471, 317);
+		setBounds(100, 100, 498, 324);
 		panelCard = new JPanel();
 		panelCard.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(panelCard);
 		panelCard.setLayout(new CardLayout(0, 0));
-		
+
 		panelCard.add(getPanelRegistro(), "registro");
 		panelCard.add(getPanelGestor(), "gestion");
 		panelCard.add(getPanelANuevos(), "a_nuevos");
@@ -76,13 +92,20 @@ public class VentanaEditor extends JFrame {
 			panelGestor = new JPanel();
 			panelGestor.setLayout(null);
 			panelGestor.add(getComboBoxArticulosConEditor());
-			panelGestor.add(getBtnOrdenarArticulos());
 			panelGestor.add(getTextFieldFiltrarPorTitulo());
 			panelGestor.add(getTextFieldFiltrarPorAutor());
 			panelGestor.add(getBtnFiltrarPorTitulo());
 			panelGestor.add(getBtnFiltrarPorAutor());
 			panelGestor.add(getLblEditor());
 			panelGestor.add(getBtnVerNuevosArticulos());
+
+			JLabel lblNewLabel = new JLabel("T\u00EDtulo");
+			lblNewLabel.setBounds(41, 97, 96, 14);
+			panelGestor.add(lblNewLabel);
+
+			JLabel lblNewLabel_1 = new JLabel("Autor");
+			lblNewLabel_1.setBounds(41, 156, 96, 14);
+			panelGestor.add(lblNewLabel_1);
 		}
 		return panelGestor;
 	}
@@ -100,23 +123,10 @@ public class VentanaEditor extends JFrame {
 		}
 		return comboBoxArticulosConEditor;
 	}
-
-	private JButton getBtnOrdenarArticulos() {
-		if (btnOrdenarArticulos == null) {
-			btnOrdenarArticulos = new JButton("Ordenar");
-			btnOrdenarArticulos.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					System.out.print("Método no implementado. ORDER BY ATRIBUTO");
-				}
-			});
-			btnOrdenarArticulos.setBounds(279, 113, 89, 23);
-		}
-		return btnOrdenarArticulos;
-	}
 	private JTextField getTextFieldFiltrarPorTitulo() {
 		if (textFieldFiltrarPorTitulo == null) {
 			textFieldFiltrarPorTitulo = new JTextField();
-			textFieldFiltrarPorTitulo.setBounds(41, 114, 96, 20);
+			textFieldFiltrarPorTitulo.setBounds(41, 119, 96, 20);
 			textFieldFiltrarPorTitulo.setColumns(10);
 		}
 		return textFieldFiltrarPorTitulo;
@@ -124,7 +134,7 @@ public class VentanaEditor extends JFrame {
 	private JTextField getTextFieldFiltrarPorAutor() {
 		if (textFieldFiltrarPorAutor == null) {
 			textFieldFiltrarPorAutor = new JTextField();
-			textFieldFiltrarPorAutor.setBounds(41, 145, 96, 20);
+			textFieldFiltrarPorAutor.setBounds(41, 181, 96, 20);
 			textFieldFiltrarPorAutor.setColumns(10);
 		}
 		return textFieldFiltrarPorAutor;
@@ -142,10 +152,10 @@ public class VentanaEditor extends JFrame {
 						}
 					}
 					comboBoxArticulosConEditor.setModel(new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])))
-				;
+					;
 				}
 			});
-			btnFiltrarPorTitulo.setBounds(147, 113, 89, 23);
+			btnFiltrarPorTitulo.setBounds(147, 118, 89, 23);
 		}
 		return btnFiltrarPorTitulo;
 	}
@@ -155,7 +165,7 @@ public class VentanaEditor extends JFrame {
 			btnFiltrarPorAutor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String autor = getTextFieldFiltrarPorAutor().getText();
-					
+
 					ArrayList<Articulo> articulo = new ArrayList<Articulo>();
 					for(Articulo art:articulos) {
 						if(art.getAuthor().getName().equals(autor) && !art.getState().equals(ArticleState.SENT.toString())) {
@@ -165,7 +175,7 @@ public class VentanaEditor extends JFrame {
 					comboBoxArticulosConEditor.setModel(new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])));
 				}
 			});
-			btnFiltrarPorAutor.setBounds(147, 144, 89, 23);
+			btnFiltrarPorAutor.setBounds(147, 180, 89, 23);
 		}
 		return btnFiltrarPorAutor;
 	}
@@ -211,6 +221,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return btnAccederEditor;
 	}
+	
 	private JLabel getLblEditor() {
 		if (lblEditor == null) {
 			lblEditor = new JLabel("Editor: ");
@@ -219,6 +230,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return lblEditor;
 	}
+	
 	private JPanel getPanelANuevos() {
 		if (panelANuevos == null) {
 			panelANuevos = new JPanel();
@@ -234,6 +246,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return panelANuevos;
 	}
+	
 	private JLabel getLblArticulosNuevos() {
 		if (lblArticulosNuevos == null) {
 			lblArticulosNuevos = new JLabel("Art\u00EDculos nuevos");
@@ -242,6 +255,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return lblArticulosNuevos;
 	}
+	
 	private JComboBox<Articulo> getComboBoxArticulosEnviados() {
 		if (comboBoxArticulosEnviados == null) {
 			comboBoxArticulosEnviados = new JComboBox<Articulo>();
@@ -256,6 +270,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return comboBoxArticulosEnviados;
 	}
+	
 	private JLabel getLblAutor() {
 		if (lblAutor == null) {
 			lblAutor = new JLabel("Autor: ");
@@ -264,6 +279,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return lblAutor;
 	}
+	
 	private JTextField getTextFieldResumen() {
 		if (textFieldResumen == null) {
 			textFieldResumen = new JTextField();
@@ -273,6 +289,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return textFieldResumen;
 	}
+	
 	private JLabel getLblResumen() {
 		if (lblResumen == null) {
 			lblResumen = new JLabel("Resumen");
@@ -281,15 +298,16 @@ public class VentanaEditor extends JFrame {
 		}
 		return lblResumen;
 	}
+	
 	private JButton getBtnVisto() {
 		if (btnVisto == null) {
 			btnVisto = new JButton("Visto");
 			btnVisto.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Articulo aux = (Articulo) getComboBoxArticulosEnviados().getSelectedItem();
-					
+
 					aux.setState(ArticleState.WITH_EDITOR);
-					
+
 					ArrayList<Articulo> articulo = new ArrayList<Articulo>();
 					for(Articulo art:articulos) {
 						if(art.getState().equals(ArticleState.SENT.toString())) {
@@ -297,19 +315,19 @@ public class VentanaEditor extends JFrame {
 						}
 					}
 					comboBoxArticulosEnviados.setModel(new DefaultComboBoxModel<Articulo>(new Articulo[articulo.size()]));
-					
-					
-					
+
+
+
 					articulo = new ArrayList<Articulo>();
-					
+
 					for(Articulo art:articulos) {
 						if(art.getState().equals(ArticleState.WITH_EDITOR.toString())) {
 							articulo.add(art);
 						}
 					}
 					comboBoxArticulosConEditor.setModel(new DefaultComboBoxModel<Articulo>(articulo.toArray( new Articulo[articulo.size()])));
-					
-					
+
+
 				}
 			});
 			btnVisto.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 12));
@@ -340,7 +358,7 @@ public class VentanaEditor extends JFrame {
 					getLblEditor().setText(getLblEditor().getText() + editor.getName());
 				}
 			});
-			btnVerNuevosArticulos.setBounds(296, 234, 139, 23);
+			btnVerNuevosArticulos.setBounds(307, 229, 139, 23);
 		}
 		return btnVerNuevosArticulos;
 	}
@@ -358,7 +376,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return btnAtras;
 	}
-	
+
 	private void chooseRevisores() {
 		Articulo a = (Articulo) getComboBoxArticulosEnviados().getSelectedItem();
 		InterfazElegirRevisores interfaz = new InterfazElegirRevisores(a);

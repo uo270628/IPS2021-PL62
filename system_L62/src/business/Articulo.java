@@ -74,6 +74,13 @@ public class Articulo {
 		this.id=id;
 		this.listOfRevisoresParaRevisar=new ArrayList<Revisor>();
 	}
+	
+	
+
+	@Override
+	public String toString() {
+		return title + ", " + author + ", " + srcFile;
+	}
 
 	public String getId() {
 		return id;
