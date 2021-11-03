@@ -265,13 +265,13 @@ public class DocumentsWindow extends JDialog {
 		}else {
 			updateArticle();
 		}
-		disposeWindows();
 	}
 
 	private void uploadArticle() {
 		boolean made = DataBaseArticle.uploadArticle(newArticle);
 		if(made) {
 			JOptionPane.showMessageDialog(null, "Se ha creado el artículo.");
+			disposeWindows();
 		}else {
 			JOptionPane.showMessageDialog(null, "Ha habido un error al intentar crear el artículo.");
 		}
@@ -281,6 +281,7 @@ public class DocumentsWindow extends JDialog {
 		boolean made = DataBaseArticle.updateArticle(newArticle);
 		if(made) {
 			JOptionPane.showMessageDialog(null, "Se ha actualizado el artículo.");
+			disposeWindows();
 		}else {
 			JOptionPane.showMessageDialog(null, "Ha habido un error al intentar actualizar el artículo.");
 		}

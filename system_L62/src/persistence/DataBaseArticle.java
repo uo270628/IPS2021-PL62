@@ -32,7 +32,8 @@ public class DataBaseArticle {
 			conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			st = conn.createStatement();
 
-			result = st.execute(queryInsertArticle);
+			st.executeUpdate(queryInsertArticle);
+			result = true;
 		} catch (SQLException e) {
 			result = false;
 		} finally {
@@ -101,7 +102,7 @@ public class DataBaseArticle {
 	}
 
 	public static boolean sendArticleToAprove(String id) {
-		String queryUpdateArticle = "update articles set state = '" + Articulo.ArticleState.WITH_EDITOR
+		String queryUpdateArticle = "update articles set state = '" + Articulo.ArticleState.SENT
 				+ "' where id_articles = '" + id + "'";
 
 		Connection conn = null;
@@ -112,7 +113,8 @@ public class DataBaseArticle {
 			conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			st = conn.createStatement();
 
-			result = st.execute(queryUpdateArticle);
+			st.executeUpdate(queryUpdateArticle);
+			result = true;
 		} catch (SQLException e) {
 			result = false;
 		} finally {
@@ -145,7 +147,8 @@ public class DataBaseArticle {
 			conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			st = conn.createStatement();
 
-			result = st.execute(queryPublishArticle);
+			st.executeUpdate(queryPublishArticle);
+			result = true;
 		} catch (SQLException e) {
 			result = false;
 		} finally {
@@ -232,7 +235,8 @@ public class DataBaseArticle {
 			conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			st = conn.createStatement();
 
-			result = st.execute(queryUpdateArticle);
+			st.executeUpdate(queryUpdateArticle);
+			result = true;
 		} catch (SQLException e) {
 			result = false;
 		} finally {
@@ -310,6 +314,8 @@ public class DataBaseArticle {
 
 	private static ArticleState toArticleState(String state) {
 		switch (state) {
+		case "CREATED":
+			return ArticleState.CREATED;
 		case "SENT":
 			return ArticleState.SENT;
 		case "WITH_EDITOR":
