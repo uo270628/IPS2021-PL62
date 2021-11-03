@@ -6,7 +6,7 @@ import java.util.List;
 public class Articulo {
 	
 	public enum ArticleState{
-		SENT, WITH_EDITOR, IN_REVISION, ACCEPTED, REJECTED, IN_EDITION, PUBLISHED
+		CREATED, SENT, WITH_EDITOR, IN_REVISION, ACCEPTED, REJECTED, IN_EDITION, PUBLISHED
 	}
 	
 	private String id;
@@ -33,7 +33,7 @@ public class Articulo {
 		this.authors = authors;
 		this.resumen = resumen;
 		this.keywords = keywords;
-		this.state = ArticleState.SENT;
+		this.state = ArticleState.CREATED;
 	}
 	
 	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords, Tema tema) {
