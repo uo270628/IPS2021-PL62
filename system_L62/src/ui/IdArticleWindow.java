@@ -123,9 +123,20 @@ public class IdArticleWindow extends JDialog {
 		return textFieldAuthor;
 	}
 
+<<<<<<< HEAD
 	private void updateArticle(Articulo a) {
 		UploadWindow cw = new UploadWindow(this, a);
 		cw.setVisible(true);
+=======
+	private void updateArticle() {
+		Articulo a = DataBaseArticle.searchArticle(getTextFieldID().getText().trim());
+		if (a == null)
+			JOptionPane.showMessageDialog(null, "No existe ningún artículo con ese id.");
+		else {
+			UploadWindow cw = new UploadWindow(this, a);
+			cw.setVisible(true);
+		}
+>>>>>>> refs/heads/main
 	}
 
 	private void modifyArticle() {
@@ -137,11 +148,19 @@ public class IdArticleWindow extends JDialog {
 			if (a != null) {
 				if (a.getAuthor().getName().equals(getTextFieldAuthor().getText())) {
 					if (action == UPDATE) {
+<<<<<<< HEAD
 						updateArticle(a);
 					} else if (action == SEND_TO_APPROVE) {
 						sendArticleToApprove(a);
 					} else if (action == PUBLISH) {
 						publishArticle(a);
+=======
+						updateArticle();
+					} else if (action == SEND_TO_APPROVE) {
+						sendArticleToApprove(id, a);
+					} else if (action == PUBLISH) {
+						publishArticle(id, a);
+>>>>>>> refs/heads/main
 					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Ese artículo no pertenece a ese autor.");
@@ -152,18 +171,30 @@ public class IdArticleWindow extends JDialog {
 		}
 	}
 
+<<<<<<< HEAD
 	private void publishArticle(Articulo a) {
 		if (a.getState().equals(ArticleState.ACCEPTED.toString())) {
 			DataBaseArticle.sendArticleToAprove(a.getId());
+=======
+	private void publishArticle(String id, Articulo a) {
+		if (a.getState().equals(ArticleState.ACCEPTED.toString())) {
+			DataBaseArticle.sendArticleToAprove(id);
+>>>>>>> refs/heads/main
 			JOptionPane.showMessageDialog(null, "El artículo está en proceso de ser publicado.");
 		} else {
 			JOptionPane.showMessageDialog(null, "El artículo no está en estado aceptado.");
 		}
 	}
 
+<<<<<<< HEAD
 	private void sendArticleToApprove(Articulo a) {
 		if (a.isComplete() && a.getState().equals(ArticleState.CREATED.toString())) {
 			DataBaseArticle.sendArticleToAprove(a.getId());
+=======
+	private void sendArticleToApprove(String id, Articulo a) {
+		if (a.isComplete() && a.getState().equals(ArticleState.SENT.toString())) {
+			DataBaseArticle.sendArticleToAprove(id);
+>>>>>>> refs/heads/main
 			JOptionPane.showMessageDialog(null, "El artículo está listo para ser evaluado.");
 		} else {
 			JOptionPane.showMessageDialog(null, "Faltan campos del artículo por rellenar.");
