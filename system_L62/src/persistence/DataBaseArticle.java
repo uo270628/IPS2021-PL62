@@ -70,10 +70,11 @@ public class DataBaseArticle {
 			rs = st.executeQuery(querySearchArticle);
 
 			if (rs.next()) {
-				article = new Articulo(rs.getString("id"), rs.getString("title"), new Autor(rs.getString("author")),
-						authorsToList(rs.getString("other_authors")), rs.getString("summary"),
-						toList(rs.getString("keywords")), rs.getString("presentation_card"), rs.getString("srcfile"),
-						toList(rs.getString("cv_authors")), toArticleState(rs.getString("state")));
+				article = new Articulo(rs.getString("id_articles"), rs.getString("title"),
+						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
+						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
+						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
+						toArticleState(rs.getString("state")));
 			}
 		} catch (SQLException e) {
 			article = null;
@@ -187,7 +188,7 @@ public class DataBaseArticle {
 		if (article.getAuthors().size() != 0) {
 			if (elements > 0)
 				queryUpdateArticle += ",";
-			queryUpdateArticle += " authors = '" + article.listAuthors() + "'";
+			queryUpdateArticle += " other_authors = '" + article.listAuthors() + "'";
 			elements++;
 		}
 		if (article.getResumen() != null) {
@@ -347,7 +348,8 @@ public class DataBaseArticle {
 		}
 		String[] strs = str.split(",");
 		for (int i = 0; i < strs.length; i++) {
-			list.add(strs[i]);
+			if (!strs[i].isEmpty())
+				list.add(strs[i]);
 		}
 		return list;
 	}
@@ -359,7 +361,8 @@ public class DataBaseArticle {
 		}
 		String[] strs = str.split(",");
 		for (int i = 0; i < strs.length; i++) {
-			list.add(new Autor(strs[i]));
+			if (!strs[i].isEmpty())
+				list.add(new Autor(strs[i]));
 		}
 		return list;
 	}

@@ -173,22 +173,22 @@ public class Articulo {
 	}
 
 	public boolean isComplete() {
-		if (this.title == null) {
+		if (this.title == null || this.title.isEmpty()) {
 			return false;
 		}
-		if (this.author == null) {
+		if (this.author == null || this.author.getName().isEmpty()) {
 			return false;
 		}
-		if (this.resumen == null) {
+		if (this.resumen == null || this.resumen.isEmpty()) {
 			return false;
 		}
-		if (this.srcFile == null) {
+		if (this.srcFile == null || this.srcFile.isEmpty()) {
 			return false;
 		}
-		if (this.presentationCard == null) {
+		if (this.presentationCard == null || this.presentationCard.isEmpty()) {
 			return false;
 		}
-		if (cvAuthors.size() == authors.size() + 1) {
+		if (cvAuthors.size() != authors.size() + 1) {
 			return false;
 		}
 		return true;

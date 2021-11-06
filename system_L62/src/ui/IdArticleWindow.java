@@ -1,24 +1,23 @@
 package ui;
 
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
 import business.Articulo.ArticleState;
 import persistence.DataBaseArticle;
 
-import javax.swing.JButton;
-import java.awt.Font;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 public class IdArticleWindow extends JDialog {
-	
+
 	private static final int UPDATE = 0;
 	private static final int SEND_TO_APPROVE = 1;
 	private static final int PUBLISH = 2;
@@ -29,7 +28,7 @@ public class IdArticleWindow extends JDialog {
 	private JButton btnBack;
 	private JTextField textFieldID;
 	private JLabel lblID;
-	
+
 	private int action;
 	private JLabel lblAuthor;
 	private JTextField textFieldAuthor;
@@ -39,7 +38,7 @@ public class IdArticleWindow extends JDialog {
 	 */
 	public IdArticleWindow(int action) {
 		this.action = action;
-		
+
 		setModal(true);
 		setResizable(false);
 		setTitle("ID art\u00EDculo");
@@ -61,6 +60,7 @@ public class IdArticleWindow extends JDialog {
 		if (btnNext == null) {
 			btnNext = new JButton("Siguiente");
 			btnNext.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					modifyArticle();
 				}
@@ -70,10 +70,12 @@ public class IdArticleWindow extends JDialog {
 		}
 		return btnNext;
 	}
+
 	public JButton getBtnBack() {
 		if (btnBack == null) {
 			btnBack = new JButton("Atr\u00E1s");
 			btnBack.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					dispose();
 				}
@@ -83,6 +85,7 @@ public class IdArticleWindow extends JDialog {
 		}
 		return btnBack;
 	}
+
 	public JTextField getTextFieldID() {
 		if (textFieldID == null) {
 			textFieldID = new JTextField();
@@ -92,6 +95,7 @@ public class IdArticleWindow extends JDialog {
 		}
 		return textFieldID;
 	}
+
 	public JLabel getLblID() {
 		if (lblID == null) {
 			lblID = new JLabel("ID:");
@@ -100,6 +104,7 @@ public class IdArticleWindow extends JDialog {
 		}
 		return lblID;
 	}
+
 	private JLabel getLblAuthor() {
 		if (lblAuthor == null) {
 			lblAuthor = new JLabel("Autor:");
@@ -107,6 +112,7 @@ public class IdArticleWindow extends JDialog {
 		}
 		return lblAuthor;
 	}
+
 	private JTextField getTextFieldAuthor() {
 		if (textFieldAuthor == null) {
 			textFieldAuthor = new JTextField();
@@ -116,57 +122,52 @@ public class IdArticleWindow extends JDialog {
 		}
 		return textFieldAuthor;
 	}
-	
-	private void updateArticle() {
-		Articulo a = DataBaseArticle.searchArticle(getTextFieldID().getText());
-		if(a == null)
-			JOptionPane.showMessageDialog(null, "No existe ningún artículo con ese id.");
-		else {
-			UploadWindow cw = new UploadWindow(this, a);
-			cw.setVisible(true);
-		}
+
+	private void updateArticle(Articulo a) {
+		UploadWindow cw = new UploadWindow(this, a);
+		cw.setVisible(true);
 	}
-	
+
 	private void modifyArticle() {
 		String id = getTextFieldID().getText().trim();
-		if(id.equals("")) {
+		if (id.equals("")) {
 			JOptionPane.showMessageDialog(null, "Hay algún campo vacío. Por favor, rellene la información solicitada.");
-		}else {
+		} else {
 			Articulo a = DataBaseArticle.searchArticle(id);
-			if(a != null) {
-				if(a.getAuthor().getName().equals(getTextFieldAuthor().getText())) {
-					if(action == UPDATE) {
-						updateArticle();
-					}else if(action == SEND_TO_APPROVE) {
-						sendArticleToApprove(id, a);
-					}else if(action == PUBLISH){
-						publishArticle(id, a);
+			if (a != null) {
+				if (a.getAuthor().getName().equals(getTextFieldAuthor().getText())) {
+					if (action == UPDATE) {
+						updateArticle(a);
+					} else if (action == SEND_TO_APPROVE) {
+						sendArticleToApprove(a);
+					} else if (action == PUBLISH) {
+						publishArticle(a);
 					}
-				}else {
+				} else {
 					JOptionPane.showMessageDialog(null, "Ese artículo no pertenece a ese autor.");
 				}
-			}else {
+			} else {
 				JOptionPane.showMessageDialog(null, "No se ha encontrado ningún artículo con ese ID.");
 			}
 		}
 	}
 
-	private void publishArticle(String id, Articulo a) {
-		if(a.getState().equals(ArticleState.ACCEPTED.toString())) {
-			DataBaseArticle.sendArticleToAprove(id);
+	private void publishArticle(Articulo a) {
+		if (a.getState().equals(ArticleState.ACCEPTED.toString())) {
+			DataBaseArticle.sendArticleToAprove(a.getId());
 			JOptionPane.showMessageDialog(null, "El artículo está en proceso de ser publicado.");
-		}else {
+		} else {
 			JOptionPane.showMessageDialog(null, "El artículo no está en estado aceptado.");
 		}
 	}
 
-	private void sendArticleToApprove(String id, Articulo a) {
-		if(a.isComplete() && a.getState().equals(ArticleState.SENT.toString())) {
-			DataBaseArticle.sendArticleToAprove(id);
+	private void sendArticleToApprove(Articulo a) {
+		if (a.isComplete() && a.getState().equals(ArticleState.CREATED.toString())) {
+			DataBaseArticle.sendArticleToAprove(a.getId());
 			JOptionPane.showMessageDialog(null, "El artículo está listo para ser evaluado.");
-		}else {
+		} else {
 			JOptionPane.showMessageDialog(null, "Faltan campos del artículo por rellenar.");
 		}
 	}
-	
+
 }
