@@ -154,7 +154,7 @@ public class IdArticleWindow extends JDialog {
 
 	private void publishArticle(Articulo a) {
 		if (a.getState().equals(ArticleState.ACCEPTED.toString())) {
-			DataBaseArticle.sendArticleToAprove(a.getId());
+			DataBaseArticle.publishArticle(a.getId());
 			JOptionPane.showMessageDialog(null, "El artículo está en proceso de ser publicado.");
 		} else {
 			JOptionPane.showMessageDialog(null, "El artículo no está en estado aceptado.");
