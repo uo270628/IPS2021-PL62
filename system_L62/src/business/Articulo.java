@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Articulo {
-	
-	public enum ArticleState{
-		CREATED, SENT, WITH_EDITOR, IN_REVISION, ACCEPTED, REJECTED, IN_EDITION, PUBLISHED
+
+	public enum ArticleState {
+		CREATED, SENT, WITH_EDITOR, IN_REVISION, ACCEPTED, ACCEPTED_WITH_CHANGES, REJECTED, IN_EDITION, PUBLISHED
 	}
-	
+
 	private String id;
 	private String title;
 	private Autor author;
@@ -19,13 +19,13 @@ public class Articulo {
 	private String srcFile;
 	private List<String> cvAuthors;
 	private ArticleState state;
-	
+
 	private Tema tema;
 	private List<Revisor> listOfRevisoresParaRevisar;
 	private int revisoresRestantes = 3;
 	private Carta carta;
 	private List<Comentario> comentarios;
-	
+
 	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords) {
 		this.id = id;
 		this.title = title;
@@ -35,8 +35,9 @@ public class Articulo {
 		this.keywords = keywords;
 		this.state = ArticleState.CREATED;
 	}
-	
-	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords, Tema tema) {
+
+	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
+			Tema tema) {
 		this.id = id;
 		this.title = title;
 		this.author = author;
@@ -46,7 +47,7 @@ public class Articulo {
 		this.state = ArticleState.SENT;
 		this.tema = tema;
 	}
-	
+
 	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
 			String presentationCard, String srcFile, List<String> cvAuthors, ArticleState state) {
 		this.id = id;
@@ -68,14 +69,12 @@ public class Articulo {
 		this.keywords = keywords;
 		this.srcFile = srcFile;
 	}
-	
-	public Articulo(Tema tema,String id) {
+
+	public Articulo(Tema tema, String id) {
 		this.tema = tema;
-		this.id=id;
-		this.listOfRevisoresParaRevisar=new ArrayList<Revisor>();
+		this.id = id;
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
 	}
-	
-	
 
 	@Override
 	public String toString() {
@@ -129,7 +128,7 @@ public class Articulo {
 	public void setCvAuthors(List<String> cvAuthors) {
 		this.cvAuthors = cvAuthors;
 	}
-	
+
 	public String getState() {
 		return "" + state;
 	}
@@ -137,69 +136,69 @@ public class Articulo {
 	public String listAuthors() {
 		String str = "";
 		int i = 0;
-		for(Autor author: authors) {
+		for (Autor author : authors) {
 			str += author.getName();
-			if(i != authors.size() - 1) {
+			if (i != authors.size() - 1) {
 				str += ",";
 			}
 			i++;
 		}
 		return str;
 	}
-	
+
 	public String listKeywords() {
 		String str = "";
 		int i = 0;
-		for(String keyword: keywords) {
+		for (String keyword : keywords) {
 			str += keyword;
-			if(i != keywords.size() - 1) {
+			if (i != keywords.size() - 1) {
 				str += ",";
 			}
 			i++;
 		}
 		return str;
 	}
-	
+
 	public String listCVAuthors() {
 		String str = "";
 		int i = 0;
-		for(String cv: cvAuthors) {
+		for (String cv : cvAuthors) {
 			str += cv;
-			if(i != cvAuthors.size() - 1) {
+			if (i != cvAuthors.size() - 1) {
 				str += ",";
 			}
 			i++;
 		}
 		return str;
 	}
-	
+
 	public boolean isComplete() {
-		if(this.title == null) {
+		if (this.title == null) {
 			return false;
 		}
-		if(this.author == null) {
+		if (this.author == null) {
 			return false;
 		}
-		if(this.resumen == null) {
+		if (this.resumen == null) {
 			return false;
 		}
-		if(this.srcFile == null) {
+		if (this.srcFile == null) {
 			return false;
 		}
-		if(this.presentationCard == null) {
+		if (this.presentationCard == null) {
 			return false;
 		}
-		if(cvAuthors.size() == authors.size() + 1) {
+		if (cvAuthors.size() == authors.size() + 1) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	public void añadirRevisor(Revisor revisor) {
 		revisoresRestantes--;
 		listOfRevisoresParaRevisar.add(revisor);
 	}
-	
+
 	public void eliminarRevisor(Revisor revisor) {
 		revisoresRestantes++;
 		listOfRevisoresParaRevisar.remove(revisor);
@@ -208,7 +207,7 @@ public class Articulo {
 	public Tema getTema() {
 		return tema;
 	}
-	
+
 	public void siguiente() {
 		state = ArticleState.IN_REVISION;
 	}
@@ -220,13 +219,15 @@ public class Articulo {
 	public int getRevisoresRestantes() {
 		return revisoresRestantes;
 	}
+
 	public void aceptarArticulo() {
 		state = ArticleState.ACCEPTED;
 	}
+
 	public void rechazarArticulo() {
 		state = ArticleState.REJECTED;
 	}
-	
+
 	public String getCarta() {
 		return carta.getTexto();
 	}
@@ -247,6 +248,5 @@ public class Articulo {
 		this.listOfRevisoresParaRevisar = revisores;
 		revisoresRestantes -= revisores.size();
 	}
-	
-	
+
 }

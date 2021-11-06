@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import business.Articulo;
-import business.Autor;
 import business.Articulo.ArticleState;
+import business.Autor;
 
 public class DataBaseArticle {
 	private static String URL = "jdbc:hsqldb:hsql://localhost";
@@ -72,11 +72,11 @@ public class DataBaseArticle {
 			if (rs.next()) {
 				article = new Articulo(rs.getString("id"), rs.getString("title"), new Autor(rs.getString("author")),
 						authorsToList(rs.getString("other_authors")), rs.getString("summary"),
-						toList(rs.getString("keywords")), rs.getString("srcfile"), rs.getString("presentation_card"),
+						toList(rs.getString("keywords")), rs.getString("presentation_card"), rs.getString("srcfile"),
 						toList(rs.getString("cv_authors")), toArticleState(rs.getString("state")));
 			}
 		} catch (SQLException e) {
-
+			article = null;
 		} finally {
 			if (rs != null) {
 				try {
@@ -257,27 +257,79 @@ public class DataBaseArticle {
 		return result;
 	}
 
+	/**
+	 * Devuelve los artículos asociados a un determinado autor junto con sus datos
+	 * 
+	 * @param author author de los artículos
+	 * @return lista de artículos asociados al autor
+	 */
+	public static List<Articulo> findArticlesByAuthor(Autor author) {
+		List<Articulo> listOfArticulos = new ArrayList<>();
+		List<Articulo> listOfArticulosFiltrados = new ArrayList<>();
+
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+
+			StringBuilder query = new StringBuilder();
+			st = conn.createStatement();
+			query.append(
+					"select id, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state from articles");
+
+			rs = st.executeQuery(query.toString());
+
+			while (rs.next()) {
+				listOfArticulos.add(new Articulo(rs.getString("id"), rs.getString("title"),
+						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
+						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
+						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
+						toArticleState(rs.getString("state"))));
+			}
+			rs.close();
+			conn.close();
+		} catch (SQLException e) {
+			listOfArticulosFiltrados = null;
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+		if (listOfArticulosFiltrados != null)
+			for (Articulo a : listOfArticulos) {
+				if (a.getAuthor().getName().equals(author.getName()) || a.getAuthors().contains(author)) {
+					listOfArticulosFiltrados.add(a);
+				}
+			}
+		return listOfArticulosFiltrados;
+	}
+
 	public static List<Articulo> loadArticles() {
 		List<Articulo> listOfArticulos = new ArrayList<>();
-		
+
 		Connection con;
 		try {
 			con = DriverManager.getConnection(URL, USER, PASSWORD);
 
 			StringBuilder query = new StringBuilder();
 			Statement st = con.createStatement();
-			query.append(
-					"select title, author, summary, keywords, srcfile from articles");
+			query.append("select title, author, summary, keywords, srcfile from articles");
 
 			ResultSet rs = st.executeQuery(query.toString());
 
 			while (rs.next()) {
-				listOfArticulos.add(new Articulo(
-						rs.getString("title"), 
-						new Autor(rs.getString("author")),
-								rs.getString("summary"),
-								toList(rs.getString("keywords")),
-								rs.getString("srcfile")));
+				listOfArticulos.add(new Articulo(rs.getString("title"), new Autor(rs.getString("author")),
+						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("srcfile")));
 			}
 			rs.close();
 			con.close();
