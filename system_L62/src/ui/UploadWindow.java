@@ -1,26 +1,25 @@
 package ui;
 
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import business.Articulo;
-import business.Autor;
-
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
-
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
-import javax.swing.JButton;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-import java.awt.event.ActionEvent;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import business.Articulo;
+import business.Autor;
 
 public class UploadWindow extends JDialog {
 
@@ -47,28 +46,29 @@ public class UploadWindow extends JDialog {
 	private JButton btnNext;
 	private JButton btnDeleteOtherAuthors;
 	private JButton btnDeleteKeywords;
-	
-	private IdArticleWindow iaw;
+
+	private JFrame frame;
 	private List<Autor> authors;
 	private List<String> keywords;
 	private Articulo article;
-	
+
 	/**
 	 * Create the frame.
-	 * @param idArticleWindow 
-	 * @param idArticleWindow 
+	 * 
+	 * @param idArticleWindow
+	 * @param idArticleWindow
 	 */
-	public UploadWindow(IdArticleWindow idArticleWindow, Articulo article) {
-		this.iaw = idArticleWindow;
+	public UploadWindow(JFrame frame, Articulo article) {
+		this.frame = frame;
 		this.article = article;
-		if(article != null) {
+		if (article != null) {
 			this.authors = article.getAuthors();
 			this.keywords = article.getKeywords();
-		}else {
+		} else {
 			this.authors = new LinkedList<>();
 			this.keywords = new LinkedList<>();
 		}
-		
+
 		setModal(true);
 		setResizable(false);
 		setTitle("Ventana de confirmaci\u00F3n");
@@ -98,18 +98,24 @@ public class UploadWindow extends JDialog {
 		contentPane.add(getBtnDeleteOtherAuthors());
 		contentPane.add(getBtnDeleteKeywords());
 	}
+
+	public UploadWindow(ArticlesByAuthorWindow articlesByAuthorWindow, Articulo a) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public JTextField getTextFieldTitle() {
 		if (textFieldTitle == null) {
 			textFieldTitle = new JTextField();
 			textFieldTitle.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			textFieldTitle.setBounds(167, 24, 205, 25);
 			textFieldTitle.setColumns(10);
-			if(article != null)
-				if(article.getTitle() != null)
+			if (article != null)
+				if (article.getTitle() != null)
 					textFieldTitle.setText(article.getTitle());
 		}
 		return textFieldTitle;
 	}
+
 	public JLabel getLblTitle() {
 		if (lblTitle == null) {
 			lblTitle = new JLabel("T\u00EDtulo:");
@@ -118,18 +124,20 @@ public class UploadWindow extends JDialog {
 		}
 		return lblTitle;
 	}
+
 	public JTextField getTextFieldAuthor() {
 		if (textFieldAuthor == null) {
 			textFieldAuthor = new JTextField();
 			textFieldAuthor.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			textFieldAuthor.setBounds(167, 59, 205, 25);
 			textFieldAuthor.setColumns(10);
-			if(article != null)
-				if(article.getAuthor() != null)
+			if (article != null)
+				if (article.getAuthor() != null)
 					textFieldAuthor.setText(article.getAuthor().getName());
 		}
 		return textFieldAuthor;
 	}
+
 	public JLabel getLblAuthor() {
 		if (lblAuthor == null) {
 			lblAuthor = new JLabel("Autor principal:");
@@ -138,17 +146,19 @@ public class UploadWindow extends JDialog {
 		}
 		return lblAuthor;
 	}
+
 	public JTextArea getTextAreaResumen() {
 		if (textAreaResumen == null) {
 			textAreaResumen = new JTextArea();
 			textAreaResumen.setLineWrap(true);
 			textAreaResumen.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			if(article != null)
-				if(article.getResumen() != null)
+			if (article != null)
+				if (article.getResumen() != null)
 					textAreaResumen.setText(article.getResumen());
 		}
 		return textAreaResumen;
 	}
+
 	public JLabel getLblResumen() {
 		if (lblResumen == null) {
 			lblResumen = new JLabel("Resumen:");
@@ -157,6 +167,7 @@ public class UploadWindow extends JDialog {
 		}
 		return lblResumen;
 	}
+
 	public JScrollPane getScrollPaneResumen() {
 		if (scrollPaneResumen == null) {
 			scrollPaneResumen = new JScrollPane();
@@ -165,6 +176,7 @@ public class UploadWindow extends JDialog {
 		}
 		return scrollPaneResumen;
 	}
+
 	public JLabel getLblOtherAuthors() {
 		if (lblOtherAuthors == null) {
 			lblOtherAuthors = new JLabel("Otros autores:");
@@ -173,6 +185,7 @@ public class UploadWindow extends JDialog {
 		}
 		return lblOtherAuthors;
 	}
+
 	public JTextField getTextFieldOtherAutors() {
 		if (textFieldOtherAutors == null) {
 			textFieldOtherAutors = new JTextField();
@@ -182,10 +195,12 @@ public class UploadWindow extends JDialog {
 		}
 		return textFieldOtherAutors;
 	}
+
 	public JButton getBtnAddAuthor() {
 		if (btnAddAuthor == null) {
 			btnAddAuthor = new JButton("A\u00F1adir");
 			btnAddAuthor.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					addAuthor();
 				}
@@ -195,6 +210,7 @@ public class UploadWindow extends JDialog {
 		}
 		return btnAddAuthor;
 	}
+
 	public JScrollPane getScrollPaneOtherAuthors() {
 		if (scrollPaneOtherAuthors == null) {
 			scrollPaneOtherAuthors = new JScrollPane();
@@ -203,16 +219,18 @@ public class UploadWindow extends JDialog {
 		}
 		return scrollPaneOtherAuthors;
 	}
+
 	public JTextArea getTextAreaOtherAuthors() {
 		if (textAreaOtherAuthors == null) {
 			textAreaOtherAuthors = new JTextArea();
 			textAreaOtherAuthors.setEditable(false);
 			textAreaOtherAuthors.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			if(article != null)
+			if (article != null)
 				textAreaOtherAuthors.setText(listAuthors());
 		}
 		return textAreaOtherAuthors;
 	}
+
 	public JLabel getLblKeywords() {
 		if (lblKeywords == null) {
 			lblKeywords = new JLabel("Palabras clave:");
@@ -221,6 +239,7 @@ public class UploadWindow extends JDialog {
 		}
 		return lblKeywords;
 	}
+
 	public JTextField getTextFieldKeywords() {
 		if (textFieldKeywords == null) {
 			textFieldKeywords = new JTextField();
@@ -230,10 +249,12 @@ public class UploadWindow extends JDialog {
 		}
 		return textFieldKeywords;
 	}
+
 	public JButton getBtnAddKeyword() {
 		if (btnAddKeyword == null) {
 			btnAddKeyword = new JButton("A\u00F1adir");
 			btnAddKeyword.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					addKeyword();
 				}
@@ -243,6 +264,7 @@ public class UploadWindow extends JDialog {
 		}
 		return btnAddKeyword;
 	}
+
 	public JScrollPane getScrollPaneKeywords() {
 		if (scrollPaneKeywords == null) {
 			scrollPaneKeywords = new JScrollPane();
@@ -251,20 +273,23 @@ public class UploadWindow extends JDialog {
 		}
 		return scrollPaneKeywords;
 	}
+
 	public JTextArea getTextAreaKeywords() {
 		if (textAreaKeywords == null) {
 			textAreaKeywords = new JTextArea();
 			textAreaKeywords.setEditable(false);
 			textAreaKeywords.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			if(article != null)
+			if (article != null)
 				textAreaKeywords.setText(listKeywords());
 		}
 		return textAreaKeywords;
 	}
+
 	public JButton getBtnBack() {
 		if (btnBack == null) {
 			btnBack = new JButton("Atr\u00E1s");
 			btnBack.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					dispose();
 				}
@@ -274,10 +299,12 @@ public class UploadWindow extends JDialog {
 		}
 		return btnBack;
 	}
+
 	public JButton getBtnNext() {
 		if (btnNext == null) {
 			btnNext = new JButton("Siguiente");
 			btnNext.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					checkFields();
 				}
@@ -287,10 +314,12 @@ public class UploadWindow extends JDialog {
 		}
 		return btnNext;
 	}
+
 	public JButton getBtnDeleteOtherAuthors() {
 		if (btnDeleteOtherAuthors == null) {
 			btnDeleteOtherAuthors = new JButton("Borrar");
 			btnDeleteOtherAuthors.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					removeAuthor();
 				}
@@ -300,10 +329,12 @@ public class UploadWindow extends JDialog {
 		}
 		return btnDeleteOtherAuthors;
 	}
+
 	public JButton getBtnDeleteKeywords() {
 		if (btnDeleteKeywords == null) {
 			btnDeleteKeywords = new JButton("Borrar");
 			btnDeleteKeywords.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					removeKeyword();
 				}
@@ -313,79 +344,75 @@ public class UploadWindow extends JDialog {
 		}
 		return btnDeleteKeywords;
 	}
-	
+
 	private String listAuthors() {
 		String str = "";
-		for(Autor author: authors) {
+		for (Autor author : authors) {
 			str += author.getName() + "\n";
 		}
 		return str.trim();
 	}
-	
+
 	private String listKeywords() {
 		String str = "";
-		for(String keyword: keywords) {
+		for (String keyword : keywords) {
 			str += keyword + "\n";
 		}
 		return str.trim();
 	}
-	
+
 	public void disposeAll() {
-		if(iaw != null)
-			iaw.dispose();
+		if (frame != null)
+			frame.dispose();
 		this.dispose();
 	}
-	
+
 	private void openDocWindow() {
 		String id;
-		if(article == null) {
+		if (article == null) {
 			id = UUID.randomUUID().toString().substring(0, 20);
-		}else {
+		} else {
 			id = article.getId();
 		}
-		DocumentsWindow dw = new DocumentsWindow(this, 
-				new Articulo(id, 
-						getTextFieldTitle().getText(), 
-						new Autor(getTextFieldAuthor().getText()),
-						authors, getTextAreaResumen().getText(), 
-						keywords), article);
+		DocumentsWindow dw = new DocumentsWindow(this, new Articulo(id, getTextFieldTitle().getText(),
+				new Autor(getTextFieldAuthor().getText()), authors, getTextAreaResumen().getText(), keywords), article);
 		dw.setVisible(true);
 	}
-	
+
 	private void addAuthor() {
-		if(! getTextFieldOtherAutors().getText().trim().equals("")) {
+		if (!getTextFieldOtherAutors().getText().trim().equals("")) {
 			authors.add(new Autor(getTextFieldOtherAutors().getText().trim()));
 			getTextFieldOtherAutors().setText("");
 			getTextAreaOtherAuthors().setText(listAuthors());
 		}
 	}
-	
+
 	private void addKeyword() {
-		if(! getTextFieldKeywords().getText().trim().equals("")) {
+		if (!getTextFieldKeywords().getText().trim().equals("")) {
 			keywords.add(getTextFieldKeywords().getText().trim());
 			getTextFieldKeywords().setText("");
 			getTextAreaKeywords().setText(listKeywords());
 		}
 	}
-	
+
 	private void checkFields() {
-		if(getTextFieldAuthor().getText().trim().equals("")) {
+		if (getTextFieldAuthor().getText().trim().equals("")) {
 			JOptionPane.showMessageDialog(null, "Necesitas por lo menos identificarte como autor.");
-		}else {
+		} else {
 			openDocWindow();
 		}
 	}
-	
+
 	private void removeAuthor() {
-		if(listAuthors().contains(getTextFieldOtherAutors().getText().trim())) {
+		if (listAuthors().contains(getTextFieldOtherAutors().getText().trim())) {
 			authors.remove(new Autor(getTextFieldOtherAutors().getText().trim()));
 			getTextAreaOtherAuthors().setText(listAuthors());
 			getTextFieldOtherAutors().setText("");
 		}
 	}
-	
+
 	private void removeKeyword() {
-		if(listKeywords().contains(getTextFieldKeywords().getText().trim())) {
+		if (listKeywords().contains(getTextFieldKeywords().getText().trim())) {
 			keywords.remove(getTextFieldKeywords().getText().trim());
 			getTextAreaKeywords().setText(listKeywords());
 			getTextFieldKeywords().setText("");

@@ -81,6 +81,10 @@ public class Articulo {
 		return title + ", " + author + ", " + srcFile;
 	}
 
+	public String toStringAuthor() {
+		return title + " - " + state.toString();
+	}
+
 	public String getId() {
 		return id;
 	}

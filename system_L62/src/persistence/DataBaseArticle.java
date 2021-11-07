@@ -277,12 +277,12 @@ public class DataBaseArticle {
 			StringBuilder query = new StringBuilder();
 			st = conn.createStatement();
 			query.append(
-					"select id, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state from articles");
+					"select id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state from articles");
 
 			rs = st.executeQuery(query.toString());
 
 			while (rs.next()) {
-				listOfArticulos.add(new Articulo(rs.getString("id"), rs.getString("title"),
+				listOfArticulos.add(new Articulo(rs.getString("id_articles"), rs.getString("title"),
 						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
 						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
 						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
@@ -291,7 +291,6 @@ public class DataBaseArticle {
 			rs.close();
 			conn.close();
 		} catch (SQLException e) {
-			listOfArticulosFiltrados = null;
 		} finally {
 			if (st != null) {
 				try {
@@ -306,12 +305,11 @@ public class DataBaseArticle {
 				}
 			}
 		}
-		if (listOfArticulosFiltrados != null)
-			for (Articulo a : listOfArticulos) {
-				if (a.getAuthor().getName().equals(author.getName()) || a.getAuthors().contains(author)) {
-					listOfArticulosFiltrados.add(a);
-				}
+		for (Articulo a : listOfArticulos) {
+			if (a.getAuthor().getName().equals(author.getName()) || a.getAuthors().contains(author)) {
+				listOfArticulosFiltrados.add(a);
 			}
+		}
 		return listOfArticulosFiltrados;
 	}
 
