@@ -253,4 +253,8 @@ public class Articulo {
 		revisoresRestantes -= revisores.size();
 	}
 
+	public boolean canBeEditable() {
+		return state == ArticleState.CREATED || state == ArticleState.ACCEPTED_WITH_CHANGES;
+	}
+
 }

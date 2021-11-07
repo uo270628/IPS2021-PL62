@@ -84,13 +84,7 @@ public class ArticlesByAuthorWindow extends JFrame {
 				@Override
 				public void focusLost(FocusEvent e) {
 					if (textFieldAuthor.getText() != null && !textFieldAuthor.getText().trim().isEmpty()) {
-						articlesModel.removeAllElements();
-						DataBaseArticle.findArticlesByAuthor(new Autor(textFieldAuthor.getText().trim()));
-						List<Articulo> articles = DataBaseArticle
-								.findArticlesByAuthor(new Autor(textFieldAuthor.getText().trim()));
-						for (Articulo a : articles)
-							articlesModel.addElement(a);
-						listArticlesByAuthor.setSelectedIndex(-1);
+						updateListArticles();
 					}
 				}
 			});
@@ -108,7 +102,8 @@ public class ArticlesByAuthorWindow extends JFrame {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					if (e.getFirstIndex() != -1) {
-						updateArticle(getListArticlesByAuthor().getSelectedValue());
+						if (listArticlesByAuthor.getSelectedValue().canBeEditable())
+							updateArticle(getListArticlesByAuthor().getSelectedValue());
 					}
 				}
 			});
@@ -122,5 +117,13 @@ public class ArticlesByAuthorWindow extends JFrame {
 	private void updateArticle(Articulo a) {
 		UploadWindow cw = new UploadWindow(this, a);
 		cw.setVisible(true);
+	}
+
+	public void updateListArticles() {
+		listArticlesByAuthor.setSelectedIndex(-1);
+		articlesModel.removeAllElements();
+		List<Articulo> articles = DataBaseArticle.findArticlesByAuthor(new Autor(textFieldAuthor.getText().trim()));
+		for (Articulo a : articles)
+			articlesModel.addElement(a);
 	}
 }

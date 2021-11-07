@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -47,19 +46,18 @@ public class UploadWindow extends JDialog {
 	private JButton btnDeleteOtherAuthors;
 	private JButton btnDeleteKeywords;
 
-	private JFrame frame;
 	private List<Autor> authors;
 	private List<String> keywords;
 	private Articulo article;
+	private ArticlesByAuthorWindow abaw;
 
 	/**
 	 * Create the frame.
 	 * 
-	 * @param idArticleWindow
-	 * @param idArticleWindow
+	 * @param frame
 	 */
-	public UploadWindow(JFrame frame, Articulo article) {
-		this.frame = frame;
+	public UploadWindow(ArticlesByAuthorWindow abaw, Articulo article) {
+		this.abaw = abaw;
 		this.article = article;
 		if (article != null) {
 			this.authors = article.getAuthors();
@@ -97,10 +95,6 @@ public class UploadWindow extends JDialog {
 		contentPane.add(getBtnNext());
 		contentPane.add(getBtnDeleteOtherAuthors());
 		contentPane.add(getBtnDeleteKeywords());
-	}
-
-	public UploadWindow(ArticlesByAuthorWindow articlesByAuthorWindow, Articulo a) {
-		// TODO Auto-generated constructor stub
 	}
 
 	public JTextField getTextFieldTitle() {
@@ -362,8 +356,7 @@ public class UploadWindow extends JDialog {
 	}
 
 	public void disposeAll() {
-		if (frame != null)
-			frame.dispose();
+		this.abaw.updateListArticles();
 		this.dispose();
 	}
 
