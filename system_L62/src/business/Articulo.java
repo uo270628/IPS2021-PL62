@@ -90,6 +90,7 @@ public class Articulo {
 		this.tema = tema;
 		this.id = id;
 		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+		this.comentarios=new ArrayList<>();
 	}
 
 	@Override
@@ -136,7 +137,10 @@ public class Articulo {
 	public void setSrcFile(String srcFile) {
 		this.srcFile = srcFile;
 	}
-
+	public void addComentario(Comentario comentario) {
+		comentarios.add(comentario);
+		
+	}
 	public List<String> getCvAuthors() {
 		return new ArrayList<>(cvAuthors);
 	}

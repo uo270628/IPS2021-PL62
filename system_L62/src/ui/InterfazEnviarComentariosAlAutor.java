@@ -6,8 +6,8 @@ import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
 import business.Carta;
+import business.Comentario;
 import business.Tema;
-import persistence.DataBaseArticle;
 import persistence.DataBaseComentario;
 
 import javax.swing.JButton;
@@ -34,7 +34,9 @@ public class InterfazEnviarComentariosAlAutor extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InterfazEnviarComentariosAlAutor frame = new InterfazEnviarComentariosAlAutor(new Articulo(new Tema( "Peces"),"25"));
+					Articulo a =new Articulo(new Tema( "Peces"),"25");
+					a.addComentario(new Comentario(12, "43", "34", "Altamente Recomendable Aceptar"));
+					InterfazEnviarComentariosAlAutor frame = new InterfazEnviarComentariosAlAutor(a);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
