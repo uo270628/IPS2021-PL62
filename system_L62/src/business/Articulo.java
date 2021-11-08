@@ -46,7 +46,23 @@ public class Articulo {
 		this.keywords = keywords;
 		this.state = ArticleState.SENT;
 		this.tema = tema;
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
 	}
+	
+	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,List<String>cvAuthors,
+			Tema tema) {
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.authors = authors;
+		this.resumen = resumen;
+		this.keywords = keywords;
+		this.state = ArticleState.SENT;
+		this.tema = tema;
+		this.cvAuthors=cvAuthors;
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+	}
+	
 
 	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
 			String presentationCard, String srcFile, List<String> cvAuthors, ArticleState state) {

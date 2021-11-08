@@ -5,20 +5,27 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
+import business.Autor;
 import business.CartaRevisores;
 import business.Revisor;
 import business.Tema;
+import persistence.DataBaseArticle;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import javax.swing.JSpinner;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class InterfazElegirRevisores extends JFrame {
 
@@ -33,6 +40,8 @@ public class InterfazElegirRevisores extends JFrame {
 	
 	private Articulo articulo;
 	private CartaRevisores cartarevisores;
+	private JLabel lblTiempoDeRevision;
+	private JSpinner spTiempoDeRevision;
 	
 	
 	/**
@@ -55,6 +64,8 @@ public class InterfazElegirRevisores extends JFrame {
 		contentPane.add(getLblRevisoresRestantes());
 		contentPane.add(getLblNumeroRevisoresRestantes());
 		contentPane.add(getBtnMandarARevision());
+		contentPane.add(getLblTiempoDeRevision());
+		contentPane.add(getSpTiempoDeRevision());
 		añadirRevisoresAlCombobox();
 
 		
@@ -64,7 +75,13 @@ public class InterfazElegirRevisores extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InterfazElegirRevisores frame = new InterfazElegirRevisores(new Articulo(new Tema( "Peces"),"25"));
+					List<Autor>list= new ArrayList<Autor>();
+					List<String>list2 = new ArrayList<>();
+					list.add(new Autor("Pepe"));
+					list2.add("a");
+					
+					InterfazElegirRevisores frame = new InterfazElegirRevisores(new Articulo("a", "e", new Autor("Pedro"), list, "a", list2,list2, new Tema( "Peces")));
+
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -123,9 +140,15 @@ public class InterfazElegirRevisores extends JFrame {
 	}
 	private void activarBotonSiguiente() {
 		if(articulo.getRevisoresRestantes()==0) {
-			
-			getBtnMandarARevision().setEnabled(true);
 			getBtnAñadirRevisor().setEnabled(false);
+			if(Integer.parseInt(getSpTiempoDeRevision().getValue().toString())>0) {
+			getBtnMandarARevision().setEnabled(true);
+			}
+			else {
+				JOptionPane.showMessageDialog(null,
+						"El tiempo de revision no puede ser 0", "Tiempo",
+						JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 	private JLabel getLblRevisoresRestantes() {
@@ -149,9 +172,12 @@ public class InterfazElegirRevisores extends JFrame {
 			btnMandarARevision = new JButton("Mandar a revision");
 			btnMandarARevision.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					actualizarArticulo();
 					dispose();
 					
 				}
+
+			
 			});
 			btnMandarARevision.setEnabled(false);
 			btnMandarARevision.setMnemonic('M');
@@ -160,5 +186,28 @@ public class InterfazElegirRevisores extends JFrame {
 			btnMandarARevision.setBounds(273, 306, 181, 34);
 		}
 		return btnMandarARevision;
+	}
+	private void actualizarArticulo() {
+		DataBaseArticle.updateArticle(articulo);
+		
+	}
+	private JLabel getLblTiempoDeRevision() {
+		if (lblTiempoDeRevision == null) {
+			lblTiempoDeRevision = new JLabel("Tiempo de revision");
+			lblTiempoDeRevision.setBounds(23, 260, 134, 14);
+		}
+		return lblTiempoDeRevision;
+	}
+	private JSpinner getSpTiempoDeRevision() {
+		if (spTiempoDeRevision == null) {
+			spTiempoDeRevision = new JSpinner();
+			spTiempoDeRevision.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					activarBotonSiguiente();
+				}
+			});
+			spTiempoDeRevision.setBounds(148, 254, 46, 20);
+		}
+		return spTiempoDeRevision;
 	}
 }
