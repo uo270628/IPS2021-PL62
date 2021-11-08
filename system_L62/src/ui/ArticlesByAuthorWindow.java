@@ -11,8 +11,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -118,6 +120,7 @@ public class ArticlesByAuthorWindow extends JFrame {
 			listArticlesByAuthor.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			listArticlesByAuthor.setBorder(new LineBorder(new Color(0, 0, 0)));
 			listArticlesByAuthor.setBounds(10, 33, 416, 192);
+			listArticlesByAuthor.setCellRenderer(new ArticleListCellRenderer());
 		}
 		return listArticlesByAuthor;
 	}
@@ -145,7 +148,7 @@ public class ArticlesByAuthorWindow extends JFrame {
 				}
 			});
 			btnCreateArticle.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			btnCreateArticle.setBounds(10, 232, 125, 31);
+			btnCreateArticle.setBounds(10, 232, 125, 21);
 		}
 		return btnCreateArticle;
 	}
@@ -158,5 +161,22 @@ public class ArticlesByAuthorWindow extends JFrame {
 	private void showArticle(Articulo articleToShow) {
 		ShowArticleWindow saw = new ShowArticleWindow(articleToShow);
 		saw.setVisible(true);
+	}
+
+	private class ArticleListCellRenderer extends DefaultListCellRenderer {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public JComponent getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			Articulo article = (Articulo) value;
+			String toString = article.getTitle() + " - " + article.getState();
+			JLabel label = (JLabel) super.getListCellRendererComponent(list, toString, index, isSelected, cellHasFocus);
+
+			label.setText(label.getText());
+
+			return label;
+
+		}
 	}
 }
