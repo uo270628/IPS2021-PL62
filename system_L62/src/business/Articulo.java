@@ -62,12 +62,46 @@ public class Articulo {
 		this.state = state;
 	}
 
-	public Articulo(String title, Autor author, String resumen, List<String> keywords, String srcFile) {
+	public Articulo(String title, Autor author, String resumen, List<String> keywords, String srcFile, String state) {
 		this.title = title;
 		this.author = author;
 		this.resumen = resumen;
 		this.keywords = keywords;
 		this.srcFile = srcFile;
+		setEstado(state);
+	}
+
+	private void setEstado(String state) {
+		switch(state) {
+		case "CREATED":
+			this.state = ArticleState.CREATED;
+			break;
+		case "SENT":
+			this.state = ArticleState.SENT;
+			break;
+		case "WITH_EDITOR":
+			this.state = ArticleState.WITH_EDITOR;
+			break;
+		case "IN_REVISION":
+			this.state = ArticleState.IN_REVISION;
+			break;
+		case "ACCEPTED":
+			this.state = ArticleState.ACCEPTED;
+			break;
+		case "ACCEPTED_WITH_CHANGES":
+			this.state = ArticleState.ACCEPTED_WITH_CHANGES;
+			break;
+		case "REJECTED":
+			this.state = ArticleState.REJECTED;
+			break;
+		case "IN_EDITION":
+			this.state = ArticleState.IN_EDITION;
+			break;
+		case "PUBLISHED":
+			this.state = ArticleState.PUBLISHED;
+			break;
+		}
+		
 	}
 
 	public Articulo(Tema tema, String id) {

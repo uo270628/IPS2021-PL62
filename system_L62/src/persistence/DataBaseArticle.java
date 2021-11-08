@@ -352,13 +352,13 @@ public class DataBaseArticle {
 
 			StringBuilder query = new StringBuilder();
 			Statement st = con.createStatement();
-			query.append("select title, author, summary, keywords, srcfile from articles");
+			query.append("select title, author, summary, keywords, srcfile, state from articles");
 
 			ResultSet rs = st.executeQuery(query.toString());
 
 			while (rs.next()) {
 				listOfArticulos.add(new Articulo(rs.getString("title"), new Autor(rs.getString("author")),
-						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("srcfile")));
+						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("srcfile"), rs.getString("state")));
 			}
 			rs.close();
 			con.close();
@@ -368,6 +368,7 @@ public class DataBaseArticle {
 		}
 		return listOfArticulos;
 	}
+	
 
 	/**
 	 * Transforma una cadena de texto en una lista de cadenas de texto que estaban
