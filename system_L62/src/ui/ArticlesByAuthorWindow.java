@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -19,8 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import business.Articulo;
 import business.Autor;
@@ -103,9 +103,9 @@ public class ArticlesByAuthorWindow extends JFrame {
 	public JList<Articulo> getListArticlesByAuthor() {
 		if (listArticlesByAuthor == null) {
 			listArticlesByAuthor = new JList<Articulo>(articlesModel);
-			listArticlesByAuthor.addListSelectionListener(new ListSelectionListener() {
+			listArticlesByAuthor.addMouseListener(new MouseAdapter() {
 				@Override
-				public void valueChanged(ListSelectionEvent e) {
+				public void mouseClicked(MouseEvent e) {
 					if (listArticlesByAuthor.getSelectedIndex() != -1) {
 						if (listArticlesByAuthor.getSelectedValue().canBeEditable())
 							updateArticle(getListArticlesByAuthor().getSelectedValue());
