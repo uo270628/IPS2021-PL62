@@ -17,6 +17,12 @@ public class DataBaseArticle {
 	private static String URL = "jdbc:hsqldb:hsql://localhost";
 	private static String USER = "sa";
 
+	/**
+	 * Sube un artículo a la base de datos
+	 * 
+	 * @param article
+	 * @return si se subió el artículo
+	 */
 	public static boolean uploadArticle(Articulo article) {
 		String queryInsertArticle = "insert into articles (id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state) values ('"
 				+ article.getId() + "', '" + article.getTitle() + "', '" + article.getAuthor().getName() + "', '"
@@ -54,6 +60,12 @@ public class DataBaseArticle {
 		return result;
 	}
 
+	/**
+	 * Busca y devuelve un artículo con un id dado de la base de datos
+	 * 
+	 * @param id
+	 * @return artículo con el id dado
+	 */
 	public static Articulo searchArticle(String id) {
 		String querySearchArticle = "select * from articles where id_articles = '" + id + "'";
 
@@ -102,6 +114,12 @@ public class DataBaseArticle {
 		return article;
 	}
 
+	/**
+	 * Envía un artículo creado para ser evaluado
+	 * 
+	 * @param id
+	 * @return si se envió el artículo
+	 */
 	public static boolean sendArticleToAprove(String id) {
 		String queryUpdateArticle = "update articles set state = '" + Articulo.ArticleState.SENT
 				+ "' where id_articles = '" + id + "'";
@@ -136,6 +154,12 @@ public class DataBaseArticle {
 		return result;
 	}
 
+	/**
+	 * Envía un artículo al editor para que decida publicarlo
+	 * 
+	 * @param id
+	 * @return si se publica el artículo o no
+	 */
 	public static boolean publishArticle(String id) {
 		String queryPublishArticle = "update articles set state = '" + Articulo.ArticleState.IN_EDITION
 				+ "' where id_articles = '" + id + "'";
@@ -170,6 +194,12 @@ public class DataBaseArticle {
 		return result;
 	}
 
+	/**
+	 * Modifica los valores de los campos de un artículo dado en la base de datos
+	 * 
+	 * @param article
+	 * @return si se actualizó el artículo
+	 */
 	public static boolean updateArticle(Articulo article) {
 		String queryUpdateArticle = "update articles set";
 
@@ -339,6 +369,13 @@ public class DataBaseArticle {
 		return listOfArticulos;
 	}
 
+	/**
+	 * Transforma una cadena de texto en una lista de cadenas de texto que estaban
+	 * separadas por comas
+	 * 
+	 * @param str
+	 * @return lista de cadenas de texto
+	 */
 	private static List<String> toList(String str) {
 		List<String> list = new LinkedList<>();
 		if (str == null) {
@@ -352,6 +389,13 @@ public class DataBaseArticle {
 		return list;
 	}
 
+	/**
+	 * Transforma una cadena de texto en una lista de autores que estaban separados
+	 * por comas
+	 * 
+	 * @param str
+	 * @return lista de autores
+	 */
 	private static List<Autor> authorsToList(String str) {
 		List<Autor> list = new LinkedList<>();
 		if (str == null) {
@@ -365,6 +409,12 @@ public class DataBaseArticle {
 		return list;
 	}
 
+	/**
+	 * Transforma una cadena de texto en un estado de artículo
+	 * 
+	 * @param state
+	 * @return estado del artículo
+	 */
 	private static ArticleState toArticleState(String state) {
 		switch (state) {
 		case "CREATED":
@@ -377,6 +427,8 @@ public class DataBaseArticle {
 			return ArticleState.IN_REVISION;
 		case "ACCEPTED":
 			return ArticleState.ACCEPTED;
+		case "ACCEPTED_WITH_CHANGES":
+			return ArticleState.ACCEPTED_WITH_CHANGES;
 		case "REJECTED":
 			return ArticleState.REJECTED;
 		case "IN_EDITION":

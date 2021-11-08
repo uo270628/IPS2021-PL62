@@ -257,6 +257,9 @@ public class DocumentsWindow extends JDialog {
 		return btnSend;
 	}
 
+	/**
+	 * Añade un currículum vitae de autor a la lista de CVs autores del artículo
+	 */
 	private void addCVAuthor() {
 		if (!getTextFieldCVAuthor().getText().trim().equals("")) {
 			cvAuthors.add(getTextFieldCVAuthor().getText().trim());
@@ -265,6 +268,9 @@ public class DocumentsWindow extends JDialog {
 		}
 	}
 
+	/**
+	 * Borra un currículum vitae de autor de la lista de CVs autores del artículo
+	 */
 	private void removeCVAuthor() {
 		if (listCVAuthors().contains(getTextFieldCVAuthor().getText().trim())) {
 			cvAuthors.remove(getTextFieldCVAuthor().getText().trim());
@@ -273,15 +279,26 @@ public class DocumentsWindow extends JDialog {
 		}
 	}
 
+	/**
+	 * Borra esta ventana y su antecesora
+	 */
 	private void disposeWindows() {
 		cw.disposeAll();
 		this.dispose();
 	}
 
+	/**
+	 * Borra esta ventana
+	 */
 	private void disposeThisWindow() {
 		this.dispose();
 	}
 
+	/**
+	 * Devuelve los CVs de los autores del artículo uno por línea
+	 * 
+	 * @return cadena de lista de CVs de autores
+	 */
 	private String listCVAuthors() {
 		String str = "";
 		for (String cv : cvAuthors) {
@@ -290,6 +307,9 @@ public class DocumentsWindow extends JDialog {
 		return str.trim();
 	}
 
+	/**
+	 * Transfiere los nuevos campos al artículo y a la base de datos
+	 */
 	private void operateArticle() {
 		newArticle.setPresentationCard(getTextFieldPresentationCard().getText().trim());
 		newArticle.setSrcFile(getTextFieldSrcFile().getText().trim());
@@ -301,6 +321,9 @@ public class DocumentsWindow extends JDialog {
 		}
 	}
 
+	/**
+	 * Sube el nuevo artículo a la base de datos
+	 */
 	private void uploadArticle() {
 		boolean made = DataBaseArticle.uploadArticle(newArticle);
 		if (made) {
@@ -311,6 +334,9 @@ public class DocumentsWindow extends JDialog {
 		}
 	}
 
+	/**
+	 * Sube los cambios del artículo a la base de datos
+	 */
 	private void updateArticle() {
 		boolean made = DataBaseArticle.updateArticle(newArticle);
 		if (made) {
@@ -321,6 +347,9 @@ public class DocumentsWindow extends JDialog {
 		}
 	}
 
+	/**
+	 * Activa o desactiva el botón de copyright en función del checkBox
+	 */
 	private void acceptCopyright() {
 		if (chckbxCopyright.isSelected()) {
 			getBtnSend().setEnabled(true);
@@ -329,15 +358,25 @@ public class DocumentsWindow extends JDialog {
 		}
 	}
 
-	private void publishArticle(Articulo a) {
-		DataBaseArticle.publishArticle(a.getId());
+	/**
+	 * Envía el artículo al editor para que decida si publicarlo
+	 * 
+	 * @param article
+	 */
+	private void publishArticle(Articulo article) {
+		DataBaseArticle.publishArticle(article.getId());
 		JOptionPane.showMessageDialog(null, "El artículo está en proceso de ser publicado.");
 		disposeWindows();
 	}
 
-	private void sendArticleToApprove(Articulo a) {
-		if (a.isComplete()) {
-			DataBaseArticle.sendArticleToAprove(a.getId());
+	/**
+	 * Finaliza el artículo para que un editor lo pueda evaluar
+	 * 
+	 * @param article
+	 */
+	private void sendArticleToApprove(Articulo article) {
+		if (article.isComplete()) {
+			DataBaseArticle.sendArticleToAprove(article.getId());
 			JOptionPane.showMessageDialog(null, "El artículo está listo para ser evaluado.");
 			disposeWindows();
 		} else {
@@ -345,6 +384,9 @@ public class DocumentsWindow extends JDialog {
 		}
 	}
 
+	/**
+	 * Transfiere los nuevos campos al artículo y finaliza la edición del mismo
+	 */
 	private void finishArticle() {
 		newArticle.setPresentationCard(getTextFieldPresentationCard().getText().trim());
 		newArticle.setSrcFile(getTextFieldSrcFile().getText().trim());

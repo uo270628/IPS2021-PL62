@@ -339,6 +339,11 @@ public class UploadWindow extends JDialog {
 		return btnDeleteKeywords;
 	}
 
+	/**
+	 * Devuelve los autores del artículo uno por línea
+	 * 
+	 * @return cadena de lista de autores
+	 */
 	private String listAuthors() {
 		String str = "";
 		for (Autor author : authors) {
@@ -347,6 +352,11 @@ public class UploadWindow extends JDialog {
 		return str.trim();
 	}
 
+	/**
+	 * Devuelve las palabras clave del artículo una por línea
+	 * 
+	 * @return cadena de lista de palabras clave
+	 */
 	private String listKeywords() {
 		String str = "";
 		for (String keyword : keywords) {
@@ -355,11 +365,19 @@ public class UploadWindow extends JDialog {
 		return str.trim();
 	}
 
+	/**
+	 * Cierra esta ventana y actualiza la lista de artículos de la ventana anterior
+	 * 
+	 */
 	public void disposeAll() {
 		this.abaw.updateListArticles();
 		this.dispose();
 	}
 
+	/**
+	 * Abre la ventana de edición de documentos a partir del artículo asociado a
+	 * esta
+	 */
 	private void openDocWindow() {
 		String id;
 		if (article == null) {
@@ -372,6 +390,9 @@ public class UploadWindow extends JDialog {
 		dw.setVisible(true);
 	}
 
+	/**
+	 * Añade un autor a la lista de autores del artículo
+	 */
 	private void addAuthor() {
 		if (!getTextFieldOtherAutors().getText().trim().equals("")) {
 			authors.add(new Autor(getTextFieldOtherAutors().getText().trim()));
@@ -380,6 +401,9 @@ public class UploadWindow extends JDialog {
 		}
 	}
 
+	/**
+	 * Añade una palabra clave a la lista de palabras clave del artículo
+	 */
 	private void addKeyword() {
 		if (!getTextFieldKeywords().getText().trim().equals("")) {
 			keywords.add(getTextFieldKeywords().getText().trim());
@@ -388,6 +412,10 @@ public class UploadWindow extends JDialog {
 		}
 	}
 
+	/**
+	 * Abre la ventana de documentos si y sólo si hay un autor principal declarado
+	 * en el artículo
+	 */
 	private void checkFields() {
 		if (getTextFieldAuthor().getText().trim().equals("")) {
 			JOptionPane.showMessageDialog(null, "Necesitas por lo menos identificarte como autor.");
@@ -396,6 +424,9 @@ public class UploadWindow extends JDialog {
 		}
 	}
 
+	/**
+	 * Borra un autor de la lista de autores del artículo
+	 */
 	private void removeAuthor() {
 		if (listAuthors().contains(getTextFieldOtherAutors().getText().trim())) {
 			authors.remove(new Autor(getTextFieldOtherAutors().getText().trim()));
@@ -404,6 +435,9 @@ public class UploadWindow extends JDialog {
 		}
 	}
 
+	/**
+	 * Borra una palabra clave de la lista de palabras clave del artículo
+	 */
 	private void removeKeyword() {
 		if (listKeywords().contains(getTextFieldKeywords().getText().trim())) {
 			keywords.remove(getTextFieldKeywords().getText().trim());

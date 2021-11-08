@@ -125,19 +125,6 @@ public class ArticlesByAuthorWindow extends JFrame {
 		return listArticlesByAuthor;
 	}
 
-	private void updateArticle(Articulo a) {
-		UploadWindow cw = new UploadWindow(this, a);
-		cw.setVisible(true);
-	}
-
-	public void updateListArticles() {
-		listArticlesByAuthor.setSelectedIndex(-1);
-		articlesModel.removeAllElements();
-		List<Articulo> articles = DataBaseArticle.findArticlesByAuthor(new Autor(textFieldAuthor.getText().trim()));
-		for (Articulo a : articles)
-			articlesModel.addElement(a);
-	}
-
 	public JButton getBtnCreateArticle() {
 		if (btnCreateArticle == null) {
 			btnCreateArticle = new JButton("Crear art\u00EDculo");
@@ -153,16 +140,52 @@ public class ArticlesByAuthorWindow extends JFrame {
 		return btnCreateArticle;
 	}
 
+	/**
+	 * Actualiza la lista de artículos de esta ventana
+	 */
+	public void updateListArticles() {
+		listArticlesByAuthor.setSelectedIndex(-1);
+		articlesModel.removeAllElements();
+		if (!textFieldAuthor.getText().isEmpty()) {
+			List<Articulo> articles = DataBaseArticle.findArticlesByAuthor(new Autor(textFieldAuthor.getText().trim()));
+			for (Articulo a : articles)
+				articlesModel.addElement(a);
+		}
+	}
+
+	/**
+	 * Muestra la ventana de actualización de artículo a partir de un artículo
+	 * 
+	 * @param article
+	 */
+	private void updateArticle(Articulo article) {
+		UploadWindow cw = new UploadWindow(this, article);
+		cw.setVisible(true);
+	}
+
+	/**
+	 * Muestra la ventana de creación de artículo
+	 */
 	private void createArticle() {
 		UploadWindow cw = new UploadWindow(this, null);
 		cw.setVisible(true);
 	}
 
+	/**
+	 * Muestra la ventana de visualización de artículo a partir de un artículo
+	 * 
+	 * @param articleToShow
+	 */
 	private void showArticle(Articulo articleToShow) {
 		ShowArticleWindow saw = new ShowArticleWindow(articleToShow);
 		saw.setVisible(true);
 	}
 
+	/**
+	 * Clase para mostrar en el JList el título y el estado asociados a cada
+	 * artículo
+	 *
+	 */
 	private class ArticleListCellRenderer extends DefaultListCellRenderer {
 		private static final long serialVersionUID = 1L;
 
