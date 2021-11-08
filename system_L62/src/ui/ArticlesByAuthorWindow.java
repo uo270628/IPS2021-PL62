@@ -109,6 +109,9 @@ public class ArticlesByAuthorWindow extends JFrame {
 					if (listArticlesByAuthor.getSelectedIndex() != -1) {
 						if (listArticlesByAuthor.getSelectedValue().canBeEditable())
 							updateArticle(getListArticlesByAuthor().getSelectedValue());
+						else {
+							showArticle(getListArticlesByAuthor().getSelectedValue());
+						}
 					}
 				}
 			});
@@ -150,5 +153,10 @@ public class ArticlesByAuthorWindow extends JFrame {
 	private void createArticle() {
 		UploadWindow cw = new UploadWindow(this, null);
 		cw.setVisible(true);
+	}
+
+	private void showArticle(Articulo articleToShow) {
+		ShowArticleWindow saw = new ShowArticleWindow(articleToShow);
+		saw.setVisible(true);
 	}
 }
