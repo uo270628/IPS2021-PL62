@@ -79,9 +79,9 @@ public class InterfazElegirRevisores extends JFrame {
 					List<String>list2 = new ArrayList<>();
 					list.add(new Autor("Pepe"));
 					list2.add("a");
-					
-					InterfazElegirRevisores frame = new InterfazElegirRevisores(new Articulo("a", "e", new Autor("Pedro"), list, "a", list2,list2, new Tema( "Peces")));
-
+					Articulo a = new Articulo("a", "e", new Autor("Pedro"), list, "a", list2,list2, new Tema( "Peces"));
+					InterfazElegirRevisores frame = new InterfazElegirRevisores(a);
+					DataBaseArticle.uploadArticle(a);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -141,6 +141,7 @@ public class InterfazElegirRevisores extends JFrame {
 	private void activarBotonSiguiente() {
 		if(articulo.getRevisoresRestantes()==0) {
 			getBtnAñadirRevisor().setEnabled(false);
+			articulo.setState(Articulo.ArticleState.IN_REVISION);
 			if(Integer.parseInt(getSpTiempoDeRevision().getValue().toString())>0) {
 			getBtnMandarARevision().setEnabled(true);
 			}
@@ -188,7 +189,7 @@ public class InterfazElegirRevisores extends JFrame {
 		return btnMandarARevision;
 	}
 	private void actualizarArticulo() {
-		DataBaseArticle.updateArticle(articulo);
+		DataBaseArticle.updateArticleRevisores(articulo);
 		
 	}
 	private JLabel getLblTiempoDeRevision() {

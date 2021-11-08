@@ -12,6 +12,7 @@ import java.util.List;
 import business.Articulo;
 import business.Articulo.ArticleState;
 import business.Autor;
+import business.Revisor;
 
 public class DataBaseArticle {
 	private static String URL = "jdbc:hsqldb:hsql://localhost";
@@ -149,6 +150,52 @@ public class DataBaseArticle {
 			st = conn.createStatement();
 
 			st.executeUpdate(queryPublishArticle);
+			result = true;
+		} catch (SQLException e) {
+			result = false;
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return result;
+	}
+
+	public static boolean updateArticleRevisores(Articulo article) {
+		String queryUpdateArticle = "update articles set";
+		Revisor revisor1 = article.getListOfRevisoresParaRevisar().get(0);
+		Revisor revisor2 = article.getListOfRevisoresParaRevisar().get(1);
+		Revisor revisor3 = article.getListOfRevisoresParaRevisar().get(2);
+		queryUpdateArticle += " idRevisor1 = '" + revisor1.getId() + "'";
+		queryUpdateArticle += ",";
+		queryUpdateArticle += " idRevisor2 = '" + revisor2.getId() + "'";
+		queryUpdateArticle += ",";
+		queryUpdateArticle += " idRevisor3 = '" + revisor3.getId() + "'";
+
+		queryUpdateArticle += ",";
+		queryUpdateArticle += " state = '" + article.getState() + "'";
+
+		queryUpdateArticle += " where id_articles = '" + article.getId() + "'";
+
+		Connection conn = null;
+		Statement st = null;
+
+		boolean result;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			st.executeUpdate(queryUpdateArticle);
 			result = true;
 		} catch (SQLException e) {
 			result = false;
