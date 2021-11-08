@@ -216,6 +216,7 @@ public class DataBaseArticle {
 
 		return result;
 	}
+	
 
 	public static boolean updateArticle(Articulo article) {
 		String queryUpdateArticle = "update articles set";

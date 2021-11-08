@@ -67,4 +67,27 @@ public class DataBaseComentario {
 			e.printStackTrace();
 		}
 	}
-}
+	public static void enviarComentariosAlAutor(Articulo articulo) {
+		try {
+			con = DriverManager.getConnection(URL,USER,PASSWORD);
+			
+			StringBuilder query = new StringBuilder();
+			Statement st = con.createStatement();
+
+			List<Comentario>list= articulo.getComentarios();
+			for (Comentario comentario : list) {
+				query.append("insert into COMENTARIOSREVISOR (IDCOMENTARIOREVISOR,IDREVISOR,IDARTICULO,COMENTARIO,RECOMENDACION) ");
+				query.append("values  ("+comentario.getId()+",'"+comentario.getIdRevisor()+"','"+comentario.getIdArticulo()+
+						"','"+comentario.getTexto()+",'"+comentario.getRecomendacion()+"')");
+				ResultSet rs = st.executeQuery(query.toString()); 
+				
+				rs.close();
+			}
+			con.close();
+			
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	
+}}

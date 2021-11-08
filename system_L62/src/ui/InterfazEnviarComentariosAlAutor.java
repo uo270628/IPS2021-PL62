@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 import business.Articulo;
 import business.Carta;
 import business.Tema;
+import persistence.DataBaseArticle;
 import persistence.DataBaseComentario;
 
 import javax.swing.JButton;
@@ -78,6 +79,7 @@ public class InterfazEnviarComentariosAlAutor extends JFrame {
 		String carta= getTextPaneCarta().getText();
 		articulo.setCarta(new Carta(carta));
 		DataBaseComentario.enviarCartaAlAutor(articulo);
+		DataBaseComentario.enviarComentariosAlAutor(articulo);
 	}
 
 	private JButton getBtnAceptarArticulo() {
