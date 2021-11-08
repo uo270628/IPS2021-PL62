@@ -69,7 +69,7 @@ public class UploadWindow extends JDialog {
 
 		setModal(true);
 		setResizable(false);
-		setTitle("Ventana de confirmaci\u00F3n");
+		setTitle("Edici\u00F3n de art\u00EDculo");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 599, 485);
 		setLocationRelativeTo(null);

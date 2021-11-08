@@ -3,11 +3,14 @@ package ui;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -32,6 +35,7 @@ public class ArticlesByAuthorWindow extends JFrame {
 	private JLabel lblAuthor;
 	private JTextField textFieldAuthor;
 	private JList<Articulo> listArticlesByAuthor;
+	private JButton btnCreateArticle;
 
 	/**
 	 * Launch the application.
@@ -66,6 +70,7 @@ public class ArticlesByAuthorWindow extends JFrame {
 		contentPane.add(getLblAuthor());
 		contentPane.add(getTextFieldAuthor());
 		contentPane.add(getListArticlesByAuthor());
+		contentPane.add(getBtnCreateArticle());
 	}
 
 	public JLabel getLblAuthor() {
@@ -101,7 +106,7 @@ public class ArticlesByAuthorWindow extends JFrame {
 			listArticlesByAuthor.addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
-					if (e.getFirstIndex() != -1) {
+					if (listArticlesByAuthor.getSelectedIndex() != -1) {
 						if (listArticlesByAuthor.getSelectedValue().canBeEditable())
 							updateArticle(getListArticlesByAuthor().getSelectedValue());
 					}
@@ -125,5 +130,25 @@ public class ArticlesByAuthorWindow extends JFrame {
 		List<Articulo> articles = DataBaseArticle.findArticlesByAuthor(new Autor(textFieldAuthor.getText().trim()));
 		for (Articulo a : articles)
 			articlesModel.addElement(a);
+	}
+
+	public JButton getBtnCreateArticle() {
+		if (btnCreateArticle == null) {
+			btnCreateArticle = new JButton("Crear art\u00EDculo");
+			btnCreateArticle.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					createArticle();
+				}
+			});
+			btnCreateArticle.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnCreateArticle.setBounds(10, 232, 125, 31);
+		}
+		return btnCreateArticle;
+	}
+
+	private void createArticle() {
+		UploadWindow cw = new UploadWindow(this, null);
+		cw.setVisible(true);
 	}
 }
