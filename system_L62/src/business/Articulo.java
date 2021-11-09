@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Articulo {
 
+<<<<<<< HEAD
     public enum ArticleState {
 	CREATED, SENT, WITH_EDITOR, IN_REVISION, ACCEPTED, ACCEPTED_WITH_CHANGES, REJECTED, IN_EDITION, PUBLISHED
     }
@@ -122,6 +123,10 @@ public class Articulo {
 	case "PUBLISHED":
 	    this.state = ArticleState.PUBLISHED;
 	    break;
+=======
+	public enum ArticleState {
+		CREATED, SENT, WITH_EDITOR,IN_REVISION, ACCEPTED, ACCEPTED_WITH_CHANGES, REJECTED, IN_EDITION, PUBLISHED,REVISION_PENDING
+>>>>>>> refs/remotes/origin/main
 	}
 
     }
@@ -138,13 +143,76 @@ public class Articulo {
 	return title + ", " + author + ", " + srcFile;
     }
 
+<<<<<<< HEAD
     public String toStringAuthor() {
 	return title + " - " + state.toString();
     }
+=======
+	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
+			Tema tema) {
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.authors = authors;
+		this.resumen = resumen;
+		this.keywords = keywords;
+		this.state = ArticleState.SENT;
+		this.tema = tema;
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+	}
+	
+	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,List<String>cvAuthors,
+			Tema tema) {
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.authors = authors;
+		this.resumen = resumen;
+		this.keywords = keywords;
+		this.state = ArticleState.SENT;
+		this.tema = tema;
+		this.cvAuthors=cvAuthors;
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+		
+	}
+	
+>>>>>>> refs/remotes/origin/main
 
+<<<<<<< HEAD
     public String getId() {
 	return id;
     }
+=======
+	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
+			String presentationCard, String srcFile, List<String> cvAuthors, ArticleState state) {
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.authors = authors;
+		this.resumen = resumen;
+		this.keywords = keywords;
+		this.presentationCard = presentationCard;
+		this.srcFile = srcFile;
+		this.cvAuthors = cvAuthors;
+		this.state = state;
+	}
+	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
+			String presentationCard, String srcFile, List<String> cvAuthors, ArticleState state,String Tema) {
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.authors = authors;
+		this.resumen = resumen;
+		this.keywords = keywords;
+		this.presentationCard = presentationCard;
+		this.srcFile = srcFile;
+		this.cvAuthors = cvAuthors;
+		this.state = state;
+		this.tema=new Tema(Tema);
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+
+	}
+>>>>>>> refs/remotes/origin/main
 
     public String getTitle() {
 	return title;
@@ -158,9 +226,16 @@ public class Articulo {
 	return new ArrayList<>(authors);
     }
 
+<<<<<<< HEAD
     public String getResumen() {
 	return resumen;
     }
+=======
+	@Override
+	public String toString() {
+		return title;
+	}
+>>>>>>> refs/remotes/origin/main
 
     public List<String> getKeywords() {
 	return new ArrayList<>(keywords);

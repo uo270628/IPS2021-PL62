@@ -7,6 +7,7 @@ import javax.swing.JTextPane;
 
 import ui.listeners.ActionListenerCrearVentanaComentarioRevisor;
 import ui.listeners.ActionListenerCrearVentanaRevisorArticulDisplay;
+import ui.listeners.ActionListenerCrearVentanaRevisorValorarArticulos;
 
 import javax.swing.JLabel;
 
@@ -17,6 +18,7 @@ public class RevisorInterface {
 	private JTextPane nombreTextPane;
 	private JButton btnVerArticulos;
 	private JLabel lblNombre;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -55,13 +57,14 @@ public class RevisorInterface {
 		frmRevisor.getContentPane().add(getNombreTextPane());		
 		frmRevisor.getContentPane().add(getBtnVerArticulos());
 		frmRevisor.getContentPane().add(getLblNombre());
+		frmRevisor.getContentPane().add(getBtnNewButton());
 	}
 	private JButton getBtnComentario() {
 		if (btnComentario == null) {
 			btnComentario = new JButton("Iniciar Comentario");
 			btnComentario.addActionListener(new ActionListenerCrearVentanaComentarioRevisor(this) {
 			});
-			btnComentario.setBounds(279, 222, 140, 23);
+			btnComentario.setBounds(228, 222, 191, 23);
 		}
 		return btnComentario;
 	}
@@ -74,10 +77,10 @@ public class RevisorInterface {
 	}
 	private JButton getBtnVerArticulos() {
 		if (btnVerArticulos == null) {
-			btnVerArticulos = new JButton("Ver Articulos");
+			btnVerArticulos = new JButton("Ver Articulos Propios");
 			btnVerArticulos.addActionListener(new ActionListenerCrearVentanaRevisorArticulDisplay(this) {
 			});
-			btnVerArticulos.setBounds(279, 183, 140, 23);
+			btnVerArticulos.setBounds(228, 183, 191, 23);
 		}
 		return btnVerArticulos;
 	}
@@ -91,5 +94,15 @@ public class RevisorInterface {
 	public String getNombre() {
 		return nombreTextPane.getText();
 		
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("Ver Articulos Propuestos");
+			btnNewButton.addActionListener(new ActionListenerCrearVentanaRevisorValorarArticulos(this) {
+			});
+			btnNewButton.setBounds(228, 183, 191, 23);
+			btnNewButton.setBounds(228, 149, 191, 23);
+		}
+		return btnNewButton;
 	}
 }

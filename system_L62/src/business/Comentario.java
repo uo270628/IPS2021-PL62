@@ -8,10 +8,6 @@ public class Comentario {
 	private String idArticulo;
 	private String type;
 
-	public String getType() {
-		return type;
-	}
-
 	public Comentario(String texto) {
 		this.texto = texto;
 	}
@@ -22,24 +18,34 @@ public class Comentario {
 		this.idRevisor = idRevisor;
 		this.recomendacion = recomendacion;
 	}
-	
 
-	public Comentario(int id, String texto, String idRevisor, String recomendacion, String idArticulo,String type) {
+	public Comentario(int id, String texto, String idRevisor, String recomendacion, String idArticulo, String type) {
+
 		this.id = id;
 		this.texto = texto;
 		this.idRevisor = idRevisor;
 		this.recomendacion = recomendacion;
 		this.idArticulo = idArticulo;
-		this.type=type;
+		this.type = type;
 	}
+
 	public Comentario(int id, String texto, String idRevisor, String recomendacion, String idArticulo) {
+
 		this.id = id;
 		this.texto = texto;
 		this.idRevisor = idRevisor;
 		this.recomendacion = recomendacion;
 		this.idArticulo = idArticulo;
 	}
-	
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public String getTexto() {
 		return texto;
 	}
@@ -55,8 +61,13 @@ public class Comentario {
 	public String getRecomendacion() {
 		return recomendacion;
 	}
-	
+
 	public String getIdArticulo() {
 		return idArticulo;
+	}
+
+	@Override
+	public String toString() {
+		return id + "";
 	}
 }

@@ -1,25 +1,24 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
+import business.Articulo.ArticleState;
 import business.Autor;
 import business.Tema;
-import business.Articulo.ArticleState;
 import persistence.DataBaseArticle;
-
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.awt.event.ActionEvent;
 
 public class InterfazDecisionFinal extends JDialog {
 
@@ -32,16 +31,17 @@ public class InterfazDecisionFinal extends JDialog {
 	private JButton btnRechazar;
 	private Articulo articulo;
 	private JButton btnSiguiente;
+
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			List<Autor>list= new ArrayList<Autor>();
-			List<String>list2 = new ArrayList<>();
+			List<Autor> list = new ArrayList<Autor>();
+			List<String> list2 = new ArrayList<>();
 			list.add(new Autor("Pepe"));
 			list2.add("a");
-			Articulo a = new Articulo("a", "e", new Autor("Pedro"), list, "a", list2,list2, new Tema( "Peces"));
+			Articulo a = new Articulo("a", "e", new Autor("Pedro"), list, "a", list2, list2, new Tema("Peces"));
 			InterfazDecisionFinal dialog = new InterfazDecisionFinal(a);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
@@ -55,7 +55,7 @@ public class InterfazDecisionFinal extends JDialog {
 	 */
 	public InterfazDecisionFinal(Articulo articulo) {
 		setResizable(false);
-		this.articulo=articulo;
+		this.articulo = articulo;
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -71,12 +71,14 @@ public class InterfazDecisionFinal extends JDialog {
 		contentPanel.add(getBtnRechazar());
 		contentPanel.add(getBtnSiguiente());
 		setLocationRelativeTo(null);
-		
+
 	}
+
 	private JButton getBtnAceptar() {
 		if (btnAceptar == null) {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					aceptarArticulo();
 				}
@@ -87,18 +89,20 @@ public class InterfazDecisionFinal extends JDialog {
 		}
 		return btnAceptar;
 	}
+
 	protected void aceptarArticulo() {
 		articulo.setState(ArticleState.ACCEPTED);
 		getBtnAceptar().setVisible(false);
 		getBtnRechazar().setVisible(false);
 		getBtnSiguiente().setEnabled(true);
-		
+
 	}
 
 	private JButton getBtnRechazar() {
 		if (btnRechazar == null) {
 			btnRechazar = new JButton("Rechazar");
 			btnRechazar.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					rechazarArticulo();
 				}
@@ -114,17 +118,22 @@ public class InterfazDecisionFinal extends JDialog {
 		articulo.setState(ArticleState.REJECTED);
 		getBtnAceptar().setVisible(false);
 		getBtnRechazar().setVisible(false);
-		getBtnSiguiente().setEnabled(true);
-		
-		
+		dispose();
+
 	}
+
 	private JButton getBtnSiguiente() {
 		if (btnSiguiente == null) {
 			btnSiguiente = new JButton("Siguiente");
 			btnSiguiente.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					DataBaseArticle.updateArticle(articulo);
+
+					interfazPublicar i = new interfazPublicar(articulo);
+					i.setVisible(true);
 				}
+
 			});
 			btnSiguiente.setEnabled(false);
 			btnSiguiente.setBounds(322, 222, 89, 28);
