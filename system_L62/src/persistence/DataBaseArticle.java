@@ -170,7 +170,82 @@ public class DataBaseArticle {
 
 		return result;
 	}
+	public static boolean updateArticleTiempoMaximoRevisor(Articulo article) {
+		String queryUpdateArticle = "update articles set";
+		queryUpdateArticle += " TIEMPO_MAXIMO_REVISION = '" + article.getTiempoMaximoRevision() + "'";
+		queryUpdateArticle += " where id_articles = '" + article.getId() + "'";
+		boolean result;
+		Connection conn = null;
+		Statement st = null;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
 
+			st.executeUpdate(queryUpdateArticle);
+			result = true;
+		} catch (SQLException e) {
+			result = false;
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return result;
+	}
+	
+	public static boolean updateArticleAlPublicar(Articulo article) {
+		String queryUpdateArticle = "update articles set";
+		queryUpdateArticle += " DOI = '" + article.getDoi() + "'";
+		queryUpdateArticle += ",";
+		queryUpdateArticle += " VOLUMEN = '" + article.getVolumen() + "'";
+		queryUpdateArticle += ",";
+		java.sql.Date sqlDate = new java.sql.Date(article.getFechaPublicacion().getTime());
+
+		queryUpdateArticle += " FECHA_PUBLICACION = '" + sqlDate + "'";
+		queryUpdateArticle += " where id_articles = '" + article.getId() + "'";
+		Connection conn = null;
+		Statement st = null;
+
+		boolean result;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			st.executeUpdate(queryUpdateArticle);
+			result = true;
+		} catch (SQLException e) {
+			result = false;
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return result;
+
+		
+		
+	}
+	
 	public static boolean updateArticleRevisores(Articulo article) {
 		String queryUpdateArticle = "update articles set";
 		Revisor revisor1 = article.getListOfRevisoresParaRevisar().get(0);

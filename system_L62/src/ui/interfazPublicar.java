@@ -1,7 +1,6 @@
 package ui;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -12,13 +11,13 @@ import business.Articulo;
 import business.Articulo.ArticleState;
 import business.Autor;
 import business.Tema;
+import persistence.DataBaseArticle;
 
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.UUID;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -50,6 +49,8 @@ public class interfazPublicar extends JDialog {
 			list2.add("a");
 			Articulo a = new Articulo("a", "e", new Autor("Pedro"), list, "a", list2,list2, new Tema( "Peces"));
 			interfazPublicar dialog = new interfazPublicar(a);
+			DataBaseArticle.uploadArticle(a);
+
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -74,6 +75,26 @@ public class interfazPublicar extends JDialog {
 		contentPanel.add(getLblNVolumen());
 		contentPanel.add(getLblFecha());
 		contentPanel.add(getLblSDoi());
+		
+		JButton btnGenerar = new JButton("Generar");
+		btnGenerar.setForeground(Color.WHITE);
+		btnGenerar.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
+			public void actionPerformed(ActionEvent e) {
+				lblSDoi.setText(UUID.randomUUID().toString());
+				lblNVolumen.setText(articulo.getResumen().length()+"");
+				Date date= new Date();
+				int month= date.getMonth()+1;
+				int year= date.getYear()+1900;
+				lblFecha.setText(date.getDate()+"/"+month+"/"+year);
+				btnGenerar.setVisible(false);
+
+			}
+		});
+		btnGenerar.setBackground(Color.BLUE);
+		btnGenerar.setMnemonic('G');
+		btnGenerar.setBounds(141, 149, 104, 34);
+		contentPanel.add(btnGenerar);
 	}
 	private JButton getBtnPublicar() {
 		if (btnPublicar == null) {
@@ -81,7 +102,11 @@ public class interfazPublicar extends JDialog {
 			btnPublicar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					articulo.setState(ArticleState.PUBLISHED);
-					
+					articulo.setDoi(getLblSDoi().getText());
+					articulo.setVolumen(getLblNVolumen().getText());
+					articulo.setFechaPublicacion(new Date());
+					actualizarArticulo();
+					dispose();
 				}
 			});
 			btnPublicar.setBackground(Color.GREEN);
@@ -90,6 +115,12 @@ public class interfazPublicar extends JDialog {
 		}
 		return btnPublicar;
 	}
+	protected void actualizarArticulo() {
+		DataBaseArticle.updateArticle(articulo);
+		DataBaseArticle.updateArticleAlPublicar(articulo);
+		
+	}
+
 	private JLabel getLblDoi() {
 		if (lblDoi == null) {
 			lblDoi = new JLabel("DOI: ");
@@ -120,19 +151,14 @@ public class interfazPublicar extends JDialog {
 			lblNVolumen.setBounds(260, 64, 46, 14);
 			
 		      
-			lblNVolumen.setText(articulo.getResumen().length()+"");
 		}
 		return lblNVolumen;
 	}
-	@SuppressWarnings("deprecation")
 	private JLabel getLblFecha() {
 		if (lblFecha == null) {
 			lblFecha = new JLabel("");
 			lblFecha.setBounds(236, 111, 171, 14);
-			Date date= new Date();
-			int month= date.getMonth()+1;
-			int year= date.getYear()+1900;
-			lblFecha.setText(date.getDate()+"/"+month+"/"+year);
+			
 		}
 		return lblFecha;
 	}
@@ -140,7 +166,7 @@ public class interfazPublicar extends JDialog {
 		if (lblSDoi == null) {
 			lblSDoi = new JLabel("");
 			lblSDoi.setBounds(141, 23, 305, 14);
-			lblSDoi.setText(UUID.randomUUID().toString());
+			
 		}
 		return lblSDoi;
 	}

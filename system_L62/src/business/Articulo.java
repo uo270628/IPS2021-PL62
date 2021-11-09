@@ -1,6 +1,7 @@
 package business;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Articulo {
@@ -19,6 +20,10 @@ public class Articulo {
 	private String srcFile;
 	private List<String> cvAuthors;
 	private ArticleState state;
+	private int tiempoMaximoRevision;
+	private String doi;
+	private String volumen;
+	private Date fechaPublicacion;
 
 	private Tema tema;
 	private List<Revisor> listOfRevisoresParaRevisar;
@@ -254,6 +259,39 @@ public class Articulo {
 
 	public void setCarta(Carta carta) {
 		this.carta = carta;
+	}
+	
+
+	public int getTiempoMaximoRevision() {
+		return tiempoMaximoRevision;
+	}
+
+	public void setTiempoMaximoRevision(int tiempoMaximoRevision) {
+		this.tiempoMaximoRevision = tiempoMaximoRevision;
+	}
+
+	public String getDoi() {
+		return doi;
+	}
+
+	public void setDoi(String doi) {
+		this.doi = doi;
+	}
+
+	public String getVolumen() {
+		return volumen;
+	}
+
+	public void setVolumen(String volumen) {
+		this.volumen = volumen;
+	}
+
+	public Date getFechaPublicacion() {
+		return fechaPublicacion;
+	}
+
+	public void setFechaPublicacion(Date fechaPublicacion) {
+		this.fechaPublicacion = fechaPublicacion;
 	}
 
 	public List<Comentario> getComentarios() {

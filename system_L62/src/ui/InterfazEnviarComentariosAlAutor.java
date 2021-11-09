@@ -35,7 +35,7 @@ public class InterfazEnviarComentariosAlAutor extends JFrame {
 			public void run() {
 				try {
 					Articulo a =new Articulo(new Tema( "Peces"),"25");
-					a.addComentario(new Comentario(12, "43", "34", "Altamente Recomendable Aceptar"));
+					a.addComentario(new Comentario(2, "hola", "12", "Aceptar", "fsfsdf", "Temporal"));
 					InterfazEnviarComentariosAlAutor frame = new InterfazEnviarComentariosAlAutor(a);
 					frame.setVisible(true);
 				} catch (Exception e) {

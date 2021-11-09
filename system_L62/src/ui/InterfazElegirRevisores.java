@@ -191,7 +191,10 @@ public class InterfazElegirRevisores extends JFrame {
 		return btnMandarARevision;
 	}
 	private void actualizarArticulo() {
+		articulo.setTiempoMaximoRevision((int) spTiempoDeRevision.getValue());
 		DataBaseArticle.updateArticleRevisores(articulo);
+		DataBaseArticle.updateArticleTiempoMaximoRevisor(articulo);
+		
 		
 	}
 	private JLabel getLblTiempoDeRevision() {
