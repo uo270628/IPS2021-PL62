@@ -14,6 +14,8 @@ import business.Articulo.ArticleState;
 import persistence.DataBaseArticle;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -114,7 +116,7 @@ public class InterfazDecisionFinal extends JDialog {
 		articulo.setState(ArticleState.REJECTED);
 		getBtnAceptar().setVisible(false);
 		getBtnRechazar().setVisible(false);
-		getBtnSiguiente().setEnabled(true);
+		dispose();
 		
 		
 	}
@@ -124,7 +126,12 @@ public class InterfazDecisionFinal extends JDialog {
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					DataBaseArticle.updateArticle(articulo);
-				}
+					
+					
+					interfazPublicar i= new interfazPublicar(articulo);
+					i.setVisible(true);
+					}
+				
 			});
 			btnSiguiente.setEnabled(false);
 			btnSiguiente.setBounds(322, 222, 89, 28);

@@ -62,6 +62,7 @@ public class interfazPublicar extends JDialog {
 	 * Create the dialog.
 	 */
 	public interfazPublicar(Articulo articulo) {
+		setResizable(false);
 		this.articulo=articulo;
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
@@ -75,7 +76,7 @@ public class interfazPublicar extends JDialog {
 		contentPanel.add(getLblNVolumen());
 		contentPanel.add(getLblFecha());
 		contentPanel.add(getLblSDoi());
-		
+		setLocationRelativeTo(null);
 		JButton btnGenerar = new JButton("Generar");
 		btnGenerar.setForeground(Color.WHITE);
 		btnGenerar.addActionListener(new ActionListener() {

@@ -310,7 +310,7 @@ public class DataBaseManager {
 	public static Articulo getArticleFromId(String idArticulo) {
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-			String sql = "SELECT * FROM articles WHERE ID = (?)";
+			String sql = "SELECT * FROM articles WHERE ID_ARTICLES = (?)";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
 			preparedStatement.setString(1, idArticulo.toUpperCase());
 			ResultSet rs = preparedStatement.executeQuery();

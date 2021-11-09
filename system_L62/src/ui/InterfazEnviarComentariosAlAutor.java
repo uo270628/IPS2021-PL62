@@ -83,7 +83,7 @@ public class InterfazEnviarComentariosAlAutor extends JFrame {
 		String carta= getTextPaneCarta().getText();
 		articulo.setCarta(new Carta(carta));
 		DataBaseComentario.enviarCartaAlAutor(articulo);
-		DataBaseComentario.enviarComentariosAlAutor(articulo);
+		//DataBaseComentario.enviarComentariosAlAutor(articulo);
 	}
 
 	private JButton getBtnAceptarArticulo() {
