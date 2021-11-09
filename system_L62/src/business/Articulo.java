@@ -1,6 +1,7 @@
 package business;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Articulo {
@@ -19,6 +20,10 @@ public class Articulo {
 	private String srcFile;
 	private List<String> cvAuthors;
 	private ArticleState state;
+	private int tiempoMaximoRevision;
+	private String doi;
+	private String volumen;
+	private Date fechaPublicacion;
 
 	private Tema tema;
 	private List<Revisor> listOfRevisoresParaRevisar;
@@ -46,7 +51,23 @@ public class Articulo {
 		this.keywords = keywords;
 		this.state = ArticleState.SENT;
 		this.tema = tema;
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
 	}
+	
+	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,List<String>cvAuthors,
+			Tema tema) {
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.authors = authors;
+		this.resumen = resumen;
+		this.keywords = keywords;
+		this.state = ArticleState.SENT;
+		this.tema = tema;
+		this.cvAuthors=cvAuthors;
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+	}
+	
 
 	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
 			String presentationCard, String srcFile, List<String> cvAuthors, ArticleState state) {
@@ -108,6 +129,7 @@ public class Articulo {
 		this.tema = tema;
 		this.id = id;
 		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+		this.comentarios=new ArrayList<>();
 	}
 
 	@Override
@@ -158,7 +180,10 @@ public class Articulo {
 	public void setSrcFile(String srcFile) {
 		this.srcFile = srcFile;
 	}
-
+	public void addComentario(Comentario comentario) {
+		comentarios.add(comentario);
+		
+	}
 	public List<String> getCvAuthors() {
 		return new ArrayList<>(cvAuthors);
 	}
@@ -272,6 +297,39 @@ public class Articulo {
 
 	public void setCarta(Carta carta) {
 		this.carta = carta;
+	}
+	
+
+	public int getTiempoMaximoRevision() {
+		return tiempoMaximoRevision;
+	}
+
+	public void setTiempoMaximoRevision(int tiempoMaximoRevision) {
+		this.tiempoMaximoRevision = tiempoMaximoRevision;
+	}
+
+	public String getDoi() {
+		return doi;
+	}
+
+	public void setDoi(String doi) {
+		this.doi = doi;
+	}
+
+	public String getVolumen() {
+		return volumen;
+	}
+
+	public void setVolumen(String volumen) {
+		this.volumen = volumen;
+	}
+
+	public Date getFechaPublicacion() {
+		return fechaPublicacion;
+	}
+
+	public void setFechaPublicacion(Date fechaPublicacion) {
+		this.fechaPublicacion = fechaPublicacion;
 	}
 
 	public List<Comentario> getComentarios() {
