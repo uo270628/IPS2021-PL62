@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 
+import business.Articulo;
 import business.Comentario;
 import persistence.DataBaseManager;
 
@@ -24,6 +25,7 @@ public class VerComentariosEditor {
 	private JTextPane textPane;
 	private JTextArea textArea;
 	private Comentario comentario;
+	private Articulo articulo;
 
 	/**
 	 * Launch the application.
@@ -43,10 +45,13 @@ public class VerComentariosEditor {
 
 	/**
 	 * Create the application.
-	 * @param string 
+	 * 
+	 * @param string
 	 */
-	public VerComentariosEditor(String editor) {
+	public VerComentariosEditor(String idArticulo) {
 		initialize();
+		articulo = DataBaseManager.getArticleFromId(idArticulo);
+		frame.setVisible(true);
 	}
 
 	/**
@@ -60,32 +65,38 @@ public class VerComentariosEditor {
 		frame.getContentPane().add(getComboBox());
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(getLblNewLabel());
-		frame.getContentPane().add(getLblNewLabel_1());	
+		frame.getContentPane().add(getLblNewLabel_1());
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+
 	private JComboBox<Comentario> getComboBox() {
 		if (comboBox == null) {
-			List<Comentario> list = DataBaseManager.SelectComentsVisibleForEditor();
-			if(!list.isEmpty()) {
-				comboBox= new JComboBox<Comentario>();
-				comboBox.setModel(new DefaultComboBoxModel<Comentario>(list.toArray(new Comentario[list.size()])));
-				comentario = (Comentario) comboBox.getSelectedItem();
-				setTexts();
-				comboBox.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						comentario = (Comentario) comboBox.getSelectedItem();
-						setTexts();
-					}
-				});
-			}
-			else {
-				comboBox= new JComboBox<Comentario>();
+			if (articulo != null) {
+				List<Comentario> list = DataBaseManager.SelectComentsVisibleForEditor(articulo.getId());
+				if (!list.isEmpty()) {
+					comboBox = new JComboBox<Comentario>();
+					comboBox.setModel(new DefaultComboBoxModel<Comentario>(list.toArray(new Comentario[list.size()])));
+					comentario = (Comentario) comboBox.getSelectedItem();
+					setTexts();
+					comboBox.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							comentario = (Comentario) comboBox.getSelectedItem();
+							setTexts();
+						}
+					});
+				}
+				else {
+					comboBox = new JComboBox<Comentario>();
+				}
+			} else {
+				comboBox = new JComboBox<Comentario>();
 			}
 			comboBox.setBounds(274, 200, 160, 22);
 		}
 		return comboBox;
 	}
+
 	private void setTexts() {
 		textPane.setText(DataBaseManager.getNombreRevisor(comentario.getIdRevisor()));
 		textArea.setText(comentario.getTexto());
@@ -98,6 +109,7 @@ public class VerComentariosEditor {
 		}
 		return lblNewLabel;
 	}
+
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("Texto:");
@@ -105,6 +117,7 @@ public class VerComentariosEditor {
 		}
 		return lblNewLabel_1;
 	}
+
 	private JTextPane getTextPane() {
 		if (textPane == null) {
 			textPane = new JTextPane();
@@ -113,6 +126,7 @@ public class VerComentariosEditor {
 		}
 		return textPane;
 	}
+
 	private JTextArea getTextArea() {
 		if (textArea == null) {
 			textArea = new JTextArea();
