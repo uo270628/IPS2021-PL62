@@ -13,8 +13,9 @@ public class ActionListenerCrearVentanaComentarioRevisor implements ActionListen
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		@SuppressWarnings("unused")
 		RevisorComentInterface rci = new RevisorComentInterface(revisorInterface.getNombre());
-		rci.initialize();
+		
 	}
 
 }
