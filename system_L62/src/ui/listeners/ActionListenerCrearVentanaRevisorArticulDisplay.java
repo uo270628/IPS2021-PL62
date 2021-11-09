@@ -16,7 +16,8 @@ public class ActionListenerCrearVentanaRevisorArticulDisplay implements ActionLi
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		@SuppressWarnings("unused")
 		RevisorArticulosDisplay rad = new RevisorArticulosDisplay(revisorInterface.getNombre());
-		rad.initialize();
+		
 	}
 }
