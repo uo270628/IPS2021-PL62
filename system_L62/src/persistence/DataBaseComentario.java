@@ -40,7 +40,7 @@ public class DataBaseComentario {
 			while (rs.next()) {
 				if (rs.getString("IDARTICULO").equals(articulo.getId())) {
 					listOfComentarios.add(new Comentario(rs.getInt("IDCOMENTARIOREVISOR"), rs.getString("COMENTARIO"),
-							rs.getString("IDREVISOR"), rs.getString("RECOMENDACION"), rs.getString("IDARTICULO")));
+							rs.getString("IDREVISOR"), rs.getString("RECOMENDACION"), rs.getString("IDARTICULO"),rs.getString("TYPE")));
 				}
 			}
 			rs.close();

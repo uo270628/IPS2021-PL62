@@ -6,7 +6,7 @@ import java.util.List;
 public class Articulo {
 
 	public enum ArticleState {
-		CREATED, SENT, WITH_EDITOR, IN_REVISION, ACCEPTED, ACCEPTED_WITH_CHANGES, REJECTED, IN_EDITION, PUBLISHED
+		CREATED, SENT, WITH_EDITOR,IN_REVISION, ACCEPTED, ACCEPTED_WITH_CHANGES, REJECTED, IN_EDITION, PUBLISHED,REVISION_PENDING
 	}
 
 	private String id;
@@ -78,7 +78,7 @@ public class Articulo {
 
 	@Override
 	public String toString() {
-		return title + ", " + author + ", " + srcFile;
+		return title;
 	}
 
 	public String getId() {
