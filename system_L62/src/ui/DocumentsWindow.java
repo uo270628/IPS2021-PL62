@@ -391,10 +391,23 @@ public class DocumentsWindow extends JDialog {
 		newArticle.setPresentationCard(getTextFieldPresentationCard().getText().trim());
 		newArticle.setSrcFile(getTextFieldSrcFile().getText().trim());
 		newArticle.setCvAuthors(cvAuthors);
-		if (newArticle.getState().equals(ArticleState.CREATED.toString())) {
-			sendArticleToApprove(newArticle);
-		} else if (newArticle.getState().equals(ArticleState.ACCEPTED_WITH_CHANGES.toString())) {
-			publishArticle(newArticle);
+		boolean present = false;
+		if (DataBaseArticle.searchArticle(newArticle.getId()) != null)
+			present = true;
+		boolean made;
+		if (!present)
+			made = DataBaseArticle.uploadArticle(newArticle);
+		else
+			made = DataBaseArticle.updateArticle(newArticle);
+		if (made) {
+			if (newArticle.getState().equals(ArticleState.CREATED.toString())) {
+				sendArticleToApprove(newArticle);
+			} else if (newArticle.getState().equals(ArticleState.ACCEPTED_WITH_CHANGES.toString())) {
+				publishArticle(newArticle);
+			}
+			disposeWindows();
+		} else {
+			JOptionPane.showMessageDialog(null, "Ha habido un error al intentar actualizar el artículo.");
 		}
 	}
 }
