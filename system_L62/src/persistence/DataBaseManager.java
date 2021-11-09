@@ -1,5 +1,7 @@
 package persistence;
 
+
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,10 +12,10 @@ import java.util.List;
 import java.util.UUID;
 
 import business.Articulo;
+import business.Articulo.ArticleState;
 import business.Autor;
 import business.Comentario;
 import business.Revisor;
-import business.Articulo.ArticleState;
 
 public class DataBaseManager {
 	private static String URL = "jdbc:hsqldb:hsql://localhost";
@@ -70,7 +72,7 @@ public class DataBaseManager {
 					revisores.add(new Revisor(rs2.getString("idREVISOR1")));
 					revisores.add(new Revisor(rs2.getString("idREVISOR2")));
 					revisores.add(new Revisor(rs2.getString("idREVISOR3")));
-					Articulo aux = new Articulo(rs2.getString("id"), rs2.getString("title"),
+					Articulo aux = new Articulo(rs2.getString("id_articles"), rs2.getString("title"),
 							new Autor(rs2.getString("author")), authorsToList(rs2.getString("other_authors")),
 							rs2.getString("summary"), toList(rs2.getString("keywords")),
 							rs2.getString("presentation_card"), rs2.getString("srcfile"),
@@ -138,7 +140,7 @@ public class DataBaseManager {
 	public static void removeArticleFromCandidates(Articulo articulo, String revisor) {
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-			String sql = "SELECT * FROM articles WHERE id=(?);";
+			String sql = "SELECT * FROM articles WHERE id_articles=(?);";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
 			preparedStatement.setString(1, articulo.getId().toUpperCase());
 			ResultSet rs = preparedStatement.executeQuery();
@@ -151,18 +153,17 @@ public class DataBaseManager {
 			}
 			while (rs.next()) {
 				if (articulo.getListOfRevisoresParaRevisar().get(0).getId().equals(revisor)) {
-					String sql2 = "UPDATE ARTICLES SET idREVISOR1=(NULL) WHERE ID=(?) ;";
+					String sql2 = "UPDATE ARTICLES SET idREVISOR1=(NULL) WHERE id_articles=(?) ;";
 					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
 					preparedStatement2.setString(1, articulo.getId().toUpperCase());
 				} else if (articulo.getListOfRevisoresParaRevisar().get(1).getId().equals(revisor)) {
-					String sql2 = "UPDATE ARTICLES SET idREVISOR2=(NULL) WHERE ID=(?) ;";
+					String sql2 = "UPDATE ARTICLES SET idREVISOR2=(NULL) WHERE id_articles=(?) ;";
 					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
 					preparedStatement2.setString(1, articulo.getId().toUpperCase());
 				} else if (articulo.getListOfRevisoresParaRevisar().get(2).getId().equals(revisor)) {
-					String sql2 = "UPDATE ARTICLES SET idREVISOR3=(NULL) WHERE ID=(?) ;";
+					String sql2 = "UPDATE ARTICLES SET idREVISOR3=(NULL) WHERE id_articles=(?) ;";
 					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
 					preparedStatement2.setString(1, articulo.getId().toUpperCase());
-					preparedStatement2.execute();
 				}
 			}
 		} catch (SQLException e) {
@@ -193,7 +194,7 @@ public class DataBaseManager {
 					revisores.add(new Revisor(rs2.getString("idREVISOR1")));
 					revisores.add(new Revisor(rs2.getString("idREVISOR2")));
 					revisores.add(new Revisor(rs2.getString("idREVISOR3")));
-					Articulo aux = new Articulo(rs2.getString("id"), rs2.getString("title"),
+					Articulo aux = new Articulo(rs2.getString("id_articles"), rs2.getString("title"),
 							new Autor(rs2.getString("author")), authorsToList(rs2.getString("other_authors")),
 							rs2.getString("summary"), toList(rs2.getString("keywords")),
 							rs2.getString("presentation_card"), rs2.getString("srcfile"),
@@ -291,7 +292,7 @@ public class DataBaseManager {
 				revisores.add(new Revisor(rs.getString("idREVISOR1")));
 				revisores.add(new Revisor(rs.getString("idREVISOR2")));
 				revisores.add(new Revisor(rs.getString("idREVISOR3")));
-				Articulo aux = new Articulo(rs.getString("id"), rs.getString("title"),
+				Articulo aux = new Articulo(rs.getString("id_articles"), rs.getString("title"),
 						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
 						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
 						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
@@ -310,7 +311,7 @@ public class DataBaseManager {
 	public static Articulo getArticleFromId(String idArticulo) {
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-			String sql = "SELECT * FROM articles WHERE ID_ARTICLES = (?)";
+			String sql = "SELECT * FROM articles WHERE id_articles = (?)";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
 			preparedStatement.setString(1, idArticulo.toUpperCase());
 			ResultSet rs = preparedStatement.executeQuery();
@@ -319,7 +320,7 @@ public class DataBaseManager {
 				revisores.add(new Revisor(rs.getString("idREVISOR1")));
 				revisores.add(new Revisor(rs.getString("idREVISOR2")));
 				revisores.add(new Revisor(rs.getString("idREVISOR3")));
-				Articulo aux = new Articulo(rs.getString("id"), rs.getString("title"),
+				Articulo aux = new Articulo(rs.getString("id_articles"), rs.getString("title"),
 						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
 						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
 						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
@@ -334,4 +335,5 @@ public class DataBaseManager {
 		}
 		return null;
 	}
+
 }
