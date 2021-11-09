@@ -14,7 +14,9 @@ import persistence.DataBaseManager;
 import ui.listeners.ActionListenerCerrarVentana;
 
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
 import java.util.List;
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 
 public class RevisorComentInterface implements Ventana{
@@ -31,25 +33,37 @@ public class RevisorComentInterface implements Ventana{
 	private final ButtonGroup Aceptabilidad = new ButtonGroup();
 	private String revisor;
 	
-	private Articulo articulo;
+	private JComboBox<String> comboBox_1;
 	
-	/**
-	 * Create the application.
-	 * @param revisor 
-	 */
-	public RevisorComentInterface(String revisor) {
-		this.revisor = revisor;
+	
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					RevisorComentInterface window = new RevisorComentInterface("pruebas");
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
+	public RevisorComentInterface(String revisor) {
+		this.revisor = revisor;
+		initialize();
+	}
+
+	
 	public void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(getComboBox());
+		frame.getContentPane().add(getComboBox_1());
 		frame.getContentPane().add(getComentarioTextField());
 		frame.getContentPane().add(getRdbtnAceptar());
 		frame.getContentPane().add(getRdbtnAltoR());
@@ -106,18 +120,19 @@ public class RevisorComentInterface implements Ventana{
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					articulo = (Articulo) comboBox.getSelectedItem();
+					Articulo articulo = (Articulo) comboBox.getSelectedItem();
+					String code = (String) comboBox_1.getSelectedItem();
 					if(getRdbtnAceptar().isSelected()) {
-						DataBaseManager.InsertReviewComment(revisor, ComentarioTextField.getText(), "Aceptar",articulo.getId());
+						DataBaseManager.InsertReviewComment(revisor, ComentarioTextField.getText(), "Aceptar",articulo.getId(),code);
 					}
 					else if (getRdbtnAltoR().isSelected()) {
-						DataBaseManager.InsertReviewComment(revisor, ComentarioTextField.getText(), "Altamente Recomendable Aceptar",articulo.getId());
+						DataBaseManager.InsertReviewComment(revisor, ComentarioTextField.getText(), "Altamente Recomendable Aceptar",articulo.getId(),code);
 					}
 					else if (getRdbtnPocoR().isSelected()) {
-						DataBaseManager.InsertReviewComment(revisor, ComentarioTextField.getText(), "Poco Recomendable Aceptar",articulo.getId());
+						DataBaseManager.InsertReviewComment(revisor, ComentarioTextField.getText(), "Poco Recomendable Aceptar",articulo.getId(),code);
 					}
 					else if (getRdbtnRechazar().isSelected()) {
-						DataBaseManager.InsertReviewComment(revisor, ComentarioTextField.getText(), "Rechazar", articulo.getId());
+						DataBaseManager.InsertReviewComment(revisor, ComentarioTextField.getText(), "Rechazar", articulo.getId(),code);
 					}
 					else {
 						throw new IllegalArgumentException();
@@ -138,9 +153,27 @@ public class RevisorComentInterface implements Ventana{
 			else {
 				comboBox= new JComboBox<Articulo>();
 			}
-			comboBox.setBounds(274, 200, 150, 22);
+			comboBox.setBounds(274, 200, 160, 22);
 		}
 		return comboBox;
+	}
+	private JComboBox<String> getComboBox_1() {
+		if (comboBox_1 == null) {
+			List<String> list = new LinkedList<String>();
+			list.add("Comentario para autor");
+			list.add("Notas para editor");
+			list.add("Decision propuesta");
+			list.add("Temporal");
+			if(!list.isEmpty()) {
+				comboBox_1= new JComboBox<String>();
+				comboBox_1.setModel(new DefaultComboBoxModel<String>(list.toArray(new String[list.size()])));
+			}
+			else {
+				comboBox_1= new JComboBox<String>();
+			}
+			comboBox_1.setBounds(274, 170, 160, 22);
+		}
+		return comboBox_1;
 	}
 	private JButton getBtnCancelar() {
 		if (btnVolver == null) {
