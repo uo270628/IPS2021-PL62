@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.UUID;
 
 import business.Articulo;
+import business.Articulo.ArticleState;
 import business.Autor;
 import business.Comentario;
 import business.Revisor;
-import business.Articulo.ArticleState;
 
 public class DataBaseManager {
 	private static String URL = "jdbc:hsqldb:hsql://localhost";
@@ -71,10 +71,10 @@ public class DataBaseManager {
 					revisores.add(new Revisor(rs2.getString("idREVISOR2")));
 					revisores.add(new Revisor(rs2.getString("idREVISOR3")));
 					Articulo aux = new Articulo(rs2.getString("id_articles"), rs2.getString("title"),
-					new Autor(rs2.getString("author")), authorsToList(rs2.getString("other_authors")),
-					rs2.getString("summary"), toList(rs2.getString("keywords")),
-					rs2.getString("presentation_card"), rs2.getString("srcfile"),
-					toList(rs2.getString("cv_authors")), toArticleState(rs2.getString("state")));
+							new Autor(rs2.getString("author")), authorsToList(rs2.getString("other_authors")),
+							rs2.getString("summary"), toList(rs2.getString("keywords")),
+							rs2.getString("presentation_card"), rs2.getString("srcfile"),
+							toList(rs2.getString("cv_authors")), toArticleState(rs2.getString("state")));
 					aux.setRevisores(revisores);
 					ret.add(aux);
 				}
@@ -162,8 +162,6 @@ public class DataBaseManager {
 					String sql2 = "UPDATE ARTICLES SET idREVISOR3=(NULL) WHERE id_articles=(?) ;";
 					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
 					preparedStatement2.setString(1, articulo.getId().toUpperCase());
-				}
-					preparedStatement2.execute();
 				}
 			}
 		} catch (SQLException e) {
