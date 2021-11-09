@@ -256,21 +256,19 @@ public class DataBaseManager {
 		return null;
 	}
 
-	public static List<Comentario> SelectComentsVisibleForEditor() {
-		List<Articulo> articulos = SelectAllArticles();
+	public static List<Comentario> SelectComentsVisibleForEditor(String id) {
 		List<Comentario> comentarios = new LinkedList<Comentario>();
 		String sql = "SELECT * FROM COMENTARIOSREVISOR WHERE idArticulo=(?) AND (TYPE = 'Decision propuesta' OR TYPE='Notas para editor');";
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			for (Articulo articulo : articulos) {
-				preparedStatement.setString(1, articulo.getId().toUpperCase());
-				ResultSet rs = preparedStatement.executeQuery();
-				while (rs.next()) {
-					Comentario c = new Comentario(rs.getInt("idCOMENTARIOREVISOR"), rs.getString("Comentario"), rs.getString("idRevisor"),
-							rs.getString("recomendacion"), rs.getString("idArticulo"), rs.getString("TYPE"));
-					comentarios.add(c);
-				}
+			preparedStatement.setString(1, id.toUpperCase());
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				Comentario c = new Comentario(rs.getInt("idCOMENTARIOREVISOR"), rs.getString("Comentario"),
+						rs.getString("idRevisor"), rs.getString("recomendacion"), rs.getString("idArticulo"),
+						rs.getString("TYPE"));
+				comentarios.add(c);
 			}
 		} catch (SQLException e) {
 			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
@@ -280,6 +278,7 @@ public class DataBaseManager {
 		return comentarios;
 	}
 
+	@SuppressWarnings("unused")
 	private static List<Articulo> SelectAllArticles() {
 		List<Articulo> ret = new LinkedList<Articulo>();
 		try {
@@ -287,16 +286,16 @@ public class DataBaseManager {
 			String sql = "SELECT * FROM articles";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
 			ResultSet rs = preparedStatement.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				List<Revisor> revisores = new LinkedList<>();
 				revisores.add(new Revisor(rs.getString("idREVISOR1")));
 				revisores.add(new Revisor(rs.getString("idREVISOR2")));
 				revisores.add(new Revisor(rs.getString("idREVISOR3")));
 				Articulo aux = new Articulo(rs.getString("id"), rs.getString("title"),
 						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
-						rs.getString("summary"), toList(rs.getString("keywords")),
-						rs.getString("presentation_card"), rs.getString("srcfile"),
-						toList(rs.getString("cv_authors")), toArticleState(rs.getString("state")));
+						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
+						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
+						toArticleState(rs.getString("state")));
 				aux.setRevisores(revisores);
 				ret.add(aux);
 			}
@@ -306,5 +305,33 @@ public class DataBaseManager {
 			e.printStackTrace();
 		}
 		return ret;
+	}
+
+	public static Articulo getArticleFromId(String idArticulo) {
+		try {
+			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			String sql = "SELECT * FROM articles WHERE ID = (?)";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, idArticulo.toUpperCase());
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				List<Revisor> revisores = new LinkedList<>();
+				revisores.add(new Revisor(rs.getString("idREVISOR1")));
+				revisores.add(new Revisor(rs.getString("idREVISOR2")));
+				revisores.add(new Revisor(rs.getString("idREVISOR3")));
+				Articulo aux = new Articulo(rs.getString("id"), rs.getString("title"),
+						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
+						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
+						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
+						toArticleState(rs.getString("state")));
+				aux.setRevisores(revisores);
+				return aux;
+			}
+		} catch (SQLException e) {
+			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
