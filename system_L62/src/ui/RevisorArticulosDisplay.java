@@ -13,6 +13,7 @@ import javax.swing.JTextPane;
 import business.Articulo;
 import persistence.DataBaseManager;
 import ui.listeners.ActionListenerCerrarVentana;
+import ui.listeners.ActionListenerCrearVentanaVerComentarios;
 
 import javax.swing.JButton;
 
@@ -22,6 +23,9 @@ public class RevisorArticulosDisplay implements Ventana {
 	private JComboBox<Articulo> comboBox;
 	private JLabel lblTitulo;
 	private JTextPane textPaneTitulo;
+	public String getRevisor() {
+		return revisor;
+	}
 	private String revisor;
 	Articulo articulo;
 	private JTextPane textPaneAutor;
@@ -29,13 +33,16 @@ public class RevisorArticulosDisplay implements Ventana {
 	private JLabel lblEstado;
 	private JTextPane textPaneEstado;
 	private JButton btnVolver;
+	private JButton btnNewButton;
 	
+
 	/**
 	 * Create the application.
 	 */
 	public RevisorArticulosDisplay( String revisor) {
 		this.revisor = revisor;
-		
+		initialize();
+		frame.setVisible(true);
 	}
 
 	/**
@@ -52,10 +59,9 @@ public class RevisorArticulosDisplay implements Ventana {
 		frame.getContentPane().add(getTextPaneAutor());
 		frame.getContentPane().add(getLblEstado());
 		frame.getContentPane().add(getTextPaneEstado());		
-		frame.getContentPane().add(textPaneAutor);
-		frame.getContentPane().add(lblEstado);
 		frame.getContentPane().add(getComboBox());
 		frame.getContentPane().add(getBtnVolver());
+		frame.getContentPane().add(getBtnNewButton());
 		frame.setVisible(true);
 	}
 	private JComboBox<Articulo> getComboBox() {
@@ -97,7 +103,7 @@ public class RevisorArticulosDisplay implements Ventana {
 	}
 	private JLabel getLblEstado() {
 		if (lblEstado == null) {
-			lblEstado = new JLabel("Titulo:");
+			lblEstado = new JLabel("SRC:");
 			lblEstado.setBounds(10, 79, 46, 14);
 		}
 		return lblEstado;
@@ -128,14 +134,14 @@ public class RevisorArticulosDisplay implements Ventana {
 	private void setTexts() {
 		textPaneTitulo.setText(articulo.getTitle());
 		textPaneAutor.setText(articulo.getAuthor().getName());
-		textPaneEstado.setText(articulo.getState());
+		textPaneEstado.setText(articulo.getSrcFile());
 	}
 	private JButton getBtnVolver() {
 		if (btnVolver == null) {
 			btnVolver = new JButton("Volver");
 			btnVolver.addActionListener(new ActionListenerCerrarVentana(this) {
 			});
-			btnVolver.setBounds(11, 227, 89, 23);
+			btnVolver.setBounds(11, 227, 140, 23);
 		}
 		return btnVolver;
 	}
@@ -144,5 +150,14 @@ public class RevisorArticulosDisplay implements Ventana {
 	public void close() {
 		frame.dispose();
 		
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("Ver Comentarios");
+			btnNewButton.addActionListener(new ActionListenerCrearVentanaVerComentarios(this) {
+			});
+			btnNewButton.setBounds(11, 193, 140, 23);
+		}
+		return btnNewButton;
 	}
 }

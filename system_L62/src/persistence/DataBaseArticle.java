@@ -12,11 +12,18 @@ import java.util.List;
 import business.Articulo;
 import business.Articulo.ArticleState;
 import business.Autor;
+import business.Revisor;
 
 public class DataBaseArticle {
 	private static String URL = "jdbc:hsqldb:hsql://localhost";
 	private static String USER = "sa";
 
+	/**
+	 * Sube un artículo a la base de datos
+	 * 
+	 * @param article
+	 * @return si se subió el artículo
+	 */
 	public static boolean uploadArticle(Articulo article) {
 		String queryInsertArticle = "insert into articles (id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state) values ('"
 				+ article.getId() + "', '" + article.getTitle() + "', '" + article.getAuthor().getName() + "', '"
@@ -54,6 +61,12 @@ public class DataBaseArticle {
 		return result;
 	}
 
+	/**
+	 * Busca y devuelve un artículo con un id dado de la base de datos
+	 * 
+	 * @param id
+	 * @return artículo con el id dado
+	 */
 	public static Articulo searchArticle(String id) {
 		String querySearchArticle = "select * from articles where id_articles = '" + id + "'";
 
@@ -102,6 +115,12 @@ public class DataBaseArticle {
 		return article;
 	}
 
+	/**
+	 * Envía un artículo creado para ser evaluado
+	 * 
+	 * @param id
+	 * @return si se envió el artículo
+	 */
 	public static boolean sendArticleToAprove(String id) {
 		String queryUpdateArticle = "update articles set state = '" + Articulo.ArticleState.SENT
 				+ "' where id_articles = '" + id + "'";
@@ -136,6 +155,12 @@ public class DataBaseArticle {
 		return result;
 	}
 
+	/**
+	 * Envía un artículo al editor para que decida publicarlo
+	 * 
+	 * @param id
+	 * @return si se publica el artículo o no
+	 */
 	public static boolean publishArticle(String id) {
 		String queryPublishArticle = "update articles set state = '" + Articulo.ArticleState.IN_EDITION
 				+ "' where id_articles = '" + id + "'";
@@ -169,7 +194,135 @@ public class DataBaseArticle {
 
 		return result;
 	}
+	public static boolean updateArticleTiempoMaximoRevisor(Articulo article) {
+		String queryUpdateArticle = "update articles set";
+		queryUpdateArticle += " TIEMPO_MAXIMO_REVISION = '" + article.getTiempoMaximoRevision() + "'";
+		queryUpdateArticle += " where id_articles = '" + article.getId() + "'";
+		boolean result;
+		Connection conn = null;
+		Statement st = null;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
 
+			st.executeUpdate(queryUpdateArticle);
+			result = true;
+		} catch (SQLException e) {
+			result = false;
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return result;
+	}
+	
+	public static boolean updateArticleAlPublicar(Articulo article) {
+		String queryUpdateArticle = "update articles set";
+		queryUpdateArticle += " DOI = '" + article.getDoi() + "'";
+		queryUpdateArticle += ",";
+		queryUpdateArticle += " VOLUMEN = '" + article.getVolumen() + "'";
+		queryUpdateArticle += ",";
+		java.sql.Date sqlDate = new java.sql.Date(article.getFechaPublicacion().getTime());
+
+		queryUpdateArticle += " FECHA_PUBLICACION = '" + sqlDate + "'";
+		queryUpdateArticle += " where id_articles = '" + article.getId() + "'";
+		Connection conn = null;
+		Statement st = null;
+
+		boolean result;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			st.executeUpdate(queryUpdateArticle);
+			result = true;
+		} catch (SQLException e) {
+			result = false;
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return result;
+
+		
+		
+	}
+	
+	public static boolean updateArticleRevisores(Articulo article) {
+		String queryUpdateArticle = "update articles set";
+		Revisor revisor1 = article.getListOfRevisoresParaRevisar().get(0);
+		Revisor revisor2 = article.getListOfRevisoresParaRevisar().get(1);
+		Revisor revisor3 = article.getListOfRevisoresParaRevisar().get(2);
+		queryUpdateArticle += " idRevisor1 = '" + revisor1.getId() + "'";
+		queryUpdateArticle += ",";
+		queryUpdateArticle += " idRevisor2 = '" + revisor2.getId() + "'";
+		queryUpdateArticle += ",";
+		queryUpdateArticle += " idRevisor3 = '" + revisor3.getId() + "'";
+
+		queryUpdateArticle += ",";
+		queryUpdateArticle += " state = '" + article.getState() + "'";
+
+		queryUpdateArticle += " where id_articles = '" + article.getId() + "'";
+
+		Connection conn = null;
+		Statement st = null;
+
+		boolean result;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			st.executeUpdate(queryUpdateArticle);
+			result = true;
+		} catch (SQLException e) {
+			result = false;
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return result;
+	}
+	
+
+	/**
+	 * Modifica los valores de los campos de un artículo dado en la base de datos
+	 * 
+	 * @param article
+	 * @return si se actualizó el artículo
+	 */
 	public static boolean updateArticle(Articulo article) {
 		String queryUpdateArticle = "update articles set";
 
@@ -277,12 +430,12 @@ public class DataBaseArticle {
 			StringBuilder query = new StringBuilder();
 			st = conn.createStatement();
 			query.append(
-					"select id, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state from articles");
+					"select id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state from articles");
 
 			rs = st.executeQuery(query.toString());
 
 			while (rs.next()) {
-				listOfArticulos.add(new Articulo(rs.getString("id"), rs.getString("title"),
+				listOfArticulos.add(new Articulo(rs.getString("id_articles"), rs.getString("title"),
 						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
 						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
 						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
@@ -291,7 +444,6 @@ public class DataBaseArticle {
 			rs.close();
 			conn.close();
 		} catch (SQLException e) {
-			listOfArticulosFiltrados = null;
 		} finally {
 			if (st != null) {
 				try {
@@ -306,12 +458,11 @@ public class DataBaseArticle {
 				}
 			}
 		}
-		if (listOfArticulosFiltrados != null)
-			for (Articulo a : listOfArticulos) {
-				if (a.getAuthor().getName().equals(author.getName()) || a.getAuthors().contains(author)) {
-					listOfArticulosFiltrados.add(a);
-				}
+		for (Articulo a : listOfArticulos) {
+			if (a.getAuthor().getName().equals(author.getName()) || a.getAuthors().contains(author)) {
+				listOfArticulosFiltrados.add(a);
 			}
+		}
 		return listOfArticulosFiltrados;
 	}
 
@@ -324,13 +475,13 @@ public class DataBaseArticle {
 
 			StringBuilder query = new StringBuilder();
 			Statement st = con.createStatement();
-			query.append("select title, author, summary, keywords, srcfile from articles");
+			query.append("select title, author, summary, keywords, srcfile, state from articles");
 
 			ResultSet rs = st.executeQuery(query.toString());
 
 			while (rs.next()) {
 				listOfArticulos.add(new Articulo(rs.getString("title"), new Autor(rs.getString("author")),
-						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("srcfile")));
+						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("srcfile"), rs.getString("state")));
 			}
 			rs.close();
 			con.close();
@@ -340,7 +491,15 @@ public class DataBaseArticle {
 		}
 		return listOfArticulos;
 	}
+	
 
+	/**
+	 * Transforma una cadena de texto en una lista de cadenas de texto que estaban
+	 * separadas por comas
+	 * 
+	 * @param str
+	 * @return lista de cadenas de texto
+	 */
 	private static List<String> toList(String str) {
 		List<String> list = new LinkedList<>();
 		if (str == null) {
@@ -354,6 +513,13 @@ public class DataBaseArticle {
 		return list;
 	}
 
+	/**
+	 * Transforma una cadena de texto en una lista de autores que estaban separados
+	 * por comas
+	 * 
+	 * @param str
+	 * @return lista de autores
+	 */
 	private static List<Autor> authorsToList(String str) {
 		List<Autor> list = new LinkedList<>();
 		if (str == null) {
@@ -367,6 +533,12 @@ public class DataBaseArticle {
 		return list;
 	}
 
+	/**
+	 * Transforma una cadena de texto en un estado de artículo
+	 * 
+	 * @param state
+	 * @return estado del artículo
+	 */
 	private static ArticleState toArticleState(String state) {
 		switch (state) {
 		case "CREATED":
@@ -379,6 +551,8 @@ public class DataBaseArticle {
 			return ArticleState.IN_REVISION;
 		case "ACCEPTED":
 			return ArticleState.ACCEPTED;
+		case "ACCEPTED_WITH_CHANGES":
+			return ArticleState.ACCEPTED_WITH_CHANGES;
 		case "REJECTED":
 			return ArticleState.REJECTED;
 		case "IN_EDITION":

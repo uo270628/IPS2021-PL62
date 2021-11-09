@@ -1,25 +1,25 @@
 package ui;
 
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import business.Articulo;
-import persistence.DataBaseArticle;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
-import java.awt.event.ActionEvent;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import business.Articulo;
+import business.Articulo.ArticleState;
+import persistence.DataBaseArticle;
 
 public class DocumentsWindow extends JDialog {
 
@@ -31,32 +31,33 @@ public class DocumentsWindow extends JDialog {
 	private JTextField textFieldCVAuthor;
 	private JButton btnAddCV;
 	private JCheckBox chckbxCopyright;
-	private JButton btnConfirm;
+	private JButton btnSave;
 	private JButton btnDeleteCV;
 	private JScrollPane scrollPaneCV;
 	private JTextArea textAreaCV;
 	private JLabel lblSrcFile;
 	private JTextField textFieldSrcFile;
 	private JButton btnBack;
-	
+
 	private UploadWindow cw;
 	private List<String> cvAuthors;
 	private Articulo newArticle;
 	private Articulo oldArticle;
+	private JButton btnSend;
 
 	/**
-	 * Create the frame. 
+	 * Create the frame.
 	 */
 	public DocumentsWindow(UploadWindow cw, Articulo newArticle, Articulo oldArticle) {
 		this.cw = cw;
 		this.newArticle = newArticle;
 		this.oldArticle = oldArticle;
-		if(oldArticle != null) {
+		if (oldArticle != null) {
 			this.cvAuthors = oldArticle.getCvAuthors();
-		}else {
+		} else {
 			this.cvAuthors = new LinkedList<>();
 		}
-		
+
 		setModal(true);
 		setResizable(false);
 		setTitle("Ventana de archivos");
@@ -73,12 +74,13 @@ public class DocumentsWindow extends JDialog {
 		contentPane.add(getTextFieldCVAuthor());
 		contentPane.add(getBtnAddCV());
 		contentPane.add(getChckbxCopyright());
-		contentPane.add(getBtnConfirm());
+		contentPane.add(getBtnSave());
 		contentPane.add(getBtnDeleteCV());
 		contentPane.add(getScrollPaneCV());
 		contentPane.add(getLblSrcFile());
 		contentPane.add(getTextFieldSrcFile());
 		contentPane.add(getBtnBack());
+		contentPane.add(getBtnSend());
 	}
 
 	public JLabel getLblPresentationCard() {
@@ -89,18 +91,20 @@ public class DocumentsWindow extends JDialog {
 		}
 		return lblPresentationCard;
 	}
+
 	public JTextField getTextFieldPresentationCard() {
 		if (textFieldPresentationCard == null) {
 			textFieldPresentationCard = new JTextField();
 			textFieldPresentationCard.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			textFieldPresentationCard.setBounds(174, 24, 229, 19);
 			textFieldPresentationCard.setColumns(10);
-			if(oldArticle != null)
-				if(oldArticle.getPresentationCard() != null)
+			if (oldArticle != null)
+				if (oldArticle.getPresentationCard() != null)
 					textFieldPresentationCard.setText(oldArticle.getPresentationCard());
 		}
 		return textFieldPresentationCard;
 	}
+
 	public JLabel getLblCV() {
 		if (lblCV == null) {
 			lblCV = new JLabel("Curr\u00EDculums de los autores:");
@@ -109,6 +113,7 @@ public class DocumentsWindow extends JDialog {
 		}
 		return lblCV;
 	}
+
 	public JTextField getTextFieldCVAuthor() {
 		if (textFieldCVAuthor == null) {
 			textFieldCVAuthor = new JTextField();
@@ -118,10 +123,12 @@ public class DocumentsWindow extends JDialog {
 		}
 		return textFieldCVAuthor;
 	}
+
 	public JButton getBtnAddCV() {
 		if (btnAddCV == null) {
 			btnAddCV = new JButton("A\u00F1adir");
 			btnAddCV.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					addCVAuthor();
 				}
@@ -131,37 +138,42 @@ public class DocumentsWindow extends JDialog {
 		}
 		return btnAddCV;
 	}
+
 	public JCheckBox getChckbxCopyright() {
 		if (chckbxCopyright == null) {
 			chckbxCopyright = new JCheckBox("Confirmo ser el autor del art\u00EDculo");
 			chckbxCopyright.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					acceptCopyright();
 				}
 			});
 			chckbxCopyright.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			chckbxCopyright.setBounds(28, 213, 207, 21);
+			chckbxCopyright.setBounds(28, 178, 207, 21);
 		}
 		return chckbxCopyright;
 	}
-	public JButton getBtnConfirm() {
-		if (btnConfirm == null) {
-			btnConfirm = new JButton("Confirmar");
-			btnConfirm.addActionListener(new ActionListener() {
+
+	public JButton getBtnSave() {
+		if (btnSave == null) {
+			btnSave = new JButton("Guardar");
+			btnSave.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					operateArticle();
 				}
 			});
-			btnConfirm.setEnabled(false);
-			btnConfirm.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			btnConfirm.setBounds(241, 213, 90, 21);
+			btnSave.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnSave.setBounds(241, 213, 90, 28);
 		}
-		return btnConfirm;
+		return btnSave;
 	}
+
 	public JButton getBtnDeleteCV() {
 		if (btnDeleteCV == null) {
 			btnDeleteCV = new JButton("Borrar");
 			btnDeleteCV.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					removeCVAuthor();
 				}
@@ -171,6 +183,7 @@ public class DocumentsWindow extends JDialog {
 		}
 		return btnDeleteCV;
 	}
+
 	public JScrollPane getScrollPaneCV() {
 		if (scrollPaneCV == null) {
 			scrollPaneCV = new JScrollPane();
@@ -179,16 +192,18 @@ public class DocumentsWindow extends JDialog {
 		}
 		return scrollPaneCV;
 	}
+
 	public JTextArea getTextAreaCV() {
 		if (textAreaCV == null) {
 			textAreaCV = new JTextArea();
 			textAreaCV.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			textAreaCV.setEditable(false);
-			if(oldArticle != null)
+			if (oldArticle != null)
 				textAreaCV.setText(listCVAuthors());
 		}
 		return textAreaCV;
 	}
+
 	public JLabel getLblSrcFile() {
 		if (lblSrcFile == null) {
 			lblSrcFile = new JLabel("Fichero fuente:");
@@ -197,101 +212,202 @@ public class DocumentsWindow extends JDialog {
 		}
 		return lblSrcFile;
 	}
+
 	public JTextField getTextFieldSrcFile() {
 		if (textFieldSrcFile == null) {
 			textFieldSrcFile = new JTextField();
 			textFieldSrcFile.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			textFieldSrcFile.setBounds(174, 62, 229, 19);
 			textFieldSrcFile.setColumns(10);
-			if(oldArticle != null)
-				if(oldArticle.getSrcFile() != null)
+			if (oldArticle != null)
+				if (oldArticle.getSrcFile() != null)
 					textFieldSrcFile.setText(oldArticle.getSrcFile());
 		}
 		return textFieldSrcFile;
 	}
+
 	public JButton getBtnBack() {
 		if (btnBack == null) {
 			btnBack = new JButton("Atr\u00E1s");
 			btnBack.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					disposeThisWindow();
 				}
 			});
 			btnBack.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			btnBack.setBounds(341, 213, 85, 21);
+			btnBack.setBounds(341, 213, 85, 28);
 		}
 		return btnBack;
 	}
-	
+
+	public JButton getBtnSend() {
+		if (btnSend == null) {
+			btnSend = new JButton("Enviar");
+			btnSend.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					finishArticle();
+				}
+			});
+			btnSend.setEnabled(false);
+			btnSend.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnSend.setBounds(141, 214, 94, 28);
+		}
+		return btnSend;
+	}
+
+	/**
+	 * Añade un currículum vitae de autor a la lista de CVs autores del artículo
+	 */
 	private void addCVAuthor() {
-		if(! getTextFieldCVAuthor().getText().trim().equals("")) {
+		if (!getTextFieldCVAuthor().getText().trim().equals("")) {
 			cvAuthors.add(getTextFieldCVAuthor().getText().trim());
 			getTextFieldCVAuthor().setText("");
 			getTextAreaCV().setText(listCVAuthors());
 		}
 	}
-	
+
+	/**
+	 * Borra un currículum vitae de autor de la lista de CVs autores del artículo
+	 */
 	private void removeCVAuthor() {
-		if(listCVAuthors().contains(getTextFieldCVAuthor().getText().trim())) {
+		if (listCVAuthors().contains(getTextFieldCVAuthor().getText().trim())) {
 			cvAuthors.remove(getTextFieldCVAuthor().getText().trim());
 			getTextAreaCV().setText(listCVAuthors());
 			getTextFieldCVAuthor().setText("");
 		}
 	}
-	
+
+	/**
+	 * Borra esta ventana y su antecesora
+	 */
 	private void disposeWindows() {
 		cw.disposeAll();
 		this.dispose();
 	}
-	
+
+	/**
+	 * Borra esta ventana
+	 */
 	private void disposeThisWindow() {
 		this.dispose();
 	}
-	
+
+	/**
+	 * Devuelve los CVs de los autores del artículo uno por línea
+	 * 
+	 * @return cadena de lista de CVs de autores
+	 */
 	private String listCVAuthors() {
 		String str = "";
-		for(String cv: cvAuthors) {
+		for (String cv : cvAuthors) {
 			str += cv + "\n";
 		}
 		return str.trim();
 	}
 
+	/**
+	 * Transfiere los nuevos campos al artículo y a la base de datos
+	 */
 	private void operateArticle() {
 		newArticle.setPresentationCard(getTextFieldPresentationCard().getText().trim());
 		newArticle.setSrcFile(getTextFieldSrcFile().getText().trim());
 		newArticle.setCvAuthors(cvAuthors);
-		if(oldArticle == null) {
+		if (oldArticle == null) {
 			uploadArticle();
-		}else {
+		} else {
 			updateArticle();
 		}
 	}
 
+	/**
+	 * Sube el nuevo artículo a la base de datos
+	 */
 	private void uploadArticle() {
 		boolean made = DataBaseArticle.uploadArticle(newArticle);
-		if(made) {
+		if (made) {
 			JOptionPane.showMessageDialog(null, "Se ha creado el artículo.");
 			disposeWindows();
-		}else {
+		} else {
 			JOptionPane.showMessageDialog(null, "Ha habido un error al intentar crear el artículo.");
 		}
 	}
 
+	/**
+	 * Sube los cambios del artículo a la base de datos
+	 */
 	private void updateArticle() {
 		boolean made = DataBaseArticle.updateArticle(newArticle);
-		if(made) {
+		if (made) {
 			JOptionPane.showMessageDialog(null, "Se ha actualizado el artículo.");
 			disposeWindows();
-		}else {
+		} else {
 			JOptionPane.showMessageDialog(null, "Ha habido un error al intentar actualizar el artículo.");
 		}
 	}
 
+	/**
+	 * Activa o desactiva el botón de copyright en función del checkBox
+	 */
 	private void acceptCopyright() {
-		if(chckbxCopyright.isSelected()) {
-			getBtnConfirm().setEnabled(true);
-		}else {
-			getBtnConfirm().setEnabled(false);
+		if (chckbxCopyright.isSelected()) {
+			getBtnSend().setEnabled(true);
+		} else {
+			getBtnSend().setEnabled(false);
+		}
+	}
+
+	/**
+	 * Envía el artículo al editor para que decida si publicarlo
+	 * 
+	 * @param article
+	 */
+	private void publishArticle(Articulo article) {
+		DataBaseArticle.publishArticle(article.getId());
+		JOptionPane.showMessageDialog(null, "El artículo está en proceso de ser publicado.");
+		disposeWindows();
+	}
+
+	/**
+	 * Finaliza el artículo para que un editor lo pueda evaluar
+	 * 
+	 * @param article
+	 */
+	private void sendArticleToApprove(Articulo article) {
+		if (article.isComplete()) {
+			DataBaseArticle.sendArticleToAprove(article.getId());
+			JOptionPane.showMessageDialog(null, "El artículo está listo para ser evaluado.");
+			disposeWindows();
+		} else {
+			JOptionPane.showMessageDialog(null, "Faltan campos del artículo por rellenar.");
+		}
+	}
+
+	/**
+	 * Transfiere los nuevos campos al artículo y finaliza la edición del mismo
+	 */
+	private void finishArticle() {
+		newArticle.setPresentationCard(getTextFieldPresentationCard().getText().trim());
+		newArticle.setSrcFile(getTextFieldSrcFile().getText().trim());
+		newArticle.setCvAuthors(cvAuthors);
+		boolean present = false;
+		if (DataBaseArticle.searchArticle(newArticle.getId()) != null)
+			present = true;
+		boolean made;
+		if (!present)
+			made = DataBaseArticle.uploadArticle(newArticle);
+		else
+			made = DataBaseArticle.updateArticle(newArticle);
+		if (made) {
+			if (newArticle.getState().equals(ArticleState.CREATED.toString())) {
+				sendArticleToApprove(newArticle);
+			} else if (newArticle.getState().equals(ArticleState.ACCEPTED_WITH_CHANGES.toString())) {
+				publishArticle(newArticle);
+			}
+			disposeWindows();
+		} else {
+			JOptionPane.showMessageDialog(null, "Ha habido un error al intentar actualizar el artículo.");
 		}
 	}
 }

@@ -1,12 +1,13 @@
 package business;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Articulo {
 
 	public enum ArticleState {
-		CREATED, SENT, WITH_EDITOR, IN_REVISION, ACCEPTED, ACCEPTED_WITH_CHANGES, REJECTED, IN_EDITION, PUBLISHED
+		CREATED, SENT, WITH_EDITOR,IN_REVISION, ACCEPTED, ACCEPTED_WITH_CHANGES, REJECTED, IN_EDITION, PUBLISHED,REVISION_PENDING
 	}
 
 	private String id;
@@ -19,6 +20,10 @@ public class Articulo {
 	private String srcFile;
 	private List<String> cvAuthors;
 	private ArticleState state;
+	private int tiempoMaximoRevision;
+	private String doi;
+	private String volumen;
+	private Date fechaPublicacion;
 
 	private Tema tema;
 	private List<Revisor> listOfRevisoresParaRevisar;
@@ -46,7 +51,23 @@ public class Articulo {
 		this.keywords = keywords;
 		this.state = ArticleState.SENT;
 		this.tema = tema;
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
 	}
+	
+	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,List<String>cvAuthors,
+			Tema tema) {
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.authors = authors;
+		this.resumen = resumen;
+		this.keywords = keywords;
+		this.state = ArticleState.SENT;
+		this.tema = tema;
+		this.cvAuthors=cvAuthors;
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+	}
+	
 
 	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
 			String presentationCard, String srcFile, List<String> cvAuthors, ArticleState state) {
@@ -62,23 +83,62 @@ public class Articulo {
 		this.state = state;
 	}
 
-	public Articulo(String title, Autor author, String resumen, List<String> keywords, String srcFile) {
+	public Articulo(String title, Autor author, String resumen, List<String> keywords, String srcFile, String state) {
 		this.title = title;
 		this.author = author;
 		this.resumen = resumen;
 		this.keywords = keywords;
 		this.srcFile = srcFile;
+		setEstado(state);
+	}
+
+	private void setEstado(String state) {
+		switch(state) {
+		case "CREATED":
+			this.state = ArticleState.CREATED;
+			break;
+		case "SENT":
+			this.state = ArticleState.SENT;
+			break;
+		case "WITH_EDITOR":
+			this.state = ArticleState.WITH_EDITOR;
+			break;
+		case "IN_REVISION":
+			this.state = ArticleState.IN_REVISION;
+			break;
+		case "ACCEPTED":
+			this.state = ArticleState.ACCEPTED;
+			break;
+		case "ACCEPTED_WITH_CHANGES":
+			this.state = ArticleState.ACCEPTED_WITH_CHANGES;
+			break;
+		case "REJECTED":
+			this.state = ArticleState.REJECTED;
+			break;
+		case "IN_EDITION":
+			this.state = ArticleState.IN_EDITION;
+			break;
+		case "PUBLISHED":
+			this.state = ArticleState.PUBLISHED;
+			break;
+		}
+		
 	}
 
 	public Articulo(Tema tema, String id) {
 		this.tema = tema;
 		this.id = id;
 		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+		this.comentarios=new ArrayList<>();
 	}
 
 	@Override
 	public String toString() {
-		return title + ", " + author + ", " + srcFile;
+		return title;
+	}
+
+	public String toStringAuthor() {
+		return title + " - " + state.toString();
 	}
 
 	public String getId() {
@@ -120,7 +180,10 @@ public class Articulo {
 	public void setSrcFile(String srcFile) {
 		this.srcFile = srcFile;
 	}
-
+	public void addComentario(Comentario comentario) {
+		comentarios.add(comentario);
+		
+	}
 	public List<String> getCvAuthors() {
 		return new ArrayList<>(cvAuthors);
 	}
@@ -235,6 +298,39 @@ public class Articulo {
 	public void setCarta(Carta carta) {
 		this.carta = carta;
 	}
+	
+
+	public int getTiempoMaximoRevision() {
+		return tiempoMaximoRevision;
+	}
+
+	public void setTiempoMaximoRevision(int tiempoMaximoRevision) {
+		this.tiempoMaximoRevision = tiempoMaximoRevision;
+	}
+
+	public String getDoi() {
+		return doi;
+	}
+
+	public void setDoi(String doi) {
+		this.doi = doi;
+	}
+
+	public String getVolumen() {
+		return volumen;
+	}
+
+	public void setVolumen(String volumen) {
+		this.volumen = volumen;
+	}
+
+	public Date getFechaPublicacion() {
+		return fechaPublicacion;
+	}
+
+	public void setFechaPublicacion(Date fechaPublicacion) {
+		this.fechaPublicacion = fechaPublicacion;
+	}
 
 	public List<Comentario> getComentarios() {
 		return comentarios;
@@ -247,6 +343,10 @@ public class Articulo {
 	public void setRevisores(List<Revisor> revisores) {
 		this.listOfRevisoresParaRevisar = revisores;
 		revisoresRestantes -= revisores.size();
+	}
+
+	public boolean canBeEditable() {
+		return state == ArticleState.CREATED || state == ArticleState.ACCEPTED_WITH_CHANGES;
 	}
 
 }
