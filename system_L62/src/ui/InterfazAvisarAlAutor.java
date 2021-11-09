@@ -65,6 +65,7 @@ public class InterfazAvisarAlAutor extends JDialog {
 	 * Create the dialog.
 	 */
 	public InterfazAvisarAlAutor(Articulo articulo) {
+		setResizable(false);
 		this.articulo=articulo;
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
@@ -78,6 +79,7 @@ public class InterfazAvisarAlAutor extends JDialog {
 		contentPanel.add(getBtnInformar());
 		contentPanel.add(getLblNewLabel());
 		contentPanel.add(getLblRevisoresDisponibles());
+		setLocationRelativeTo(null);
 	}
 	private JLabel getLblTema() {
 		if (lblTema == null) {

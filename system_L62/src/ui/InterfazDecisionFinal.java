@@ -54,6 +54,7 @@ public class InterfazDecisionFinal extends JDialog {
 	 * Create the dialog.
 	 */
 	public InterfazDecisionFinal(Articulo articulo) {
+		setResizable(false);
 		this.articulo=articulo;
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
@@ -69,6 +70,8 @@ public class InterfazDecisionFinal extends JDialog {
 		contentPanel.add(getBtnAceptar());
 		contentPanel.add(getBtnRechazar());
 		contentPanel.add(getBtnSiguiente());
+		setLocationRelativeTo(null);
+		
 	}
 	private JButton getBtnAceptar() {
 		if (btnAceptar == null) {

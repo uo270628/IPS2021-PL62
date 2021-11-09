@@ -48,6 +48,7 @@ public class InterfazElegirRevisores extends JFrame {
 	 * Create the frame.
 	 */
 	public InterfazElegirRevisores(Articulo articulo) {
+		setResizable(false);
 		this.articulo=articulo;
 	
 		cartarevisores=  new CartaRevisores();
@@ -67,6 +68,7 @@ public class InterfazElegirRevisores extends JFrame {
 		contentPane.add(getLblTiempoDeRevision());
 		contentPane.add(getSpTiempoDeRevision());
 		añadirRevisoresAlCombobox();
+		setLocationRelativeTo(null);
 
 		
 	}

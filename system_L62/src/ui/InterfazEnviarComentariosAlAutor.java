@@ -48,6 +48,7 @@ public class InterfazEnviarComentariosAlAutor extends JFrame {
 	 * Create the frame.
 	 */
 	public InterfazEnviarComentariosAlAutor(Articulo articulo) {
+		setResizable(false);
 		this.articulo = articulo;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -60,6 +61,7 @@ public class InterfazEnviarComentariosAlAutor extends JFrame {
 		contentPane.add(getBtnRechazar());
 		contentPane.add(getLbLCarta());
 		contentPane.add(getTextPaneCarta());
+		setLocationRelativeTo(null);
 	}
 
 	private JButton getBtnEnviarComentariosAlAutor() {
