@@ -8,6 +8,11 @@ public class Comentario {
 	private String idArticulo;
 	private String type;
 
+	public String getType() {
+		return type;
+	}
+
+
 	public Comentario(String texto) {
 		this.texto = texto;
 	}
@@ -18,8 +23,19 @@ public class Comentario {
 		this.idRevisor = idRevisor;
 		this.recomendacion = recomendacion;
 	}
+	
 
 	public Comentario(int id, String texto, String idRevisor, String recomendacion, String idArticulo,String type) {
+
+		this.id = id;
+		this.texto = texto;
+		this.idRevisor = idRevisor;
+		this.recomendacion = recomendacion;
+		this.idArticulo = idArticulo;
+		this.type=type;
+	}
+	public Comentario(int id, String texto, String idRevisor, String recomendacion, String idArticulo) {
+
 		this.id = id;
 		this.texto = texto;
 		this.idRevisor = idRevisor;

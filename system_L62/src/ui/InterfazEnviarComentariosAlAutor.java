@@ -6,6 +6,7 @@ import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
 import business.Carta;
+import business.Comentario;
 import business.Tema;
 import persistence.DataBaseComentario;
 
@@ -33,7 +34,9 @@ public class InterfazEnviarComentariosAlAutor extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InterfazEnviarComentariosAlAutor frame = new InterfazEnviarComentariosAlAutor(new Articulo(new Tema( "Peces"),"25"));
+					Articulo a =new Articulo(new Tema( "Peces"),"25");
+					a.addComentario(new Comentario(2, "hola", "12", "Aceptar", "fsfsdf", "Temporal"));
+					InterfazEnviarComentariosAlAutor frame = new InterfazEnviarComentariosAlAutor(a);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -45,6 +48,7 @@ public class InterfazEnviarComentariosAlAutor extends JFrame {
 	 * Create the frame.
 	 */
 	public InterfazEnviarComentariosAlAutor(Articulo articulo) {
+		setResizable(false);
 		this.articulo = articulo;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -57,6 +61,7 @@ public class InterfazEnviarComentariosAlAutor extends JFrame {
 		contentPane.add(getBtnRechazar());
 		contentPane.add(getLbLCarta());
 		contentPane.add(getTextPaneCarta());
+		setLocationRelativeTo(null);
 	}
 
 	private JButton getBtnEnviarComentariosAlAutor() {
@@ -78,6 +83,7 @@ public class InterfazEnviarComentariosAlAutor extends JFrame {
 		String carta= getTextPaneCarta().getText();
 		articulo.setCarta(new Carta(carta));
 		DataBaseComentario.enviarCartaAlAutor(articulo);
+		DataBaseComentario.enviarComentariosAlAutor(articulo);
 	}
 
 	private JButton getBtnAceptarArticulo() {

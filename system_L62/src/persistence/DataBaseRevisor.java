@@ -35,7 +35,7 @@ public class DataBaseRevisor {
 		Statement st = con.createStatement();
 		query.append(
 				"SELECT revisores.idrevisor, revisores.nombre nombre,revisores.tiempo tiempo, temas.nombre tema from revisores "
-						+ "inner join revisa on (revisa.id_revisor=revisores.idrevisor) inner join temas on (revisa.id_tema=temas.id_tema) where temas.nombre=  "
+						+ "inner join revisa on (revisa.id_revisor=revisores.idrevisor) inner join temas on (revisa.id_tema=temas.id) where temas.nombre=  "
 						+"'"+ tema +"'"+" order by revisores.idrevisor ");
 		
 		

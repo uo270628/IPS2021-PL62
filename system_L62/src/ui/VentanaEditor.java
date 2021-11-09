@@ -52,6 +52,8 @@ public class VentanaEditor extends JFrame {
 	private List<Articulo> articulos;
 	private JButton btnVerNuevosArticulos;
 	private JButton btnAtras;
+	private JTextField textField;
+	private JLabel lblNewLabel_2;
 
 	/**
 	 * Launch the application.
@@ -106,12 +108,19 @@ public class VentanaEditor extends JFrame {
 			JLabel lblNewLabel_1 = new JLabel("Autor");
 			lblNewLabel_1.setBounds(41, 156, 96, 14);
 			panelGestor.add(lblNewLabel_1);
+			panelGestor.add(getTextField());
+			panelGestor.add(getLblNewLabel_2());
 		}
 		return panelGestor;
 	}
 	private JComboBox<Articulo> getComboBoxArticulosConEditor() {
 		if (comboBoxArticulosConEditor == null) {
 			comboBoxArticulosConEditor = new JComboBox<Articulo>();
+			comboBoxArticulosConEditor.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					textField.setText(((Articulo) getComboBoxArticulosConEditor().getSelectedItem()).getResumen());
+				}
+			});
 			ArrayList<Articulo> articulo = new ArrayList<Articulo>();
 			for(Articulo art:articulos) {
 				if(art.getState().equals(ArticleState.WITH_EDITOR.toString())) {
@@ -331,7 +340,7 @@ public class VentanaEditor extends JFrame {
 				}
 			});
 			btnVisto.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 12));
-			btnVisto.setBounds(346, 184, 89, 23);
+			btnVisto.setBounds(373, 200, 89, 23);
 		}
 		return btnVisto;
 	}
@@ -344,7 +353,7 @@ public class VentanaEditor extends JFrame {
 				}
 			});
 			btnElegirRevisores.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 12));
-			btnElegirRevisores.setBounds(297, 234, 138, 23);
+			btnElegirRevisores.setBounds(324, 234, 138, 23);
 		}
 		return btnElegirRevisores;
 	}
@@ -381,5 +390,22 @@ public class VentanaEditor extends JFrame {
 		Articulo a = (Articulo) getComboBoxArticulosEnviados().getSelectedItem();
 		InterfazElegirRevisores interfaz = new InterfazElegirRevisores(a);
 		interfaz.setVisible(true);
+	}
+	private JTextField getTextField() {
+		if (textField == null) {
+			textField = new JTextField();
+			textField.setBounds(246, 119, 216, 83);
+			textField.setColumns(10);
+			textField.setText(((Articulo) getComboBoxArticulosConEditor().getSelectedItem()).getResumen());
+		}
+		return textField;
+	}
+	private JLabel getLblNewLabel_2() {
+		if (lblNewLabel_2 == null) {
+			lblNewLabel_2 = new JLabel("Resumen:");
+			lblNewLabel_2.setBounds(246, 97, 89, 14);
+
+		}
+		return lblNewLabel_2;
 	}
 }

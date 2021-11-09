@@ -63,8 +63,40 @@ public class DataBaseComentario {
 			ps.setString(2, articulo.getId());
 			ps.setString(3, articulo.getCarta());
 			ps.execute();
+			ps.close();
+			con.close();
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-}
+	public static void enviarComentariosAlAutor(Articulo articulo) {
+		try {
+			con = DriverManager.getConnection(URL,USER,PASSWORD);
+			
+			StringBuilder query = new StringBuilder();
+
+			List<Comentario>list= articulo.getComentarios();
+			for (Comentario comentario : list) {
+				query.append("INSERT INTO ComentariosRevisor "
+						+ "(COMENTARIO, RECOMENDACION,idCOMENTARIOREVISOR,idREVISOR,idArticulo,TYPE) VALUES (?,?,?,?,?,?)");
+				
+				PreparedStatement ps = con.prepareStatement(query.toString());
+				ps.setString(1, comentario.getTexto());
+				ps.setString(2, comentario.getRecomendacion());
+				ps.setInt(3, comentario.getId());
+				ps.setInt(4, Integer.parseInt(comentario.getIdRevisor()));
+				ps.setString(5, comentario.getIdArticulo());
+				ps.setString(6, comentario.getType());
+				ps.execute();
+				ps.close();
+				
+				
+			}
+			con.close();
+			
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+	
+}}
