@@ -49,8 +49,8 @@ public class VerComentariosEditor {
 	 * @param string
 	 */
 	public VerComentariosEditor(String idArticulo) {
-		initialize();
 		articulo = DataBaseManager.getArticleFromId(idArticulo);
+		initialize();
 		frame.setVisible(true);
 	}
 
