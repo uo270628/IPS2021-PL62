@@ -154,14 +154,17 @@ public class DataBaseManager {
 					String sql2 = "UPDATE ARTICLES SET idREVISOR1=(NULL) WHERE id_articles=(?) ;";
 					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
 					preparedStatement2.setString(1, articulo.getId());
+					preparedStatement2.execute();
 				} else if (articulo.getListOfRevisoresParaRevisar().get(1).getId().equals(revisor)) {
 					String sql2 = "UPDATE ARTICLES SET idREVISOR2=(NULL) WHERE id_articles=(?) ;";
 					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
 					preparedStatement2.setString(1, articulo.getId());
+					preparedStatement2.execute();
 				} else if (articulo.getListOfRevisoresParaRevisar().get(2).getId().equals(revisor)) {
 					String sql2 = "UPDATE ARTICLES SET idREVISOR3=(NULL) WHERE id_articles=(?) ;";
 					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
 					preparedStatement2.setString(1, articulo.getId());
+					preparedStatement2.execute();
 				}
 			}
 		} catch (SQLException e) {
