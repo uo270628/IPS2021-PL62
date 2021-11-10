@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 
 import business.Articulo;
 import business.Autor;
+import business.Comentario;
 import business.Tema;
 import persistence.DataBaseArticle;
 import ui.listeners.ActionListenerVerComentarioEditor;
@@ -134,6 +135,7 @@ public class EditorStarUp {
 		list.add(new Autor("Pepe"));
 		list2.add("a");
 		Articulo a = new Articulo("12", "e", new Autor("Pedro"), list, "a", list2,list2, new Tema( "Peces"));
+		
 		DataBaseArticle.uploadArticleTodosLosAtributos(a);
 		
 	}
@@ -172,6 +174,7 @@ public class EditorStarUp {
 					else {
 					
 					InterfazDecisionFinal i= new InterfazDecisionFinal(articulo);
+					
 					i.setVisible(true);
 					}
 				}
@@ -186,12 +189,13 @@ public class EditorStarUp {
 			btnNewButton_2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Articulo articulo =  DataBaseArticle.searchArticleConTodosLosAtributos(getArticulo());
+					
 					if(articulo==null)
 						JOptionPane.showMessageDialog(null,
 								"No se ha encontrado la id del articulo", "Articulo",
 								JOptionPane.ERROR_MESSAGE);
 					else {
-					
+					articulo.addComentario(new Comentario(2, "hola", "12", "Aceptar", "12", "Temporal"));
 					InterfazEnviarComentariosAlAutor i= new InterfazEnviarComentariosAlAutor(articulo);
 					i.setVisible(true);
 					}

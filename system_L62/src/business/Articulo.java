@@ -67,6 +67,7 @@ public class Articulo {
 	this.tema = tema;
 	this.cvAuthors = cvAuthors;
 	this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+	this.comentarios=new ArrayList<Comentario>();
     }
 
     public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
@@ -81,6 +82,8 @@ public class Articulo {
 	this.srcFile = srcFile;
 	this.cvAuthors = cvAuthors;
 	this.state = state;
+	this.comentarios=new ArrayList<Comentario>();
+
     }
 
     public Articulo(String title, Autor author, String resumen, List<String> keywords, String srcFile, String state) {
@@ -90,6 +93,8 @@ public class Articulo {
 	this.keywords = keywords;
 	this.srcFile = srcFile;
 	setEstado(state);
+	this.comentarios=new ArrayList<Comentario>();
+
     }
 
     private void setEstado(String state) {
@@ -130,6 +135,8 @@ public class Articulo {
 	this.id = id;
 	this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
 	this.comentarios = new ArrayList<>();
+	this.comentarios=new ArrayList<Comentario>();
+
     }
 
     public String toStringAuthor() {
@@ -154,6 +161,8 @@ public class Articulo {
 	this.state = state;
 	this.tema = new Tema(Tema);
 	this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+	this.comentarios=new ArrayList<Comentario>();
+
 
     }
 

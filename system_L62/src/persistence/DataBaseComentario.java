@@ -78,15 +78,14 @@ public class DataBaseComentario {
 			List<Comentario>list= articulo.getComentarios();
 			for (Comentario comentario : list) {
 				query.append("INSERT INTO ComentariosRevisor "
-						+ "(COMENTARIO, RECOMENDACION,idCOMENTARIOREVISOR,idREVISOR,idArticulo,TYPE) VALUES (?,?,?,?,?,?)");
+						+ "(IDCOMENTARIOREVISOR, IDARTICULO, COMENTARIO, RECOMENDACION ,TYPE) VALUES (?,?,?,?,?)");
 				
 				PreparedStatement ps = con.prepareStatement(query.toString());
-				ps.setString(1, comentario.getTexto());
-				ps.setString(2, comentario.getRecomendacion());
-				ps.setInt(3, comentario.getId());
-				ps.setInt(4, Integer.parseInt(comentario.getIdRevisor()));
-				ps.setString(5, comentario.getIdArticulo());
-				ps.setString(6, comentario.getType());
+				ps.setInt(1, comentario.getId());
+				ps.setString(2, comentario.getIdArticulo());
+				ps.setString(3,comentario.getTexto());
+				ps.setString(4, comentario.getRecomendacion());
+				ps.setString(5, comentario.getType());
 				ps.execute();
 				ps.close();
 				
