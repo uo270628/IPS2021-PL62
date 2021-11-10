@@ -13,14 +13,14 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
 import business.Articulo.ArticleState;
-import business.Editor;
+import business.Comentario;
 import persistence.DataBaseArticle;
 
 public class VentanaEditor extends JFrame {
@@ -33,20 +33,13 @@ public class VentanaEditor extends JFrame {
 	private JTextField textFieldFiltrarPorAutor;
 	private JButton btnFiltrarPorTitulo;
 	private JButton btnFiltrarPorAutor;
-	private JPanel panelRegistro;
-	private JLabel lblInsertarID;
-	private JTextField textFieldIdEditor;
-	private JButton btnAccederEditor;
 
-	private Editor editor;
-	private JLabel lblEditor;
+
 	private JPanel panelANuevos;
 	private JLabel lblArticulosNuevos;
 	private JComboBox<Articulo> comboBoxArticulosEnviados;
-	private JLabel lblAutor;
 	private JTextField textFieldResumen;
 	private JLabel lblResumen;
-	private JButton btnVisto;
 	private JButton btnElegirRevisores;
 
 	private List<Articulo> articulos;
@@ -54,6 +47,14 @@ public class VentanaEditor extends JFrame {
 	private JButton btnAtras;
 	private JTextField textField;
 	private JLabel lblNewLabel_2;
+	private JPanel panel;
+	private JButton btnNewButton;
+	private JLabel lblNewLabel_3;
+	private JTextField textField_1;
+	private JButton btnNewButton_1;
+	private JButton btnNewButton_2;
+	private JButton btnNewButton_3;
+	private JButton btnNewButton_4;
 
 	/**
 	 * Launch the application.
@@ -82,11 +83,10 @@ public class VentanaEditor extends JFrame {
 		panelCard.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(panelCard);
 		panelCard.setLayout(new CardLayout(0, 0));
-
-		panelCard.add(getPanelRegistro(), "registro");
-		panelCard.add(getPanelGestor(), "gestion");
+		
 		panelCard.add(getPanelANuevos(), "a_nuevos");
-		editor = null;
+		panelCard.add(getPanelGestor(), "gestion");
+		panelCard.add(getPanel(), "aceptarCC");
 	}
 
 	private JPanel getPanelGestor() {
@@ -98,7 +98,6 @@ public class VentanaEditor extends JFrame {
 			panelGestor.add(getTextFieldFiltrarPorAutor());
 			panelGestor.add(getBtnFiltrarPorTitulo());
 			panelGestor.add(getBtnFiltrarPorAutor());
-			panelGestor.add(getLblEditor());
 			panelGestor.add(getBtnVerNuevosArticulos());
 
 			JLabel lblNewLabel = new JLabel("T\u00EDtulo");
@@ -110,6 +109,7 @@ public class VentanaEditor extends JFrame {
 			panelGestor.add(lblNewLabel_1);
 			panelGestor.add(getTextField());
 			panelGestor.add(getLblNewLabel_2());
+			panelGestor.add(getBtnNewButton());
 		}
 		return panelGestor;
 	}
@@ -121,14 +121,8 @@ public class VentanaEditor extends JFrame {
 					textField.setText(((Articulo) getComboBoxArticulosConEditor().getSelectedItem()).getResumen());
 				}
 			});
-			ArrayList<Articulo> articulo = new ArrayList<Articulo>();
-			for(Articulo art:articulos) {
-				if(art.getState().equals(ArticleState.WITH_EDITOR.toString())) {
-					articulo.add(art);
-				}
-			}
-			comboBoxArticulosConEditor.setModel(new DefaultComboBoxModel<Articulo>(articulo.toArray( new Articulo[articulo.size()])));
-			comboBoxArticulosConEditor.setBounds(41, 64, 350, 22);
+			comboBoxArticulosConEditor.setModel(new DefaultComboBoxModel<Articulo>(articulos.toArray( new Articulo[articulos.size()])));
+			comboBoxArticulosConEditor.setBounds(10, 64, 349, 22);
 		}
 		return comboBoxArticulosConEditor;
 	}
@@ -188,57 +182,6 @@ public class VentanaEditor extends JFrame {
 		}
 		return btnFiltrarPorAutor;
 	}
-	private JPanel getPanelRegistro() {
-		if (panelRegistro == null) {
-			panelRegistro = new JPanel();
-			panelRegistro.setLayout(null);
-			panelRegistro.add(getLblInsertarID());
-			panelRegistro.add(getTextFieldIdEditor());
-			panelRegistro.add(getBtnAccederEditor());
-		}
-		return panelRegistro;
-	}
-	private JLabel getLblInsertarID() {
-		if (lblInsertarID == null) {
-			lblInsertarID = new JLabel("Introduce tu Identificador");
-			lblInsertarID.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 18));
-			lblInsertarID.setHorizontalAlignment(SwingConstants.CENTER);
-			lblInsertarID.setBounds(63, 30, 301, 46);
-		}
-		return lblInsertarID;
-	}
-	private JTextField getTextFieldIdEditor() {
-		if (textFieldIdEditor == null) {
-			textFieldIdEditor = new JTextField();
-			textFieldIdEditor.setBounds(136, 135, 168, 20);
-			textFieldIdEditor.setColumns(10);
-		}
-		return textFieldIdEditor;
-	}
-	private JButton getBtnAccederEditor() {
-		if (btnAccederEditor == null) {
-			btnAccederEditor = new JButton("Acceder");
-			btnAccederEditor.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					editor = new Editor(getTextFieldIdEditor().getText());
-					CardLayout cl = (CardLayout)panelCard.getLayout();
-					cl.show(panelCard, "gestion");
-					getLblEditor().setText(getLblEditor().getText() + editor.getName());
-				}
-			});
-			btnAccederEditor.setBounds(346, 234, 89, 23);
-		}
-		return btnAccederEditor;
-	}
-	
-	private JLabel getLblEditor() {
-		if (lblEditor == null) {
-			lblEditor = new JLabel("Editor: ");
-			lblEditor.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 11));
-			lblEditor.setBounds(10, 11, 127, 22);
-		}
-		return lblEditor;
-	}
 	
 	private JPanel getPanelANuevos() {
 		if (panelANuevos == null) {
@@ -246,10 +189,8 @@ public class VentanaEditor extends JFrame {
 			panelANuevos.setLayout(null);
 			panelANuevos.add(getLblArticulosNuevos());
 			panelANuevos.add(getComboBoxArticulosEnviados());
-			panelANuevos.add(getLblAutor());
 			panelANuevos.add(getTextFieldResumen());
 			panelANuevos.add(getLblResumen());
-			panelANuevos.add(getBtnVisto());
 			panelANuevos.add(getBtnElegirRevisores());
 			panelANuevos.add(getBtnAtras());
 		}
@@ -268,33 +209,30 @@ public class VentanaEditor extends JFrame {
 	private JComboBox<Articulo> getComboBoxArticulosEnviados() {
 		if (comboBoxArticulosEnviados == null) {
 			comboBoxArticulosEnviados = new JComboBox<Articulo>();
+			comboBoxArticulosEnviados.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					textFieldResumen.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
+				}
+			});
 			ArrayList<Articulo> articulo = new ArrayList<Articulo>();
 			for(Articulo art:articulos) {
-				if(art.getState().equals(ArticleState.SENT.toString())) {
+				if(art.getState().equals(ArticleState.WITH_EDITOR.toString())) {
 					articulo.add(art);
 				}
 			}
 			comboBoxArticulosEnviados.setModel(new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()]) ));
-			comboBoxArticulosEnviados.setBounds(10, 47, 233, 25);
+			comboBoxArticulosEnviados.setBounds(10, 47, 452, 25);
 		}
 		return comboBoxArticulosEnviados;
-	}
-	
-	private JLabel getLblAutor() {
-		if (lblAutor == null) {
-			lblAutor = new JLabel("Autor: ");
-			lblAutor.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 14));
-			lblAutor.setBounds(253, 47, 182, 25);
-		}
-		return lblAutor;
 	}
 	
 	private JTextField getTextFieldResumen() {
 		if (textFieldResumen == null) {
 			textFieldResumen = new JTextField();
 			textFieldResumen.setEditable(false);
-			textFieldResumen.setBounds(10, 129, 233, 78);
+			textFieldResumen.setBounds(10, 129, 452, 78);
 			textFieldResumen.setColumns(10);
+			textFieldResumen.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
 		}
 		return textFieldResumen;
 	}
@@ -306,43 +244,6 @@ public class VentanaEditor extends JFrame {
 			lblResumen.setBounds(10, 83, 118, 35);
 		}
 		return lblResumen;
-	}
-	
-	private JButton getBtnVisto() {
-		if (btnVisto == null) {
-			btnVisto = new JButton("Visto");
-			btnVisto.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					Articulo aux = (Articulo) getComboBoxArticulosEnviados().getSelectedItem();
-
-					aux.setState(ArticleState.WITH_EDITOR);
-
-					ArrayList<Articulo> articulo = new ArrayList<Articulo>();
-					for(Articulo art:articulos) {
-						if(art.getState().equals(ArticleState.SENT.toString())) {
-							articulo.add(art);
-						}
-					}
-					comboBoxArticulosEnviados.setModel(new DefaultComboBoxModel<Articulo>(new Articulo[articulo.size()]));
-
-
-
-					articulo = new ArrayList<Articulo>();
-
-					for(Articulo art:articulos) {
-						if(art.getState().equals(ArticleState.WITH_EDITOR.toString())) {
-							articulo.add(art);
-						}
-					}
-					comboBoxArticulosConEditor.setModel(new DefaultComboBoxModel<Articulo>(articulo.toArray( new Articulo[articulo.size()])));
-
-
-				}
-			});
-			btnVisto.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 12));
-			btnVisto.setBounds(373, 200, 89, 23);
-		}
-		return btnVisto;
 	}
 	private JButton getBtnElegirRevisores() {
 		if (btnElegirRevisores == null) {
@@ -364,7 +265,7 @@ public class VentanaEditor extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					CardLayout cl = (CardLayout)panelCard.getLayout();
 					cl.show(panelCard, "a_nuevos");
-					getLblEditor().setText(getLblEditor().getText() + editor.getName());
+
 				}
 			});
 			btnVerNuevosArticulos.setBounds(307, 229, 139, 23);
@@ -373,12 +274,11 @@ public class VentanaEditor extends JFrame {
 	}
 	private JButton getBtnAtras() {
 		if (btnAtras == null) {
-			btnAtras = new JButton("Atras");
+			btnAtras = new JButton("Ver todos");
 			btnAtras.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					CardLayout cl = (CardLayout)panelCard.getLayout();
 					cl.show(panelCard, "gestion");
-					getLblEditor().setText(getLblEditor().getText() + editor.getName());
 				}
 			});
 			btnAtras.setBounds(10, 235, 89, 23);
@@ -394,6 +294,7 @@ public class VentanaEditor extends JFrame {
 	private JTextField getTextField() {
 		if (textField == null) {
 			textField = new JTextField();
+			textField.setEditable(false);
 			textField.setBounds(246, 119, 216, 83);
 			textField.setColumns(10);
 			textField.setText(((Articulo) getComboBoxArticulosConEditor().getSelectedItem()).getResumen());
@@ -407,5 +308,136 @@ public class VentanaEditor extends JFrame {
 
 		}
 		return lblNewLabel_2;
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.setLayout(null);
+			panel.add(getLblNewLabel_3());
+			panel.add(getTextField_1());
+			panel.add(getBtnNewButton_1());
+			panel.add(getBtnNewButton_2());
+			panel.add(getBtnNewButton_3());
+			panel.add(getBtnNewButton_4());
+		}
+		return panel;
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("Detalles");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout cl = (CardLayout)panelCard.getLayout();
+					cl.show(panelCard, "aceptarCC");
+					lblNewLabel_3.setText(((Articulo) getComboBoxArticulosConEditor().getSelectedItem()).getResumen());
+					textField_1.setText(mostrarComentarios());
+				}
+			});
+			btnNewButton.setBounds(369, 64, 89, 23);
+		}
+		return btnNewButton;
+	}
+	private JLabel getLblNewLabel_3() {
+		if (lblNewLabel_3 == null) {
+			lblNewLabel_3 = new JLabel();
+			lblNewLabel_3.setBounds(10, 29, 452, 30);
+			lblNewLabel_3.setText(((Articulo) getComboBoxArticulosConEditor().getSelectedItem()).getResumen());
+		}
+		return lblNewLabel_3;
+	}
+	private JTextField getTextField_1() {
+		if (textField_1 == null) {
+			textField_1 = new JTextField();
+			textField_1.setEditable(false);
+			textField_1.setBounds(10, 70, 452, 122);
+			textField_1.setColumns(10);
+			textField_1.setText(mostrarComentarios());
+		}
+		return textField_1;
+	}
+
+	private String mostrarComentarios() {
+		Articulo art = (Articulo)getComboBoxArticulosConEditor().getSelectedItem();
+		String tmp = "";
+		for(Comentario c:art.getComentarios()) {
+			tmp += "-" + c.getIdRevisor() + ": " + c.getTexto() + "\n";
+		}
+		return tmp;
+	}
+	private JButton getBtnNewButton_1() {
+		if (btnNewButton_1 == null) {
+			btnNewButton_1 = new JButton("Aceptar");
+			btnNewButton_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null, "El articulo ha sido aceptado");
+					
+					((Articulo)getComboBoxArticulosConEditor().getSelectedItem()).setState(ArticleState.ACCEPTED);					
+					Articulo a = ((Articulo)getComboBoxArticulosConEditor().getSelectedItem());
+					DataBaseArticle.updateArticle(a);
+					
+					CardLayout cl = (CardLayout)panelCard.getLayout();
+					cl.show(panelCard, "gestion");
+				}
+			});
+			btnNewButton_1.setBounds(10, 203, 89, 23);
+		}
+		return btnNewButton_1;
+	}
+	private JButton getBtnNewButton_2() {
+		if (btnNewButton_2 == null) {
+			btnNewButton_2 = new JButton("Cambios menores");
+			btnNewButton_2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null, "El articulo ha sido aceptado con cambios menores");
+					
+					((Articulo)getComboBoxArticulosConEditor().getSelectedItem()).setState(ArticleState.ACCEPTED_WITH_CHANGES);					
+					Articulo a = ((Articulo)getComboBoxArticulosConEditor().getSelectedItem());
+					DataBaseArticle.updateArticle(a);
+					
+					CardLayout cl = (CardLayout)panelCard.getLayout();
+					cl.show(panelCard, "gestion");
+				}
+			});
+			btnNewButton_2.setBounds(109, 203, 125, 23);
+		}
+		return btnNewButton_2;
+	}
+	private JButton getBtnNewButton_3() {
+		if (btnNewButton_3 == null) {
+			btnNewButton_3 = new JButton("Cambios mayores");
+			btnNewButton_3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null, "El articulo ha sido aceptado con cambios mayores");
+					
+					((Articulo)getComboBoxArticulosConEditor().getSelectedItem()).setState(ArticleState.ACCEPTED_WITH_CHANGES);					
+					Articulo a = ((Articulo)getComboBoxArticulosConEditor().getSelectedItem());
+					DataBaseArticle.updateArticle(a);
+					
+					CardLayout cl = (CardLayout)panelCard.getLayout();
+					cl.show(panelCard, "gestion");
+				}
+			});
+			btnNewButton_3.setBounds(244, 203, 119, 23);
+		}
+		return btnNewButton_3;
+	}
+	private JButton getBtnNewButton_4() {
+		if (btnNewButton_4 == null) {
+			btnNewButton_4 = new JButton("Rechazar");
+			btnNewButton_4.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null, "El articulo ha sido rechazado");
+					
+					((Articulo)getComboBoxArticulosConEditor().getSelectedItem()).setState(ArticleState.REJECTED);					
+					Articulo a = ((Articulo)getComboBoxArticulosConEditor().getSelectedItem());
+					DataBaseArticle.updateArticle(a);
+					
+					CardLayout cl = (CardLayout)panelCard.getLayout();
+					cl.show(panelCard, "gestion");
+				}
+			});
+			btnNewButton_4.setBounds(373, 203, 89, 23);
+		}
+		return btnNewButton_4;
 	}
 }

@@ -5,9 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 public class Articulo {
-
 	public enum ArticleState {
-		CREATED, SENT, WITH_EDITOR,IN_REVISION, ACCEPTED, ACCEPTED_WITH_CHANGES, REJECTED, IN_EDITION, PUBLISHED,REVISION_PENDING
+		CREATED, SENT, WITH_EDITOR, PENDING_REVISION, IN_REVISION, ACCEPTED, ACCEPTED_WITH_CHANGES, REJECTED,
+		IN_EDITION, PUBLISHED
 	}
 
 	private String id;
@@ -27,6 +27,7 @@ public class Articulo {
 
 	private Tema tema;
 	private List<Revisor> listOfRevisoresParaRevisar;
+	private List<Revisor> listRevisoresRecomendados = new ArrayList<Revisor>();
 	private int revisoresRestantes = 3;
 	private Carta carta;
 	private List<Comentario> comentarios;
@@ -53,9 +54,9 @@ public class Articulo {
 		this.tema = tema;
 		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
 	}
-	
-	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,List<String>cvAuthors,
-			Tema tema) {
+
+	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
+			List<String> cvAuthors, Tema tema) {
 		this.id = id;
 		this.title = title;
 		this.author = author;
@@ -64,10 +65,10 @@ public class Articulo {
 		this.keywords = keywords;
 		this.state = ArticleState.SENT;
 		this.tema = tema;
-		this.cvAuthors=cvAuthors;
+		this.cvAuthors = cvAuthors;
 		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+		this.comentarios = new ArrayList<Comentario>();
 	}
-	
 
 	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
 			String presentationCard, String srcFile, List<String> cvAuthors, ArticleState state) {
@@ -81,6 +82,8 @@ public class Articulo {
 		this.srcFile = srcFile;
 		this.cvAuthors = cvAuthors;
 		this.state = state;
+		this.comentarios = new ArrayList<Comentario>();
+
 	}
 
 	public Articulo(String title, Autor author, String resumen, List<String> keywords, String srcFile, String state) {
@@ -90,10 +93,12 @@ public class Articulo {
 		this.keywords = keywords;
 		this.srcFile = srcFile;
 		setEstado(state);
+		this.comentarios = new ArrayList<Comentario>();
+
 	}
 
 	private void setEstado(String state) {
-		switch(state) {
+		switch (state) {
 		case "CREATED":
 			this.state = ArticleState.CREATED;
 			break;
@@ -122,19 +127,16 @@ public class Articulo {
 			this.state = ArticleState.PUBLISHED;
 			break;
 		}
-		
+
 	}
 
 	public Articulo(Tema tema, String id) {
 		this.tema = tema;
 		this.id = id;
 		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
-		this.comentarios=new ArrayList<>();
-	}
+		this.comentarios = new ArrayList<>();
+		this.comentarios = new ArrayList<Comentario>();
 
-	@Override
-	public String toString() {
-		return title;
 	}
 
 	public String toStringAuthor() {
@@ -143,6 +145,24 @@ public class Articulo {
 
 	public String getId() {
 		return id;
+	}
+
+	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
+			String presentationCard, String srcFile, List<String> cvAuthors, ArticleState state, String Tema) {
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.authors = authors;
+		this.resumen = resumen;
+		this.keywords = keywords;
+		this.presentationCard = presentationCard;
+		this.srcFile = srcFile;
+		this.cvAuthors = cvAuthors;
+		this.state = state;
+		this.tema = new Tema(Tema);
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+		this.comentarios = new ArrayList<Comentario>();
+
 	}
 
 	public String getTitle() {
@@ -159,6 +179,11 @@ public class Articulo {
 
 	public String getResumen() {
 		return resumen;
+	}
+
+	@Override
+	public String toString() {
+		return title;
 	}
 
 	public List<String> getKeywords() {
@@ -180,10 +205,12 @@ public class Articulo {
 	public void setSrcFile(String srcFile) {
 		this.srcFile = srcFile;
 	}
+
 	public void addComentario(Comentario comentario) {
 		comentarios.add(comentario);
-		
+
 	}
+
 	public List<String> getCvAuthors() {
 		return new ArrayList<>(cvAuthors);
 	}
@@ -298,7 +325,6 @@ public class Articulo {
 	public void setCarta(Carta carta) {
 		this.carta = carta;
 	}
-	
 
 	public int getTiempoMaximoRevision() {
 		return tiempoMaximoRevision;
@@ -347,6 +373,11 @@ public class Articulo {
 
 	public boolean canBeEditable() {
 		return state == ArticleState.CREATED || state == ArticleState.ACCEPTED_WITH_CHANGES;
+	}
+
+	public void setRevisoresRecomendados(List<Revisor> revisoresRecomendados) {
+		listRevisoresRecomendados = revisoresRecomendados;
+
 	}
 
 }

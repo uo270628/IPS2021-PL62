@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
+import business.Articulo.ArticleState;
 import business.Autor;
 
 public class UploadWindow extends JDialog {
@@ -385,9 +386,19 @@ public class UploadWindow extends JDialog {
 		} else {
 			id = article.getId();
 		}
-		DocumentsWindow dw = new DocumentsWindow(this, new Articulo(id, getTextFieldTitle().getText(),
-				new Autor(getTextFieldAuthor().getText()), authors, getTextAreaResumen().getText(), keywords), article);
-		dw.setVisible(true);
+		if (article == null) {
+			DocumentsWindow dw = new DocumentsWindow(this, new Articulo(id, getTextFieldTitle().getText(),
+					new Autor(getTextFieldAuthor().getText()), authors, getTextAreaResumen().getText(), keywords),
+					article);
+			dw.setVisible(true);
+		} else {
+			DocumentsWindow dw = new DocumentsWindow(this,
+					new Articulo(id, getTextFieldTitle().getText(), new Autor(getTextFieldAuthor().getText()), authors,
+							getTextAreaResumen().getText(), keywords, article.getPresentationCard(),
+							article.getSrcFile(), article.getCvAuthors(), toArticleState(article.getState())),
+					article);
+			dw.setVisible(true);
+		}
 	}
 
 	/**
@@ -443,6 +454,31 @@ public class UploadWindow extends JDialog {
 			keywords.remove(getTextFieldKeywords().getText().trim());
 			getTextAreaKeywords().setText(listKeywords());
 			getTextFieldKeywords().setText("");
+		}
+	}
+
+	private ArticleState toArticleState(String state) {
+		switch (state) {
+		case "CREATED":
+			return ArticleState.CREATED;
+		case "SENT":
+			return ArticleState.SENT;
+		case "WITH_EDITOR":
+			return ArticleState.WITH_EDITOR;
+		case "IN_REVISION":
+			return ArticleState.IN_REVISION;
+		case "ACCEPTED":
+			return ArticleState.ACCEPTED;
+		case "ACCEPTED_WITH_CHANGES":
+			return ArticleState.ACCEPTED_WITH_CHANGES;
+		case "REJECTED":
+			return ArticleState.REJECTED;
+		case "IN_EDITION":
+			return ArticleState.IN_EDITION;
+		case "PUBLISHED":
+			return ArticleState.PUBLISHED;
+		default:
+			return null;
 		}
 	}
 }

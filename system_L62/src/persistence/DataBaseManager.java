@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.UUID;
 
 import business.Articulo;
+import business.Articulo.ArticleState;
 import business.Autor;
 import business.Comentario;
 import business.Revisor;
-import business.Articulo.ArticleState;
 
 public class DataBaseManager {
 	private static String URL = "jdbc:hsqldb:hsql://localhost";
@@ -28,7 +28,7 @@ public class DataBaseManager {
 			String sql = "SELECT * FROM revisores WHERE nombre=(?);";
 			String sql2 = "INSERT INTO ComentariosRevisor (COMENTARIO, RECOMENDACION,idCOMENTARIOREVISOR,idREVISOR,idArticulo,TYPE) VALUES (?,?,?,?,?,?)";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, revisor.toUpperCase());
+			preparedStatement.setString(1, revisor);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
@@ -55,9 +55,9 @@ public class DataBaseManager {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			String sql = "SELECT * FROM revisores WHERE nombre=(?);";
 			String sql2 = "SELECT * FROM articles WHERE (idREVISOR1=(?) OR idREVISOR2=(?) OR idREVISOR3=(?)) "
-					+ "AND (state ='REVISION_PENDING' OR state ='IN_REVISION');";
+					+ "AND (state ='PENDING_REVISION' OR state ='IN_REVISION');";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, revisor.toUpperCase());
+			preparedStatement.setString(1, revisor);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
@@ -71,10 +71,10 @@ public class DataBaseManager {
 					revisores.add(new Revisor(rs2.getString("idREVISOR2")));
 					revisores.add(new Revisor(rs2.getString("idREVISOR3")));
 					Articulo aux = new Articulo(rs2.getString("id_articles"), rs2.getString("title"),
-					new Autor(rs2.getString("author")), authorsToList(rs2.getString("other_authors")),
-					rs2.getString("summary"), toList(rs2.getString("keywords")),
-					rs2.getString("presentation_card"), rs2.getString("srcfile"),
-					toList(rs2.getString("cv_authors")), toArticleState(rs2.getString("state")));
+							new Autor(rs2.getString("author")), authorsToList(rs2.getString("other_authors")),
+							rs2.getString("summary"), toList(rs2.getString("keywords")),
+							rs2.getString("presentation_card"), rs2.getString("srcfile"),
+							toList(rs2.getString("cv_authors")), toArticleState(rs2.getString("state")));
 					aux.setRevisores(revisores);
 					ret.add(aux);
 				}
@@ -140,7 +140,7 @@ public class DataBaseManager {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			String sql = "SELECT * FROM articles WHERE id_articles=(?);";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, articulo.getId().toUpperCase());
+			preparedStatement.setString(1, articulo.getId());
 			ResultSet rs = preparedStatement.executeQuery();
 			String sql3 = "SELECT * FROM revisores WHERE nombre=(?);";
 			PreparedStatement preparedStatement3 = conn.prepareStatement(sql3);
@@ -153,16 +153,17 @@ public class DataBaseManager {
 				if (articulo.getListOfRevisoresParaRevisar().get(0).getId().equals(revisor)) {
 					String sql2 = "UPDATE ARTICLES SET idREVISOR1=(NULL) WHERE id_articles=(?) ;";
 					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
-					preparedStatement2.setString(1, articulo.getId().toUpperCase());
+					preparedStatement2.setString(1, articulo.getId());
+					preparedStatement2.execute();
 				} else if (articulo.getListOfRevisoresParaRevisar().get(1).getId().equals(revisor)) {
 					String sql2 = "UPDATE ARTICLES SET idREVISOR2=(NULL) WHERE id_articles=(?) ;";
 					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
-					preparedStatement2.setString(1, articulo.getId().toUpperCase());
+					preparedStatement2.setString(1, articulo.getId());
+					preparedStatement2.execute();
 				} else if (articulo.getListOfRevisoresParaRevisar().get(2).getId().equals(revisor)) {
 					String sql2 = "UPDATE ARTICLES SET idREVISOR3=(NULL) WHERE id_articles=(?) ;";
 					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
-					preparedStatement2.setString(1, articulo.getId().toUpperCase());
-				}
+					preparedStatement2.setString(1, articulo.getId());
 					preparedStatement2.execute();
 				}
 			}
@@ -175,40 +176,11 @@ public class DataBaseManager {
 
 	public static List<Articulo> SelectAllArticlesForPendingRevisor(String revisor) {
 		List<Articulo> ret = new LinkedList<Articulo>();
-		try {
-			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-			String sql = "SELECT * FROM revisores WHERE nombre=(?);";
-			String sql2 = "SELECT * FROM articles WHERE (idREVISOR1=(?) OR idREVISOR2=(?) OR idREVISOR3=(?)) "
-					+ "AND (state='REVISION_PENDING');";
-			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, revisor.toUpperCase());
-			ResultSet rs = preparedStatement.executeQuery();
-			while (rs.next()) {
-				PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
-				preparedStatement2.setString(1, rs.getString("idREVISOR"));
-				preparedStatement2.setString(2, rs.getString("idREVISOR"));
-				preparedStatement2.setString(3, rs.getString("idREVISOR"));
-				ResultSet rs2 = preparedStatement2.executeQuery();
-				while (rs2.next()) {
-					List<Revisor> revisores = new LinkedList<>();
-					revisores.add(new Revisor(rs2.getString("idREVISOR1")));
-					revisores.add(new Revisor(rs2.getString("idREVISOR2")));
-					revisores.add(new Revisor(rs2.getString("idREVISOR3")));
-					Articulo aux = new Articulo(rs2.getString("id_articles"), rs2.getString("title"),
-							new Autor(rs2.getString("author")), authorsToList(rs2.getString("other_authors")),
-							rs2.getString("summary"), toList(rs2.getString("keywords")),
-							rs2.getString("presentation_card"), rs2.getString("srcfile"),
-							toList(rs2.getString("cv_authors")), toArticleState(rs2.getString("state")));
-					aux.setRevisores(revisores);
-					ret.add(aux);
-				}
+		ret = SelectAllArticlesForRevisor(revisor);
+		for (Articulo articulo : ret) {
+			if (!articulo.getState().equals(ArticleState.PENDING_REVISION.toString())) {
+				ret.remove(articulo);
 			}
-		}
-
-		catch (SQLException e) {
-			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
 		return ret;
@@ -222,7 +194,7 @@ public class DataBaseManager {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
 			for (Articulo articulo : articulos) {
-				preparedStatement.setString(1, articulo.getId().toUpperCase());
+				preparedStatement.setString(1, articulo.getId());
 				ResultSet rs = preparedStatement.executeQuery();
 				while (rs.next()) {
 					Comentario c = new Comentario(rs.getInt("idCOMENTARIOREVISOR"), rs.getString("Comentario"),
@@ -244,7 +216,7 @@ public class DataBaseManager {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			String sql = "SELECT * FROM revisores WHERE idREVISOR =(?);";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, id.toUpperCase());
+			preparedStatement.setString(1, id);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				return rs.getString("nombre");
@@ -263,7 +235,7 @@ public class DataBaseManager {
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, id.toUpperCase());
+			preparedStatement.setString(1, id);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				Comentario c = new Comentario(rs.getInt("idCOMENTARIOREVISOR"), rs.getString("Comentario"),
@@ -313,7 +285,7 @@ public class DataBaseManager {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			String sql = "SELECT * FROM articles WHERE id_articles = (?)";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, idArticulo.toUpperCase());
+			preparedStatement.setString(1, idArticulo);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				List<Revisor> revisores = new LinkedList<>();
@@ -335,4 +307,5 @@ public class DataBaseManager {
 		}
 		return null;
 	}
+
 }

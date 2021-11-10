@@ -61,6 +61,43 @@ public class DataBaseArticle {
 		return result;
 	}
 
+	public static boolean uploadArticleTodosLosAtributos(Articulo article) {
+		String queryInsertArticle = "insert into articles (id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors,tema, state) values ('"
+				+ article.getId() + "', '" + article.getTitle() + "', '" + article.getAuthor().getName() + "', '"
+				+ article.listAuthors() + "', '" + article.getResumen() + "', '" + article.listKeywords() + "', '"
+				+ article.getSrcFile() + "', '" + article.getPresentationCard() + "', '" + article.listCVAuthors()
+				+ "', '" + article.getTema().getNombre() + "', '" + article.getState() + "')";
+
+		Connection conn = null;
+		Statement st = null;
+
+		boolean result;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			st.executeUpdate(queryInsertArticle);
+			result = true;
+		} catch (SQLException e) {
+			result = false;
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return result;
+	}
+
 	/**
 	 * Busca y devuelve un artículo con un id dado de la base de datos
 	 * 
@@ -88,6 +125,54 @@ public class DataBaseArticle {
 						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
 						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
 						toArticleState(rs.getString("state")));
+			}
+		} catch (SQLException e) {
+			article = null;
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return article;
+	}
+
+	public static Articulo searchArticleConTodosLosAtributos(String id) {
+		String querySearchArticle = "select * from articles where id_articles = '" + id + "'";
+
+		Articulo article = null;
+
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
+
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			rs = st.executeQuery(querySearchArticle);
+
+			if (rs.next()) {
+				article = new Articulo(rs.getString("id_articles"), rs.getString("title"),
+						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
+						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
+						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
+						toArticleState(rs.getString("state")), (rs.getString("tema")));
 			}
 		} catch (SQLException e) {
 			article = null;
@@ -194,6 +279,7 @@ public class DataBaseArticle {
 
 		return result;
 	}
+
 	public static boolean updateArticleTiempoMaximoRevisor(Articulo article) {
 		String queryUpdateArticle = "update articles set";
 		queryUpdateArticle += " TIEMPO_MAXIMO_REVISION = '" + article.getTiempoMaximoRevision() + "'";
@@ -226,7 +312,7 @@ public class DataBaseArticle {
 
 		return result;
 	}
-	
+
 	public static boolean updateArticleAlPublicar(Articulo article) {
 		String queryUpdateArticle = "update articles set";
 		queryUpdateArticle += " DOI = '" + article.getDoi() + "'";
@@ -266,10 +352,8 @@ public class DataBaseArticle {
 
 		return result;
 
-		
-		
 	}
-	
+
 	public static boolean updateArticleRevisores(Articulo article) {
 		String queryUpdateArticle = "update articles set";
 		Revisor revisor1 = article.getListOfRevisoresParaRevisar().get(0);
@@ -315,7 +399,6 @@ public class DataBaseArticle {
 
 		return result;
 	}
-	
 
 	/**
 	 * Modifica los valores de los campos de un artículo dado en la base de datos
@@ -480,8 +563,9 @@ public class DataBaseArticle {
 			ResultSet rs = st.executeQuery(query.toString());
 
 			while (rs.next()) {
-				listOfArticulos.add(new Articulo(rs.getString("title"), new Autor(rs.getString("author")),
-						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("srcfile"), rs.getString("state")));
+				listOfArticulos.add(
+						new Articulo(rs.getString("title"), new Autor(rs.getString("author")), rs.getString("summary"),
+								toList(rs.getString("keywords")), rs.getString("srcfile"), rs.getString("state")));
 			}
 			rs.close();
 			con.close();
@@ -491,7 +575,6 @@ public class DataBaseArticle {
 		}
 		return listOfArticulos;
 	}
-	
 
 	/**
 	 * Transforma una cadena de texto en una lista de cadenas de texto que estaban

@@ -44,6 +44,7 @@ public class DocumentsWindow extends JDialog {
 	private Articulo newArticle;
 	private Articulo oldArticle;
 	private JButton btnSend;
+	private JButton btnNewButton;
 
 	/**
 	 * Create the frame.
@@ -81,6 +82,7 @@ public class DocumentsWindow extends JDialog {
 		contentPane.add(getTextFieldSrcFile());
 		contentPane.add(getBtnBack());
 		contentPane.add(getBtnSend());
+		contentPane.add(getBtnNewButton());
 	}
 
 	public JLabel getLblPresentationCard() {
@@ -409,5 +411,21 @@ public class DocumentsWindow extends JDialog {
 		} else {
 			JOptionPane.showMessageDialog(null, "Ha habido un error al intentar actualizar el artículo.");
 		}
+	}
+
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("Rec. Revisores");
+			btnNewButton.setEnabled(newArticle.getState().equals(ArticleState.CREATED.toString()));
+			btnNewButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					SugerirEditor se = new SugerirEditor(newArticle);
+					se.setVisible(true);
+				}
+			});
+			btnNewButton.setBounds(10, 217, 115, 23);
+		}
+		return btnNewButton;
 	}
 }
