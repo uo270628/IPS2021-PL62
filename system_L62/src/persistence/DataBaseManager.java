@@ -1,7 +1,5 @@
 package persistence;
 
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -30,7 +28,7 @@ public class DataBaseManager {
 			String sql = "SELECT * FROM revisores WHERE nombre=(?);";
 			String sql2 = "INSERT INTO ComentariosRevisor (COMENTARIO, RECOMENDACION,idCOMENTARIOREVISOR,idREVISOR,idArticulo,TYPE) VALUES (?,?,?,?,?,?)";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, revisor.toUpperCase());
+			preparedStatement.setString(1, revisor);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
@@ -59,7 +57,7 @@ public class DataBaseManager {
 			String sql2 = "SELECT * FROM articles WHERE (idREVISOR1=(?) OR idREVISOR2=(?) OR idREVISOR3=(?)) "
 					+ "AND (state ='REVISION_PENDING' OR state ='IN_REVISION');";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, revisor.toUpperCase());
+			preparedStatement.setString(1, revisor);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
