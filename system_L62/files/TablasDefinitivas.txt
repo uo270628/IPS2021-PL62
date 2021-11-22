@@ -1,0 +1,62 @@
+create table revisores (
+idREVISOR Integer primary key,
+nombre varchar(100),
+tiempo integer
+);
+ 
+create table articles(
+idREVISOR1 Integer FOREIGN key REFERENCES revisores(idREVISOR),
+idREVISOR2 Integer FOREIGN key REFERENCES revisores(idREVISOR),
+idREVISOR3 Integer FOREIGN key REFERENCES revisores(idREVISOR),
+id_articles varchar(20) not null,
+title varchar(20),
+author varchar(20),
+other_authors varchar(100),
+summary varchar(2000),
+keywords varchar(2000),
+srcfile varchar(20),
+presentation_card varchar(20),
+cv_authors varchar(2000),
+tiempo_maximo_revision integer,
+doi varchar(100),
+volumen varchar(100),
+fecha_publicacion date,
+tema varchar(100),
+state varchar(50) not null,
+constraint pk_article primary key (id_articles),
+constraint ck_article_state check (state in ('CREATED', 'SENT', 'WITH_EDITOR', 'IN_REVISION', 'ACCEPTED', 'ACCEPTED_WITH_MINOR_CHANGES', 'ACCEPTED_WITH_GREATER_CHANGES', 'REJECTED', 'IN_EDITION', 'PUBLISHED'))
+);
+ 
+CREATE TABLE COMENTARIOSREVISOR (
+idCOMENTARIOREVISOR Integer primary key,
+idREVISOR Integer FOREIGN key REFERENCES Revisores(idREVISOR),
+idArticulo varchar(255),
+Comentario varchar(255),
+Recomendacion varchar(255),
+TYPE varchar(255),
+constraint ck_Recomendacion check ( Recomendacion in ('Aceptar','Altamente Recomendable Aceptar','Poco Recomendable Aceptar','Rechazar')),
+constraint ck_TYPE  check ( TYPE in ('Comentario para autor','Notas para editor','Decision propuesta','Temporal'))
+);
+ 
+create table carta(
+idcarta integer primary key,
+idarticulo varchar(250),
+texto varchar(250)
+);
+create table temas(
+id Integer primary key,
+nombre varchar(100)
+);
+create table revisa(
+id_revisor Integer,
+id_tema Integer,
+Constraint id_unique unique (id_revisor,id_tema)
+);
+
+create table recomendaciones_revisores(
+	id_rec varchar(20) PRIMARY KEY,
+	id_article varchar(20) FOREIGN key REFERENCES articles(id_articles),
+	id_revisor_1 Integer FOREIGN key REFERENCES revisores(idREVISOR),
+	id_revisor_2 Integer FOREIGN key REFERENCES revisores(idREVISOR),
+	id_revisor_3 Integer FOREIGN key REFERENCES revisores(idREVISOR)
+);
