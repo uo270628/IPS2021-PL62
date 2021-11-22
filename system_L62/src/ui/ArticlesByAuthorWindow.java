@@ -179,7 +179,7 @@ public class ArticlesByAuthorWindow extends JFrame {
 	 * @param articleToShow
 	 */
 	private void showArticle(Articulo articleToShow) {
-		ShowArticleWindow saw = new ShowArticleWindow(articleToShow);
+		ShowArticleWindow saw = new ShowArticleWindow(articleToShow, this);
 		saw.setVisible(true);
 	}
 

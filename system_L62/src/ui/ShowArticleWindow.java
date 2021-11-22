@@ -45,15 +45,17 @@ public class ShowArticleWindow extends JDialog {
 	private JTextArea textAreaCVAuthors;
 	private JLabel lblState;
 	private JTextField textFieldState;
+	private JButton btnPublish;
 
 	private Articulo article;
-	private JButton btnPublish;
+	private ArticlesByAuthorWindow window;
 
 	/**
 	 * Create the frame.
 	 */
-	public ShowArticleWindow(Articulo article) {
+	public ShowArticleWindow(Articulo article, ArticlesByAuthorWindow window) {
 		this.article = article;
+		this.window = window;
 
 		setTitle("Mostrar art\u00EDculo");
 		setResizable(false);
@@ -343,5 +345,6 @@ public class ShowArticleWindow extends JDialog {
 		DataBaseArticle.publishArticle(article.getId());
 		JOptionPane.showMessageDialog(null, "El artículo está en proceso de ser publicado.");
 		this.dispose();
+		this.window.updateListArticles();
 	}
 }
