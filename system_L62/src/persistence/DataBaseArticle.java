@@ -241,6 +241,46 @@ public class DataBaseArticle {
 	}
 
 	/**
+	 * Envía un artículo creado para ser evaluado por segunda vez
+	 * 
+	 * @param id
+	 * @return si se envió el artículo
+	 */
+	public static boolean sendArticleToAproveAgain(String id) {
+		String queryUpdateArticle = "update articles set state = '" + Articulo.ArticleState.SENT_AGAIN
+				+ "' where id_articles = '" + id + "'";
+
+		Connection conn = null;
+		Statement st = null;
+
+		boolean result;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			st.executeUpdate(queryUpdateArticle);
+			result = true;
+		} catch (SQLException e) {
+			result = false;
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return result;
+	}
+
+	/**
 	 * Envía un artículo al editor para que decida publicarlo
 	 * 
 	 * @param id
@@ -634,8 +674,10 @@ public class DataBaseArticle {
 			return ArticleState.IN_REVISION;
 		case "ACCEPTED":
 			return ArticleState.ACCEPTED;
-		case "ACCEPTED_WITH_CHANGES":
-			return ArticleState.ACCEPTED_WITH_CHANGES;
+		case "ACCEPTED_WITH_MINOR_CHANGES":
+			return ArticleState.ACCEPTED_WITH_MINOR_CHANGES;
+		case "ACCEPTED_WITH_GREATER_CHANGES":
+			return ArticleState.ACCEPTED_WITH_GREATER_CHANGES;
 		case "REJECTED":
 			return ArticleState.REJECTED;
 		case "IN_EDITION":

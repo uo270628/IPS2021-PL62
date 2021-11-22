@@ -361,14 +361,18 @@ public class DocumentsWindow extends JDialog {
 	}
 
 	/**
-	 * Envía el artículo al editor para que decida si publicarlo
+	 * Finaliza el artículo para que un editor lo pueda evaluar de nuevo
 	 * 
 	 * @param article
 	 */
 	private void publishArticle(Articulo article) {
-		DataBaseArticle.publishArticle(article.getId());
-		JOptionPane.showMessageDialog(null, "El artículo está en proceso de ser publicado.");
-		disposeWindows();
+		if (article.isComplete()) {
+			DataBaseArticle.sendArticleToAproveAgain(article.getId());
+			JOptionPane.showMessageDialog(null, "El artículo está listo para ser evaluado.");
+			disposeWindows();
+		} else {
+			JOptionPane.showMessageDialog(null, "Faltan campos del artículo por rellenar.");
+		}
 	}
 
 	/**
@@ -404,7 +408,7 @@ public class DocumentsWindow extends JDialog {
 		if (made) {
 			if (newArticle.getState().equals(ArticleState.CREATED.toString())) {
 				sendArticleToApprove(newArticle);
-			} else if (newArticle.getState().equals(ArticleState.ACCEPTED_WITH_CHANGES.toString())) {
+			} else if (newArticle.changesNeeded()) {
 				publishArticle(newArticle);
 			}
 			disposeWindows();

@@ -469,8 +469,10 @@ public class UploadWindow extends JDialog {
 			return ArticleState.IN_REVISION;
 		case "ACCEPTED":
 			return ArticleState.ACCEPTED;
-		case "ACCEPTED_WITH_CHANGES":
-			return ArticleState.ACCEPTED_WITH_CHANGES;
+		case "ACCEPTED_WITH_MINOR_CHANGES":
+			return ArticleState.ACCEPTED_WITH_MINOR_CHANGES;
+		case "ACCEPTED_WITH_GREATER_CHANGES":
+			return ArticleState.ACCEPTED_WITH_GREATER_CHANGES;
 		case "REJECTED":
 			return ArticleState.REJECTED;
 		case "IN_EDITION":

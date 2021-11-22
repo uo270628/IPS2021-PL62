@@ -1,10 +1,14 @@
 package ui;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -13,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
 import business.Autor;
+import persistence.DataBaseArticle;
 
 public class ShowArticleWindow extends JDialog {
 
@@ -42,6 +47,7 @@ public class ShowArticleWindow extends JDialog {
 	private JTextField textFieldState;
 
 	private Articulo article;
+	private JButton btnPublish;
 
 	/**
 	 * Create the frame.
@@ -52,7 +58,7 @@ public class ShowArticleWindow extends JDialog {
 		setTitle("Mostrar art\u00EDculo");
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 357, 468);
+		setBounds(100, 100, 357, 492);
 		setLocationRelativeTo(null);
 		setModal(true);
 		contentPane = new JPanel();
@@ -77,6 +83,7 @@ public class ShowArticleWindow extends JDialog {
 		contentPane.add(getScrollPaneCVAuthors());
 		contentPane.add(getLblState());
 		contentPane.add(getTextFieldState());
+		contentPane.add(getBtnPublish());
 	}
 
 	public JLabel getLblTitle() {
@@ -310,5 +317,31 @@ public class ShowArticleWindow extends JDialog {
 			str += s.toString() + "\n";
 		}
 		return str.trim();
+	}
+
+	public JButton getBtnPublish() {
+		if (btnPublish == null) {
+			btnPublish = new JButton("Publicar");
+			btnPublish.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					publishArticle();
+				}
+			});
+			btnPublish.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnPublish.setBounds(187, 434, 129, 21);
+			if (article.isAccepted()) {
+				btnPublish.setEnabled(true);
+			} else {
+				btnPublish.setEnabled(false);
+			}
+		}
+		return btnPublish;
+	}
+
+	private void publishArticle() {
+		DataBaseArticle.publishArticle(article.getId());
+		JOptionPane.showMessageDialog(null, "El artículo está en proceso de ser publicado.");
+		this.dispose();
 	}
 }

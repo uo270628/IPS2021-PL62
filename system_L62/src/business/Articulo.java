@@ -6,7 +6,8 @@ import java.util.List;
 
 public class Articulo {
 	public enum ArticleState {
-		CREATED, SENT, WITH_EDITOR, IN_REVISION, ACCEPTED, ACCEPTED_WITH_CHANGES, REJECTED, IN_EDITION, PUBLISHED
+		CREATED, SENT, WITH_EDITOR, IN_REVISION, ACCEPTED, ACCEPTED_WITH_MINOR_CHANGES, ACCEPTED_WITH_GREATER_CHANGES,
+		REJECTED, SENT_AGAIN, IN_EDITION, PUBLISHED
 	}
 
 	private String id;
@@ -113,8 +114,11 @@ public class Articulo {
 		case "ACCEPTED":
 			this.state = ArticleState.ACCEPTED;
 			break;
-		case "ACCEPTED_WITH_CHANGES":
-			this.state = ArticleState.ACCEPTED_WITH_CHANGES;
+		case "ACCEPTED_WITH_MINOR_CHANGES":
+			this.state = ArticleState.ACCEPTED_WITH_MINOR_CHANGES;
+			break;
+		case "ACCEPTED_WITH_GREATER_CHANGES":
+			this.state = ArticleState.ACCEPTED_WITH_GREATER_CHANGES;
 			break;
 		case "REJECTED":
 			this.state = ArticleState.REJECTED;
@@ -371,12 +375,19 @@ public class Articulo {
 	}
 
 	public boolean canBeEditable() {
-		return state == ArticleState.CREATED || state == ArticleState.ACCEPTED_WITH_CHANGES;
+		return state == ArticleState.CREATED || changesNeeded();
+	}
+
+	public boolean changesNeeded() {
+		return state == ArticleState.ACCEPTED_WITH_GREATER_CHANGES || state == ArticleState.ACCEPTED_WITH_MINOR_CHANGES;
+	}
+
+	public boolean isAccepted() {
+		return state == ArticleState.ACCEPTED;
 	}
 
 	public void setRevisoresRecomendados(List<Revisor> revisoresRecomendados) {
 		listRevisoresRecomendados = revisoresRecomendados;
-
 	}
 
 }
