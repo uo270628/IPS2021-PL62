@@ -60,9 +60,9 @@ public class ArticlesByAuthorWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public ArticlesByAuthorWindow() {
-		setResizable(false);
 		this.articlesModel = new DefaultListModel<>();
 
+		setResizable(false);
 		setTitle("Visualizar art\u00EDculos");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
