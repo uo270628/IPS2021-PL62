@@ -55,7 +55,7 @@ public class DataBaseManager {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			String sql = "SELECT * FROM revisores WHERE nombre=(?);";
 			String sql2 = "SELECT * FROM articles WHERE (idREVISOR1=(?) OR idREVISOR2=(?) OR idREVISOR3=(?)) "
-					+ "AND (state ='PENDING_REVISION' OR state ='IN_REVISION');";
+					+ "AND (state ='WITH_EDITOR' OR state ='IN_REVISION');";
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
 			preparedStatement.setString(1, revisor);
 			ResultSet rs = preparedStatement.executeQuery();
@@ -178,7 +178,7 @@ public class DataBaseManager {
 		List<Articulo> ret = new LinkedList<Articulo>();
 		ret = SelectAllArticlesForRevisor(revisor);
 		for (Articulo articulo : ret) {
-			if (!articulo.getState().equals(ArticleState.PENDING_REVISION.toString())) {
+			if (!articulo.getState().equals(ArticleState.WITH_EDITOR.toString())) {
 				ret.remove(articulo);
 			}
 		}
