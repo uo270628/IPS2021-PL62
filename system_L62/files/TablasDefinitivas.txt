@@ -24,7 +24,7 @@ create table articles(
 	tema varchar(100),
 	state varchar(50) not null,
 	constraint pk_article primary key (id_articles),
-	constraint ck_article_state check (state in ('CREATED', 'SENT', 'WITH_EDITOR', 'IN_REVISION', 'ACCEPTED', 'ACCEPTED_WITH_MINOR_CHANGES', 'ACCEPTED_WITH_GREATER_CHANGES', 'REJECTED', 'SENT_AGAIN', 'IN_EDITION', 'PUBLISHED'))
+	constraint ck_article_state check (state in ('CREATED', 'SENT', 'WITH_EDITOR', 'IN_REVISION', 'ACCEPTED', 'ACCEPTED_WITH_MINOR_CHANGES', 'ACCEPTED_WITH_GREATER_CHANGES', 'REJECTED', 'IN_EDITION', 'PUBLISHED'))
 );
  
 CREATE TABLE COMENTARIOSREVISOR (
