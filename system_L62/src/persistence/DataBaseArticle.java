@@ -247,7 +247,7 @@ public class DataBaseArticle {
 	 * @return si se envió el artículo
 	 */
 	public static boolean sendArticleToAproveAgain(String id) {
-		String queryUpdateArticle = "update articles set state = '" + Articulo.ArticleState.SENT_AGAIN
+		String queryUpdateArticle = "update articles set state = '" + Articulo.ArticleState.SENT
 				+ "' where id_articles = '" + id + "'";
 
 		Connection conn = null;
