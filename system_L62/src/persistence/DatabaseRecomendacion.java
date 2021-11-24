@@ -34,7 +34,7 @@ public class DatabaseRecomendacion {
 
 			query.append("insert into recomendaciones_revisores VALUES (?,?");
 
-			for (Revisor r : revisores) {
+			for (int i = 0; i < revisores.size(); i++) {
 				query.append(",?");
 			}
 			query.append(")");
