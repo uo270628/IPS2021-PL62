@@ -39,11 +39,9 @@ public class VentanaEditor extends JFrame {
 	private JComboBox<Articulo> comboBoxArticulosEnviados;
 	private JTextField textFieldResumen;
 	private JLabel lblResumen;
-	private JButton btnElegirRevisores;
 
 	private List<Articulo> articulos;
 	private JButton btnVerNuevosArticulos;
-	private JButton btnAtras;
 	private JTextField textField;
 	private JLabel lblNewLabel_2;
 	private JPanel panel;
@@ -54,6 +52,11 @@ public class VentanaEditor extends JFrame {
 	private JButton btnNewButton_2;
 	private JButton btnNewButton_3;
 	private JButton btnNewButton_4;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JLabel lblNewLabel_7;
+	private JTextField textField_4;
+	private JButton btnNewButton_6;
 
 	/**
 	 * Launch the application.
@@ -78,7 +81,7 @@ public class VentanaEditor extends JFrame {
 	public VentanaEditor() {
 		articulos = DataBaseArticle.loadArticles();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 498, 324);
+		setBounds(100, 100, 537, 432);
 		panelCard = new JPanel();
 		panelCard.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(panelCard);
@@ -101,15 +104,18 @@ public class VentanaEditor extends JFrame {
 			panelGestor.add(getBtnVerNuevosArticulos());
 
 			JLabel lblNewLabel = new JLabel("T\u00EDtulo");
-			lblNewLabel.setBounds(41, 97, 96, 14);
+			lblNewLabel.setBounds(10, 97, 96, 14);
 			panelGestor.add(lblNewLabel);
 
 			JLabel lblNewLabel_1 = new JLabel("Autor");
-			lblNewLabel_1.setBounds(41, 156, 96, 14);
+			lblNewLabel_1.setBounds(10, 156, 96, 14);
 			panelGestor.add(lblNewLabel_1);
 			panelGestor.add(getTextField());
 			panelGestor.add(getLblNewLabel_2());
 			panelGestor.add(getBtnNewButton());
+			panelGestor.add(getLblNewLabel_7());
+			panelGestor.add(getTextField_4());
+			panelGestor.add(getBtnNewButton_6());
 		}
 		return panelGestor;
 	}
@@ -133,7 +139,7 @@ public class VentanaEditor extends JFrame {
 	private JTextField getTextFieldFiltrarPorTitulo() {
 		if (textFieldFiltrarPorTitulo == null) {
 			textFieldFiltrarPorTitulo = new JTextField();
-			textFieldFiltrarPorTitulo.setBounds(41, 119, 96, 20);
+			textFieldFiltrarPorTitulo.setBounds(10, 119, 96, 20);
 			textFieldFiltrarPorTitulo.setColumns(10);
 		}
 		return textFieldFiltrarPorTitulo;
@@ -142,7 +148,7 @@ public class VentanaEditor extends JFrame {
 	private JTextField getTextFieldFiltrarPorAutor() {
 		if (textFieldFiltrarPorAutor == null) {
 			textFieldFiltrarPorAutor = new JTextField();
-			textFieldFiltrarPorAutor.setBounds(41, 181, 96, 20);
+			textFieldFiltrarPorAutor.setBounds(10, 181, 96, 20);
 			textFieldFiltrarPorAutor.setColumns(10);
 		}
 		return textFieldFiltrarPorAutor;
@@ -165,7 +171,7 @@ public class VentanaEditor extends JFrame {
 							new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])));
 				}
 			});
-			btnFiltrarPorTitulo.setBounds(147, 118, 89, 23);
+			btnFiltrarPorTitulo.setBounds(116, 118, 89, 23);
 		}
 		return btnFiltrarPorTitulo;
 	}
@@ -189,7 +195,7 @@ public class VentanaEditor extends JFrame {
 							new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])));
 				}
 			});
-			btnFiltrarPorAutor.setBounds(147, 180, 89, 23);
+			btnFiltrarPorAutor.setBounds(116, 180, 89, 23);
 		}
 		return btnFiltrarPorAutor;
 	}
@@ -202,8 +208,40 @@ public class VentanaEditor extends JFrame {
 			panelANuevos.add(getComboBoxArticulosEnviados());
 			panelANuevos.add(getTextFieldResumen());
 			panelANuevos.add(getLblResumen());
-			panelANuevos.add(getBtnElegirRevisores());
-			panelANuevos.add(getBtnAtras());
+			
+			JLabel lblNewLabel_4 = new JLabel("Otros authores");
+			lblNewLabel_4.setBounds(10, 83, 226, 35);
+			panelANuevos.add(lblNewLabel_4);
+			
+			textField_2 = new JTextField();
+			textField_2.setEditable(false);
+			textField_2.setBounds(10, 129, 231, 91);
+			panelANuevos.add(textField_2);
+			textField_2.setColumns(10);
+			
+			JLabel lblNewLabel_5 = new JLabel("Carta de presentacion");
+			lblNewLabel_5.setBounds(10, 231, 231, 25);
+			panelANuevos.add(lblNewLabel_5);
+			
+			textField_3 = new JTextField();
+			textField_3.setEditable(false);
+			textField_3.setBounds(10, 267, 231, 64);
+			panelANuevos.add(textField_3);
+			textField_3.setColumns(10);
+			
+			JLabel lblNewLabel_6 = new JLabel("Fichero fuente: "+ ((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getSrcFile());
+			lblNewLabel_6.setBounds(275, 288, 226, 19);
+			panelANuevos.add(lblNewLabel_6);
+			
+			JButton btnNewButton_5 = new JButton("Ver todos");
+			btnNewButton_5.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout cl = (CardLayout) panelCard.getLayout();
+					cl.show(panelCard, "gestion");
+				}
+			});
+			btnNewButton_5.setBounds(10, 349, 89, 23);
+			panelANuevos.add(btnNewButton_5);
 		}
 		return panelANuevos;
 	}
@@ -244,7 +282,7 @@ public class VentanaEditor extends JFrame {
 		if (textFieldResumen == null) {
 			textFieldResumen = new JTextField();
 			textFieldResumen.setEditable(false);
-			textFieldResumen.setBounds(10, 129, 452, 78);
+			textFieldResumen.setBounds(275, 129, 226, 148);
 			textFieldResumen.setColumns(10);
 			textFieldResumen.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
 		}
@@ -255,24 +293,9 @@ public class VentanaEditor extends JFrame {
 		if (lblResumen == null) {
 			lblResumen = new JLabel("Resumen");
 			lblResumen.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 14));
-			lblResumen.setBounds(10, 83, 118, 35);
+			lblResumen.setBounds(275, 83, 118, 35);
 		}
 		return lblResumen;
-	}
-
-	private JButton getBtnElegirRevisores() {
-		if (btnElegirRevisores == null) {
-			btnElegirRevisores = new JButton("Elegir revisores");
-			btnElegirRevisores.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					chooseRevisores();
-				}
-			});
-			btnElegirRevisores.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 12));
-			btnElegirRevisores.setBounds(324, 234, 138, 23);
-		}
-		return btnElegirRevisores;
 	}
 
 	private JButton getBtnVerNuevosArticulos() {
@@ -289,27 +312,6 @@ public class VentanaEditor extends JFrame {
 			btnVerNuevosArticulos.setBounds(307, 229, 139, 23);
 		}
 		return btnVerNuevosArticulos;
-	}
-
-	private JButton getBtnAtras() {
-		if (btnAtras == null) {
-			btnAtras = new JButton("Ver todos");
-			btnAtras.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					CardLayout cl = (CardLayout) panelCard.getLayout();
-					cl.show(panelCard, "gestion");
-				}
-			});
-			btnAtras.setBounds(10, 235, 89, 23);
-		}
-		return btnAtras;
-	}
-
-	private void chooseRevisores() {
-		Articulo a = (Articulo) getComboBoxArticulosEnviados().getSelectedItem();
-		InterfazElegirRevisores interfaz = new InterfazElegirRevisores(a);
-		interfaz.setVisible(true);
 	}
 
 	private JTextField getTextField() {
@@ -476,5 +478,27 @@ public class VentanaEditor extends JFrame {
 			btnNewButton_4.setBounds(373, 203, 89, 23);
 		}
 		return btnNewButton_4;
+	}
+	private JLabel getLblNewLabel_7() {
+		if (lblNewLabel_7 == null) {
+			lblNewLabel_7 = new JLabel("Estado");
+			lblNewLabel_7.setBounds(10, 216, 96, 14);
+		}
+		return lblNewLabel_7;
+	}
+	private JTextField getTextField_4() {
+		if (textField_4 == null) {
+			textField_4 = new JTextField();
+			textField_4.setBounds(10, 232, 96, 20);
+			textField_4.setColumns(10);
+		}
+		return textField_4;
+	}
+	private JButton getBtnNewButton_6() {
+		if (btnNewButton_6 == null) {
+			btnNewButton_6 = new JButton("Filtrar");
+			btnNewButton_6.setBounds(116, 229, 89, 23);
+		}
+		return btnNewButton_6;
 	}
 }

@@ -186,7 +186,7 @@ public class Articulo {
 
 	@Override
 	public String toString() {
-		return title;
+		return "Título: " +  title + ". Autor: " + author +  ". Estado: " + state.toString();
 	}
 
 	public List<String> getKeywords() {
