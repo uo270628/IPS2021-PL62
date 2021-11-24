@@ -23,8 +23,10 @@ create table articles(
 	fecha_publicacion date,
 	tema varchar(100),
 	state varchar(50) not null,
+	version varchar(50) not null,
 	constraint pk_article primary key (id_articles),
-	constraint ck_article_state check (state in ('CREATED', 'SENT', 'WITH_EDITOR', 'IN_REVISION', 'ACCEPTED', 'ACCEPTED_WITH_MINOR_CHANGES', 'ACCEPTED_WITH_GREATER_CHANGES', 'REJECTED', 'IN_EDITION', 'PUBLISHED'))
+	constraint ck_article_state check (state in ('CREATED', 'SENT', 'WITH_EDITOR', 'IN_REVISION', 'ACCEPTED', 'ACCEPTED_WITH_MINOR_CHANGES', 'ACCEPTED_WITH_GREATER_CHANGES', 'REJECTED', 'IN_EDITION', 'PUBLISHED')),
+	constraint ck_article_version check (version in ('NEW', 'GREATER_CHANGES', 'MINOR_CHANGES', 'FINAL'))
 );
  
 CREATE TABLE COMENTARIOSREVISOR (

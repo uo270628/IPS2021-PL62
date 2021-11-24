@@ -10,6 +10,10 @@ public class Articulo {
 		REJECTED, IN_EDITION, PUBLISHED
 	}
 
+	public enum ArticleVersion {
+		NEW, GREATER_CHANGES, MINOR_CHANGES, FINAL
+	}
+
 	private String id;
 	private String title;
 	private Autor author;
@@ -24,8 +28,9 @@ public class Articulo {
 	private String doi;
 	private String volumen;
 	private Date fechaPublicacion;
-
 	private Tema tema;
+	private ArticleVersion version;
+
 	private List<Revisor> listOfRevisoresParaRevisar;
 	private List<Revisor> listRevisoresRecomendados = new ArrayList<Revisor>();
 	private int revisoresRestantes = 3;
@@ -40,6 +45,7 @@ public class Articulo {
 		this.resumen = resumen;
 		this.keywords = keywords;
 		this.state = ArticleState.CREATED;
+		this.version = ArticleVersion.NEW;
 	}
 
 	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
@@ -51,6 +57,7 @@ public class Articulo {
 		this.resumen = resumen;
 		this.keywords = keywords;
 		this.state = ArticleState.SENT;
+		this.version = ArticleVersion.NEW;
 		this.tema = tema;
 		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
 	}
@@ -64,6 +71,7 @@ public class Articulo {
 		this.resumen = resumen;
 		this.keywords = keywords;
 		this.state = ArticleState.SENT;
+		this.version = ArticleVersion.NEW;
 		this.tema = tema;
 		this.cvAuthors = cvAuthors;
 		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
@@ -82,6 +90,7 @@ public class Articulo {
 		this.srcFile = srcFile;
 		this.cvAuthors = cvAuthors;
 		this.state = state;
+		this.version = ArticleVersion.NEW;
 		this.comentarios = new ArrayList<Comentario>();
 
 	}
@@ -93,6 +102,7 @@ public class Articulo {
 		this.keywords = keywords;
 		this.srcFile = srcFile;
 		setEstado(state);
+		this.version = ArticleVersion.NEW;
 		this.comentarios = new ArrayList<Comentario>();
 
 	}
@@ -211,7 +221,6 @@ public class Articulo {
 
 	public void addComentario(Comentario comentario) {
 		comentarios.add(comentario);
-
 	}
 
 	public List<String> getCvAuthors() {
@@ -224,6 +233,10 @@ public class Articulo {
 
 	public String getState() {
 		return "" + state;
+	}
+
+	public String getVersion() {
+		return "" + version;
 	}
 
 	public String listAuthors() {
@@ -301,6 +314,10 @@ public class Articulo {
 		return tema;
 	}
 
+	public void setTema(String tema) {
+		this.tema = new Tema(tema);
+	}
+
 	public void siguiente() {
 		state = ArticleState.IN_REVISION;
 	}
@@ -369,6 +386,10 @@ public class Articulo {
 		this.state = state;
 	}
 
+	public void setVersion(ArticleVersion version) {
+		this.version = version;
+	}
+
 	public void setRevisores(List<Revisor> revisores) {
 		this.listOfRevisoresParaRevisar = revisores;
 		revisoresRestantes -= revisores.size();
@@ -388,6 +409,15 @@ public class Articulo {
 
 	public void setRevisoresRecomendados(List<Revisor> revisoresRecomendados) {
 		listRevisoresRecomendados = revisoresRecomendados;
+	}
+
+	public boolean isRevised() {
+		return state == ArticleState.ACCEPTED || state == ArticleState.ACCEPTED_WITH_GREATER_CHANGES
+				|| state == ArticleState.ACCEPTED_WITH_MINOR_CHANGES || state == ArticleState.REJECTED;
+	}
+
+	public boolean hasBeenRevised() {
+		return version != ArticleVersion.NEW || isRevised();
 	}
 
 }

@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
 import business.Articulo.ArticleState;
+import business.Articulo.ArticleVersion;
 import business.Autor;
 
 public class UploadWindow extends JDialog {
@@ -51,6 +52,8 @@ public class UploadWindow extends JDialog {
 	private List<String> keywords;
 	private Articulo article;
 	private ArticlesByAuthorWindow abaw;
+	private JLabel lblTema;
+	private JTextField textFieldTema;
 
 	/**
 	 * Create the frame.
@@ -96,6 +99,8 @@ public class UploadWindow extends JDialog {
 		contentPane.add(getBtnNext());
 		contentPane.add(getBtnDeleteOtherAuthors());
 		contentPane.add(getBtnDeleteKeywords());
+		contentPane.add(getLblTema());
+		contentPane.add(getTextFieldTema());
 	}
 
 	public JTextField getTextFieldTitle() {
@@ -340,6 +345,32 @@ public class UploadWindow extends JDialog {
 		return btnDeleteKeywords;
 	}
 
+	public JLabel getLblTema() {
+		if (lblTema == null) {
+			lblTema = new JLabel("Tema:");
+			lblTema.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lblTema.setBounds(37, 279, 85, 13);
+		}
+		return lblTema;
+	}
+
+	public JTextField getTextFieldTema() {
+		if (textFieldTema == null) {
+			textFieldTema = new JTextField();
+			textFieldTema.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			textFieldTema.setColumns(10);
+			textFieldTema.setBounds(167, 277, 129, 25);
+			if (article == null || article.getVersion().equals(ArticleVersion.NEW.toString())) {
+				textFieldTema.setEditable(true);
+			} else {
+				textFieldTema.setEditable(false);
+			}
+			if (article != null)
+				textFieldTema.setText(article.getTema().getNombre());
+		}
+		return textFieldTema;
+	}
+
 	/**
 	 * Devuelve los autores del artículo uno por línea
 	 * 
@@ -387,16 +418,21 @@ public class UploadWindow extends JDialog {
 			id = article.getId();
 		}
 		if (article == null) {
-			DocumentsWindow dw = new DocumentsWindow(this, new Articulo(id, getTextFieldTitle().getText(),
-					new Autor(getTextFieldAuthor().getText()), authors, getTextAreaResumen().getText(), keywords),
-					article);
+			Articulo a = new Articulo(id, getTextFieldTitle().getText().trim(),
+					new Autor(getTextFieldAuthor().getText().trim()), authors, getTextAreaResumen().getText().trim(),
+					keywords);
+			a.setTema(getTextFieldTema().getText().trim());
+			a.setVersion(ArticleVersion.NEW);
+			DocumentsWindow dw = new DocumentsWindow(this, a, article);
 			dw.setVisible(true);
 		} else {
-			DocumentsWindow dw = new DocumentsWindow(this,
-					new Articulo(id, getTextFieldTitle().getText(), new Autor(getTextFieldAuthor().getText()), authors,
-							getTextAreaResumen().getText(), keywords, article.getPresentationCard(),
-							article.getSrcFile(), article.getCvAuthors(), toArticleState(article.getState())),
-					article);
+			Articulo a = new Articulo(id, getTextFieldTitle().getText().trim(),
+					new Autor(getTextFieldAuthor().getText().trim()), authors, getTextAreaResumen().getText().trim(),
+					keywords, article.getPresentationCard().trim(), article.getSrcFile().trim(), article.getCvAuthors(),
+					toArticleState(article.getState()));
+			a.setTema(article.getTema().getNombre());
+			a.setVersion(ArticleVersion.NEW);
+			DocumentsWindow dw = new DocumentsWindow(this, a, article);
 			dw.setVisible(true);
 		}
 	}

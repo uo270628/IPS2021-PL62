@@ -341,6 +341,11 @@ public class ShowArticleWindow extends JDialog {
 			});
 			btnSeeRevisionComments.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			btnSeeRevisionComments.setBounds(10, 435, 167, 21);
+			if (article.hasBeenRevised()) {
+				btnSeeRevisionComments.setEnabled(true);
+			} else {
+				btnSeeRevisionComments.setEnabled(false);
+			}
 		}
 		return btnSeeRevisionComments;
 	}

@@ -11,6 +11,7 @@ import java.util.List;
 
 import business.Articulo;
 import business.Articulo.ArticleState;
+import business.Articulo.ArticleVersion;
 import business.Autor;
 import business.Revisor;
 
@@ -25,11 +26,12 @@ public class DataBaseArticle {
 	 * @return si se subió el artículo
 	 */
 	public static boolean uploadArticle(Articulo article) {
-		String queryInsertArticle = "insert into articles (id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state) values ('"
+		String queryInsertArticle = "insert into articles (id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state, tema, version) values ('"
 				+ article.getId() + "', '" + article.getTitle() + "', '" + article.getAuthor().getName() + "', '"
 				+ article.listAuthors() + "', '" + article.getResumen() + "', '" + article.listKeywords() + "', '"
 				+ article.getSrcFile() + "', '" + article.getPresentationCard() + "', '" + article.listCVAuthors()
-				+ "', '" + article.getState() + "')";
+				+ "', '" + article.getState() + "', '" + article.getTema().getNombre() + "', '" + article.getVersion()
+				+ "')";
 
 		Connection conn = null;
 		Statement st = null;
@@ -125,6 +127,8 @@ public class DataBaseArticle {
 						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
 						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
 						toArticleState(rs.getString("state")));
+				article.setTema(rs.getString("tema"));
+				article.setVersion(toArticleVersion(rs.getString("version")));
 			}
 		} catch (SQLException e) {
 			article = null;
@@ -246,9 +250,9 @@ public class DataBaseArticle {
 	 * @param id
 	 * @return si se envió el artículo
 	 */
-	public static boolean sendArticleToAproveAgain(String id) {
-		String queryUpdateArticle = "update articles set state = '" + Articulo.ArticleState.SENT
-				+ "' where id_articles = '" + id + "'";
+	public static boolean sendArticleToAproveAgain(String id, String version) {
+		String queryUpdateArticle = "update articles set state = '" + Articulo.ArticleState.SENT + "', version = '"
+				+ version + "' where id_articles = '" + id + "'";
 
 		Connection conn = null;
 		Statement st = null;
@@ -288,7 +292,7 @@ public class DataBaseArticle {
 	 */
 	public static boolean publishArticle(String id) {
 		String queryPublishArticle = "update articles set state = '" + Articulo.ArticleState.IN_EDITION
-				+ "' where id_articles = '" + id + "'";
+				+ "', version = '" + ArticleVersion.FINAL + "' where id_articles = '" + id + "'";
 
 		Connection conn = null;
 		Statement st = null;
@@ -553,16 +557,19 @@ public class DataBaseArticle {
 			StringBuilder query = new StringBuilder();
 			st = conn.createStatement();
 			query.append(
-					"select id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state from articles");
+					"select id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state, tema, version from articles");
 
 			rs = st.executeQuery(query.toString());
 
 			while (rs.next()) {
-				listOfArticulos.add(new Articulo(rs.getString("id_articles"), rs.getString("title"),
+				Articulo a = new Articulo(rs.getString("id_articles"), rs.getString("title"),
 						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
 						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
 						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
-						toArticleState(rs.getString("state"))));
+						toArticleState(rs.getString("state")));
+				a.setTema(rs.getString("tema"));
+				a.setVersion(toArticleVersion(rs.getString("version")));
+				listOfArticulos.add(a);
 			}
 			rs.close();
 			conn.close();
@@ -684,6 +691,27 @@ public class DataBaseArticle {
 			return ArticleState.IN_EDITION;
 		case "PUBLISHED":
 			return ArticleState.PUBLISHED;
+		default:
+			return null;
+		}
+	}
+
+	/**
+	 * Transforma una cadena de texto en un estado de artículo
+	 * 
+	 * @param state
+	 * @return estado del artículo
+	 */
+	private static ArticleVersion toArticleVersion(String version) {
+		switch (version) {
+		case "NEW":
+			return ArticleVersion.NEW;
+		case "GREATER_CHANGES":
+			return ArticleVersion.GREATER_CHANGES;
+		case "MINOR_CHANGES":
+			return ArticleVersion.MINOR_CHANGES;
+		case "FINAL":
+			return ArticleVersion.FINAL;
 		default:
 			return null;
 		}

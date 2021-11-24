@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
 import business.Articulo.ArticleState;
+import business.Articulo.ArticleVersion;
 import persistence.DataBaseArticle;
 
 public class DocumentsWindow extends JDialog {
@@ -365,9 +366,14 @@ public class DocumentsWindow extends JDialog {
 	 * 
 	 * @param article
 	 */
-	private void publishArticle(Articulo article) {
+	private void sendArticleToApproveAgain(Articulo article) {
 		if (article.isComplete()) {
-			DataBaseArticle.sendArticleToAproveAgain(article.getId());
+			if (article.getState().equals(ArticleState.ACCEPTED_WITH_GREATER_CHANGES.toString())) {
+				article.setVersion(ArticleVersion.GREATER_CHANGES);
+			} else {
+				article.setVersion(ArticleVersion.MINOR_CHANGES);
+			}
+			DataBaseArticle.sendArticleToAproveAgain(article.getId(), article.getVersion());
 			JOptionPane.showMessageDialog(null, "El artículo está listo para ser evaluado.");
 			disposeWindows();
 		} else {
@@ -409,7 +415,12 @@ public class DocumentsWindow extends JDialog {
 			if (newArticle.getState().equals(ArticleState.CREATED.toString())) {
 				sendArticleToApprove(newArticle);
 			} else if (newArticle.changesNeeded()) {
-				publishArticle(newArticle);
+				if (newArticle.getState().equals(ArticleState.ACCEPTED_WITH_MINOR_CHANGES.toString())) {
+					newArticle.setVersion(ArticleVersion.MINOR_CHANGES);
+				} else {
+					newArticle.setVersion(ArticleVersion.GREATER_CHANGES);
+				}
+				sendArticleToApproveAgain(newArticle);
 			}
 			disposeWindows();
 		} else {
