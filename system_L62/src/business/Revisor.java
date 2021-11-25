@@ -38,7 +38,7 @@ public class Revisor {
 
 	@Override
 	public String toString() {
-		return "Nombre:" + nombre + ", tiempo de revision : " + tiempoDeRevision;
+		return "Nombre: " + nombre + ", tiempo de revision: " + tiempoDeRevision;
 	}
 
 	@Override

@@ -277,33 +277,54 @@ public class InterfazElegirRevisores extends JFrame {
 	private void updateListRevisores() {
 		listRevisoresSugeridos.setSelectedIndex(-1);
 		revisoresModel.removeAllElements();
-		List<Revisor> revisores = new DataBaseRevisor().getRevisores(this.articulo.getTema().getNombre());
+		List<Revisor> revisores = new DataBaseRevisor().getRevisores();
 		List<Revisor> revisoresOrdenados = orderRevisores(revisores);
 		for (Revisor r : revisoresOrdenados)
 			revisoresModel.addElement(r);
 	}
 
 	/**
-	 * Devuelve una lista de revisores ordenada a partir de una lista de revisores
-	 * cualquiera
+	 * Devuelve una lista de revisores filtrada y ordenada a partir de una lista de
+	 * revisores cualquiera
 	 * 
 	 * @param lista original
 	 * @return lista ordenada
 	 */
 	private List<Revisor> orderRevisores(List<Revisor> original) {
 		List<Revisor> resultado = new ArrayList<>();
-		int tMin;
+		int maxComparation;
+		int comparation;
 		Revisor revisor;
 		for (int i = 0; i < 3 && i < original.size(); i++) {
-			tMin = 0;
+			maxComparation = -1;
 			revisor = null;
 			for (Revisor r : original) {
-				if (r.getTiempoDeRevision() >= tMin && !resultado.contains(r)) {
-					revisor = r;
-					tMin = r.getTiempoDeRevision();
+				comparation = 0;
+				if (!resultado.contains(r)) {
+					for (Tema t : r.getListOfTemas()) {
+						if (articulo.getTema().getNombre().toLowerCase().equals(t.getNombre().toLowerCase())) {
+							comparation++;
+						}
+						for (String keyword : articulo.getKeywords()) {
+							if (keyword.toLowerCase().equals(t.getNombre().toLowerCase())) {
+								comparation++;
+							}
+						}
+						if (articulo.getTitle().toLowerCase().equals(t.getNombre().toLowerCase())) {
+							comparation++;
+						}
+						if (articulo.getResumen().toLowerCase().contains(t.getNombre().toLowerCase())) {
+							comparation++;
+						}
+					}
+					if (comparation > maxComparation) {
+						revisor = r;
+						maxComparation = comparation;
+					}
 				}
 			}
-			resultado.add(revisor);
+			if (revisor != null)
+				resultado.add(revisor);
 		}
 		return resultado;
 	}
