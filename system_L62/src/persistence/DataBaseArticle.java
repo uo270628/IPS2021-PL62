@@ -501,10 +501,18 @@ public class DataBaseArticle {
 			queryUpdateArticle += " cv_authors = '" + article.listCVAuthors() + "'";
 			elements++;
 		}
+		if (article.getTema() != null && !article.getTema().getNombre().isEmpty()) {
+			if (elements > 0)
+				queryUpdateArticle += ",";
+			queryUpdateArticle += " tema = '" + article.getTema().getNombre() + "'";
+			elements++;
+		}
 
 		if (elements > 0)
 			queryUpdateArticle += ",";
 		queryUpdateArticle += " state = '" + article.getState() + "'";
+
+		queryUpdateArticle += ", version = '" + article.getVersion() + "'";
 
 		queryUpdateArticle += " where id_articles = '" + article.getId() + "'";
 

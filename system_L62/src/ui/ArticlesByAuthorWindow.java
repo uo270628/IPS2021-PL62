@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
@@ -38,6 +39,7 @@ public class ArticlesByAuthorWindow extends JFrame {
 	private JTextField textFieldAuthor;
 	private JList<Articulo> listArticlesByAuthor;
 	private JButton btnCreateArticle;
+	private JScrollPane scrollPaneArticlesByAuthor;
 
 	/**
 	 * Launch the application.
@@ -73,8 +75,8 @@ public class ArticlesByAuthorWindow extends JFrame {
 		contentPane.setLayout(null);
 		contentPane.add(getLblAuthor());
 		contentPane.add(getTextFieldAuthor());
-		contentPane.add(getListArticlesByAuthor());
 		contentPane.add(getBtnCreateArticle());
+		contentPane.add(getScrollPaneArticlesByAuthor());
 	}
 
 	public JLabel getLblAuthor() {
@@ -104,6 +106,15 @@ public class ArticlesByAuthorWindow extends JFrame {
 		return textFieldAuthor;
 	}
 
+	public JScrollPane getScrollPaneArticlesByAuthor() {
+		if (scrollPaneArticlesByAuthor == null) {
+			scrollPaneArticlesByAuthor = new JScrollPane();
+			scrollPaneArticlesByAuthor.setBounds(10, 33, 416, 189);
+			scrollPaneArticlesByAuthor.setViewportView(getListArticlesByAuthor());
+		}
+		return scrollPaneArticlesByAuthor;
+	}
+
 	public JList<Articulo> getListArticlesByAuthor() {
 		if (listArticlesByAuthor == null) {
 			listArticlesByAuthor = new JList<Articulo>(articlesModel);
@@ -121,7 +132,6 @@ public class ArticlesByAuthorWindow extends JFrame {
 			});
 			listArticlesByAuthor.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			listArticlesByAuthor.setBorder(new LineBorder(new Color(0, 0, 0)));
-			listArticlesByAuthor.setBounds(10, 33, 416, 192);
 			listArticlesByAuthor.setCellRenderer(new ArticleListCellRenderer());
 		}
 		return listArticlesByAuthor;
@@ -204,4 +214,5 @@ public class ArticlesByAuthorWindow extends JFrame {
 
 		}
 	}
+
 }
