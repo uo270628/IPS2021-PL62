@@ -65,9 +65,7 @@ create table recomendaciones_revisores(
 
 create table debates(
 idDebate varchar(30) primary key,
-idREVISOR1 Integer FOREIGN key REFERENCES revisores(idREVISOR),
-idREVISOR2 Integer FOREIGN key REFERENCES revisores(idREVISOR),
-idREVISOR3 Integer FOREIGN key REFERENCES revisores(idREVISOR),
+idArticle varchar(30),
 fecha_limite date,
 state varchar(50) not null,
 constraint ck_debate_state check (state in ('ACTIVE','FINISHED'))

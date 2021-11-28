@@ -7,17 +7,17 @@ import java.util.List;
 public class Debate {
 	public enum DebateState{ACTIVE,FINISHED}
 	private String id;
-	private List<Revisor>list= new ArrayList<>();
+	private String idArticulo;
 	private LocalDateTime fechaLimite;
 	private DebateState state;
 	
-	public Debate(String id,List<Revisor>list,LocalDateTime fechaLimite) {
+	public Debate(String id,String idArticulo,LocalDateTime fechaLimite) {
 		if(fechaLimite.isBefore(LocalDateTime.now()))
 			state=DebateState.FINISHED;
 		else
 			state=DebateState.ACTIVE;
 		this.id=id;
-		this.list=list;
+		this.idArticulo=idArticulo;
 		this.fechaLimite=fechaLimite;
 		
 	}
@@ -35,8 +35,9 @@ public class Debate {
 	}
 
 
-	public List<Revisor> getList() {
-		return list;
+	
+	public String getIdArticulo() {
+		return idArticulo;
 	}
 
 	public LocalDateTime getFechaLimite() {
