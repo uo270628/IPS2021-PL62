@@ -46,7 +46,6 @@ public class InterfazElegirRevisores extends JFrame {
 	private JButton btnMandarARevision;
 
 	private Articulo articulo;
-	private CartaRevisores cartarevisores;
 	private JLabel lblTiempoDeRevision;
 	private JSpinner spTiempoDeRevision;
 	private JScrollPane scrollPaneRevisoresSugeridos;
@@ -62,7 +61,7 @@ public class InterfazElegirRevisores extends JFrame {
 		setResizable(false);
 		this.articulo = articulo;
 		this.revisoresModel = new DefaultListModel<Revisor>();
-		cartarevisores = new CartaRevisores();
+		new CartaRevisores();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 518, 390);
@@ -107,7 +106,7 @@ public class InterfazElegirRevisores extends JFrame {
 	}
 
 	private void añadirRevisoresAlCombobox() {
-		DataBaseRevisor data= new DataBaseRevisor();
+		DataBaseRevisor data = new DataBaseRevisor();
 		List<Revisor> listOfRevisores = data.getAllRevisores();
 		for (Revisor revisor : listOfRevisores) {
 			cbRevisores.addItem(revisor);

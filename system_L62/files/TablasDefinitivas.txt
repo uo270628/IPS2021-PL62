@@ -64,9 +64,9 @@ create table recomendaciones_revisores(
 );
 
 create table debates(
-idDebate varchar(30) primary key,
-idArticle varchar(30),
-fecha_limite date,
-state varchar(50) not null,
-constraint ck_debate_state check (state in ('ACTIVE','FINISHED'))
+	idDebate varchar(30) primary key,
+	idArticle varchar(30),
+	fecha_limite date,
+	state varchar(50) not null,
+	constraint ck_debate_state check (state in ('ACTIVE','FINISHED'))
 );

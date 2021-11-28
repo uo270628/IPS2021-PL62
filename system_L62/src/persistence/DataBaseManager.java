@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 import business.Articulo;
 import business.Articulo.ArticleState;
 import business.Autor;
+import business.Carta;
 import business.Comentario;
 import business.Revisor;
 
@@ -306,6 +308,50 @@ public class DataBaseManager {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static Carta getCartaArticulo(String id) {
+		String querySearchCarta = "select * from carta where idarticulo = '" + id + "'";
+
+		Carta carta = null;
+
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
+
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			rs = st.executeQuery(querySearchCarta);
+
+			if (rs.next()) {
+				carta = new Carta(rs.getString("texto"));
+			}
+		} catch (SQLException e) {
+			carta = null;
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return carta;
 	}
 
 }

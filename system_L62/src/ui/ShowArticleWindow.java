@@ -3,7 +3,6 @@ package ui;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -18,9 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
 import business.Autor;
-import business.Comentario;
 import persistence.DataBaseArticle;
-import persistence.DataBaseComentario;
 
 public class ShowArticleWindow extends JDialog {
 
@@ -374,14 +371,7 @@ public class ShowArticleWindow extends JDialog {
 	}
 
 	private void showCommentsForAuthor() {
-		List<Comentario> comentarios = DataBaseComentario.getComentariosDeUnArticulo(article);
-		List<Comentario> comentariosParaAutor = new ArrayList<>();
-		for (Comentario c : comentarios) {
-			if (c.getType().equals("Comentario para autor")) {
-				comentariosParaAutor.add(c);
-			}
-		}
-		SeeRevisionCommentsForAuthorWindow srcWindow = new SeeRevisionCommentsForAuthorWindow(comentariosParaAutor);
+		SeeRevisionCommentsForAuthorWindow srcWindow = new SeeRevisionCommentsForAuthorWindow(article);
 		srcWindow.setVisible(true);
 	}
 

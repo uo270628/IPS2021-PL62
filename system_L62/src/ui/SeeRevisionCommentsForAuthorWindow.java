@@ -20,7 +20,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import business.Articulo;
 import business.Comentario;
+import persistence.DataBaseComentario;
+import persistence.DataBaseManager;
 
 public class SeeRevisionCommentsForAuthorWindow extends JDialog {
 
@@ -34,14 +37,22 @@ public class SeeRevisionCommentsForAuthorWindow extends JDialog {
 	private JTextArea textAreaCommentInfo;
 	private JLabel lblCommentInfo;
 	private JLabel lblComments;
+	private JButton btnShowCard;
+
+	private Articulo article;
 
 	/**
 	 * Create the frame.
 	 */
-	public SeeRevisionCommentsForAuthorWindow(List<Comentario> comentarios) {
+	public SeeRevisionCommentsForAuthorWindow(Articulo article) {
 		this.commentsModel = new DefaultListModel<>();
+		this.article = article;
+		article.setCarta(DataBaseManager.getCartaArticulo(article.getId()));
+		List<Comentario> comentarios = DataBaseComentario.getComentariosDeUnArticulo(article);
 		for (Comentario c : comentarios) {
-			commentsModel.addElement(c);
+			if (c.getType().equals("Comentario para autor")) {
+				commentsModel.addElement(c);
+			}
 		}
 
 		setResizable(false);
@@ -59,6 +70,7 @@ public class SeeRevisionCommentsForAuthorWindow extends JDialog {
 		contentPane.add(getScrollPaneCommentInfo());
 		contentPane.add(getLblCommentInfo());
 		contentPane.add(getLblComments());
+		contentPane.add(getBtnShowCard());
 	}
 
 	public JButton getBtnBack() {
@@ -79,7 +91,7 @@ public class SeeRevisionCommentsForAuthorWindow extends JDialog {
 	public JScrollPane getScrollPaneComments() {
 		if (scrollPaneComments == null) {
 			scrollPaneComments = new JScrollPane();
-			scrollPaneComments.setBounds(341, 41, 85, 181);
+			scrollPaneComments.setBounds(341, 41, 85, 148);
 			scrollPaneComments.setViewportView(getListComments());
 		}
 		return scrollPaneComments;
@@ -134,6 +146,21 @@ public class SeeRevisionCommentsForAuthorWindow extends JDialog {
 		return lblComments;
 	}
 
+	public JButton getBtnShowCard() {
+		if (btnShowCard == null) {
+			btnShowCard = new JButton("Ver carta");
+			btnShowCard.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					textAreaCommentInfo.setText(article.getCarta());
+				}
+			});
+			btnShowCard.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnShowCard.setBounds(341, 201, 85, 21);
+		}
+		return btnShowCard;
+	}
+
 	private void disposeWindow() {
 		this.dispose();
 	}
@@ -166,4 +193,5 @@ public class SeeRevisionCommentsForAuthorWindow extends JDialog {
 
 		}
 	}
+
 }
