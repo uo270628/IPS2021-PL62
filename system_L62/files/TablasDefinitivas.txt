@@ -71,8 +71,9 @@ create table debates(
 	constraint ck_debate_state check (state in ('ACTIVE','FINISHED'))
 );
 create table mensajes(
-	idMensaje Integer PRIMARY KEY,
+	idMensaje Integer,
 	idDebate varchar(30) FOREIGN key REFERENCES debates(idDebate ),
 	texto varchar(255),
 	redactor varchar(255),
+	primary key(idMensaje,idDebate)
 );
