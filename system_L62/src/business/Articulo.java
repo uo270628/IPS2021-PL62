@@ -422,5 +422,19 @@ public class Articulo {
 	public boolean hasBeenRevised() {
 		return version != ArticleVersion.NEW || isRevised();
 	}
+	public void cambiarComentario(String texto,Revisor revisor) {
+		for (Comentario comentario : comentarios) {
+			if(comentario.getIdRevisor().equals(revisor.getId()))
+				comentario.setTexto(texto);
+		}
+	}
+	public Comentario getComentarioDeUnRevisor(Revisor revisor) {
+		for (Comentario comentario : comentarios) {
+			if(comentario.getIdRevisor().equals(revisor.getId()))
+				return comentario;
+		}
+		return null;
+	}
+
 
 }
