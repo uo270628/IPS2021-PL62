@@ -65,6 +65,11 @@ public class Comentario {
 	public String getIdArticulo() {
 		return idArticulo;
 	}
+	
+
+	public void setTexto(String texto) {
+		this.texto = texto;
+	}
 
 	@Override
 	public String toString() {
