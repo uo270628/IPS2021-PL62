@@ -107,7 +107,8 @@ public class InterfazElegirRevisores extends JFrame {
 	}
 
 	private void añadirRevisoresAlCombobox() {
-		List<Revisor> listOfRevisores = cartarevisores.getRevisoresPorTema(articulo.getTema().getNombre());
+		DataBaseRevisor data= new DataBaseRevisor();
+		List<Revisor> listOfRevisores = data.getAllRevisores();
 		for (Revisor revisor : listOfRevisores) {
 			cbRevisores.addItem(revisor);
 		}
@@ -183,8 +184,8 @@ public class InterfazElegirRevisores extends JFrame {
 
 	private JLabel getLblRevisoresRestantes() {
 		if (lblRevisoresRestantes == null) {
-			lblRevisoresRestantes = new JLabel("Revisores restantes:");
-			lblRevisoresRestantes.setBounds(20, 35, 142, 34);
+			lblRevisoresRestantes = new JLabel("Revisores restantes por elegir:");
+			lblRevisoresRestantes.setBounds(10, 35, 198, 34);
 		}
 		return lblRevisoresRestantes;
 	}
