@@ -54,6 +54,7 @@ public class UploadWindow extends JDialog {
 	private ArticlesByAuthorWindow abaw;
 	private JLabel lblTema;
 	private JTextField textFieldTema;
+	private JButton btnSeeRevisionComments;
 
 	/**
 	 * Create the frame.
@@ -101,6 +102,7 @@ public class UploadWindow extends JDialog {
 		contentPane.add(getBtnDeleteKeywords());
 		contentPane.add(getLblTema());
 		contentPane.add(getTextFieldTema());
+		contentPane.add(getBtnSeeRevisionComments());
 	}
 
 	public JTextField getTextFieldTitle() {
@@ -371,6 +373,27 @@ public class UploadWindow extends JDialog {
 		return textFieldTema;
 	}
 
+	public JButton getBtnSeeRevisionComments() {
+		if (btnSeeRevisionComments == null) {
+			btnSeeRevisionComments = new JButton("Comentarios de revisi\u00F3n");
+			btnSeeRevisionComments.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					SeeRevisionCommentsForAuthorWindow window = new SeeRevisionCommentsForAuthorWindow(article);
+					window.setVisible(true);
+				}
+			});
+			btnSeeRevisionComments.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnSeeRevisionComments.setBounds(37, 419, 172, 21);
+			if (article.hasBeenRevised()) {
+				btnSeeRevisionComments.setEnabled(true);
+			} else {
+				btnSeeRevisionComments.setEnabled(false);
+			}
+		}
+		return btnSeeRevisionComments;
+	}
+
 	/**
 	 * Devuelve los autores del artículo uno por línea
 	 * 
@@ -519,4 +542,5 @@ public class UploadWindow extends JDialog {
 			return null;
 		}
 	}
+
 }
