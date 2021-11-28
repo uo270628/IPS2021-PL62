@@ -64,16 +64,16 @@ create table recomendaciones_revisores(
 );
 
 create table debates(
-	idDebate varchar(30) primary key,
 	idArticle varchar(20) FOREIGN key REFERENCES articles(id_articles),
 	fecha_limite date,
 	state varchar(50) not null,
 	constraint ck_debate_state check (state in ('ACTIVE','FINISHED'))
+	primary key(idArticle)
 );
 create table mensajes(
 	idMensaje Integer,
-	idDebate varchar(30) FOREIGN key REFERENCES debates(idDebate ),
+	idArticle varchar(30) FOREIGN key REFERENCES debates(idDebate ),
 	texto varchar(255),
 	redactor varchar(255),
-	primary key(idMensaje,idDebate)
+	primary key(idMensaje,idArticle)
 );
