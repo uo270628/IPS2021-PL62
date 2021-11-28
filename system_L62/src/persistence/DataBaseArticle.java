@@ -155,6 +155,56 @@ public class DataBaseArticle {
 
 		return article;
 	}
+	public static List<Articulo> findAllArticles() {
+		String querySearchArticle = "select * from articles  " ;
+		List<Articulo>list=new ArrayList<>();
+		Articulo article = null;
+
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
+
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			rs = st.executeQuery(querySearchArticle);
+
+			if (rs.next()) {
+				article = new Articulo(rs.getString("id_articles"), rs.getString("title"),
+						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
+						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
+						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
+						toArticleState(rs.getString("state")));
+				article.setTema(rs.getString("tema"));
+				article.setVersion(toArticleVersion(rs.getString("version")));
+				list.add(article);
+			}
+		} catch (SQLException e) {
+			article = null;
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return list;
+	}
 
 	public static Articulo searchArticleConTodosLosAtributos(String id) {
 		String querySearchArticle = "select * from articles where id_articles = '" + id + "'";
@@ -293,6 +343,39 @@ public class DataBaseArticle {
 	public static boolean publishArticle(String id) {
 		String queryPublishArticle = "update articles set state = '" + Articulo.ArticleState.IN_EDITION
 				+ "', version = '" + ArticleVersion.FINAL + "' where id_articles = '" + id + "'";
+
+		Connection conn = null;
+		Statement st = null;
+
+		boolean result;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			st.executeUpdate(queryPublishArticle);
+			result = true;
+		} catch (SQLException e) {
+			result = false;
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return result;
+	}
+	public static boolean publishArticleState(Articulo a) {
+		String queryPublishArticle = "update articles set state = '" + a.getState()
+				+  "' where id_articles = '" + a.getId() + "'";
 
 		Connection conn = null;
 		Statement st = null;

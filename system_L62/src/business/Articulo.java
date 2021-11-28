@@ -46,6 +46,7 @@ public class Articulo {
 		this.keywords = keywords;
 		this.state = ArticleState.CREATED;
 		this.version = ArticleVersion.NEW;
+		
 	}
 
 	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
@@ -104,6 +105,8 @@ public class Articulo {
 		setEstado(state);
 		this.version = ArticleVersion.NEW;
 		this.comentarios = new ArrayList<Comentario>();
+		this.authors=new ArrayList<>();
+	
 
 	}
 

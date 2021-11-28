@@ -76,7 +76,8 @@ public class VentanaEditor extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaEditor() {
-		articulos = DataBaseArticle.loadArticles();
+		articulos = DataBaseArticle.findAllArticles();
+		cambiarArticulosAWithEditor();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 498, 324);
 		panelCard = new JPanel();
@@ -87,6 +88,15 @@ public class VentanaEditor extends JFrame {
 		panelCard.add(getPanelANuevos(), "a_nuevos");
 		panelCard.add(getPanelGestor(), "gestion");
 		panelCard.add(getPanel(), "aceptarCC");
+	}
+
+	private void cambiarArticulosAWithEditor() {
+		for(Articulo a: articulos) {
+			a.setState(ArticleState.WITH_EDITOR);
+			DataBaseArticle.publishArticleState(a);
+		}
+		
+		
 	}
 
 	private JPanel getPanelGestor() {
@@ -246,7 +256,7 @@ public class VentanaEditor extends JFrame {
 			textFieldResumen.setEditable(false);
 			textFieldResumen.setBounds(10, 129, 452, 78);
 			textFieldResumen.setColumns(10);
-			textFieldResumen.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
+			//textFieldResumen.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
 		}
 		return textFieldResumen;
 	}
