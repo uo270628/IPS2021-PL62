@@ -72,7 +72,7 @@ create table debates(
 );
 create table mensajes(
 	idMensaje Integer,
-	idArticle varchar(30) FOREIGN key REFERENCES debates(idDebate ),
+	idArticle varchar(30) FOREIGN key REFERENCES debates(idArticle ),
 	texto varchar(255),
 	redactor varchar(255),
 	primary key(idMensaje,idArticle)
