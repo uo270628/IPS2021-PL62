@@ -413,9 +413,10 @@ public class VentanaEditor extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 		    JOptionPane.showMessageDialog(null, "El articulo ha sido aceptado con cambios menores");
 
-		    ((Articulo) getComboBoxArticulosConEditor().getSelectedItem())
-			    .setState(ArticleState.ACCEPTED_WITH_MINOR_CHANGES);
 		    Articulo a = ((Articulo) getComboBoxArticulosConEditor().getSelectedItem());
+
+		    a.setState(ArticleState.ACCEPTED_WITH_MINOR_CHANGES);
+
 		    DataBaseArticle.updateArticle(a);
 
 		    CardLayout cl = (CardLayout) panelCard.getLayout();
