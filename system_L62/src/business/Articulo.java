@@ -6,8 +6,12 @@ import java.util.List;
 
 public class Articulo {
 	public enum ArticleState {
-		CREATED, SENT, WITH_EDITOR, PENDING_REVISION, IN_REVISION, ACCEPTED, ACCEPTED_WITH_CHANGES, REJECTED,
-		IN_EDITION, PUBLISHED
+		CREATED, SENT, WITH_EDITOR, IN_REVISION, ACCEPTED, ACCEPTED_WITH_MINOR_CHANGES, ACCEPTED_WITH_GREATER_CHANGES,
+		REJECTED, IN_EDITION, PUBLISHED
+	}
+
+	public enum ArticleVersion {
+		NEW, GREATER_CHANGES, MINOR_CHANGES, FINAL
 	}
 
 	private String id;
@@ -24,8 +28,9 @@ public class Articulo {
 	private String doi;
 	private String volumen;
 	private Date fechaPublicacion;
-
 	private Tema tema;
+	private ArticleVersion version;
+
 	private List<Revisor> listOfRevisoresParaRevisar;
 	private List<Revisor> listRevisoresRecomendados = new ArrayList<Revisor>();
 	private int revisoresRestantes = 3;
@@ -40,6 +45,8 @@ public class Articulo {
 		this.resumen = resumen;
 		this.keywords = keywords;
 		this.state = ArticleState.CREATED;
+		this.version = ArticleVersion.NEW;
+		
 	}
 
 	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
@@ -51,6 +58,7 @@ public class Articulo {
 		this.resumen = resumen;
 		this.keywords = keywords;
 		this.state = ArticleState.SENT;
+		this.version = ArticleVersion.NEW;
 		this.tema = tema;
 		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
 	}
@@ -64,6 +72,7 @@ public class Articulo {
 		this.resumen = resumen;
 		this.keywords = keywords;
 		this.state = ArticleState.SENT;
+		this.version = ArticleVersion.NEW;
 		this.tema = tema;
 		this.cvAuthors = cvAuthors;
 		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
@@ -82,6 +91,7 @@ public class Articulo {
 		this.srcFile = srcFile;
 		this.cvAuthors = cvAuthors;
 		this.state = state;
+		this.version = ArticleVersion.NEW;
 		this.comentarios = new ArrayList<Comentario>();
 
 	}
@@ -93,7 +103,10 @@ public class Articulo {
 		this.keywords = keywords;
 		this.srcFile = srcFile;
 		setEstado(state);
+		this.version = ArticleVersion.NEW;
 		this.comentarios = new ArrayList<Comentario>();
+		this.authors=new ArrayList<>();
+	
 
 	}
 
@@ -114,8 +127,11 @@ public class Articulo {
 		case "ACCEPTED":
 			this.state = ArticleState.ACCEPTED;
 			break;
-		case "ACCEPTED_WITH_CHANGES":
-			this.state = ArticleState.ACCEPTED_WITH_CHANGES;
+		case "ACCEPTED_WITH_MINOR_CHANGES":
+			this.state = ArticleState.ACCEPTED_WITH_MINOR_CHANGES;
+			break;
+		case "ACCEPTED_WITH_GREATER_CHANGES":
+			this.state = ArticleState.ACCEPTED_WITH_GREATER_CHANGES;
 			break;
 		case "REJECTED":
 			this.state = ArticleState.REJECTED;
@@ -208,7 +224,6 @@ public class Articulo {
 
 	public void addComentario(Comentario comentario) {
 		comentarios.add(comentario);
-
 	}
 
 	public List<String> getCvAuthors() {
@@ -221,6 +236,10 @@ public class Articulo {
 
 	public String getState() {
 		return "" + state;
+	}
+
+	public String getVersion() {
+		return "" + version;
 	}
 
 	public String listAuthors() {
@@ -298,6 +317,10 @@ public class Articulo {
 		return tema;
 	}
 
+	public void setTema(String tema) {
+		this.tema = new Tema(tema);
+	}
+
 	public void siguiente() {
 		state = ArticleState.IN_REVISION;
 	}
@@ -366,18 +389,52 @@ public class Articulo {
 		this.state = state;
 	}
 
+	public void setVersion(ArticleVersion version) {
+		this.version = version;
+	}
+
 	public void setRevisores(List<Revisor> revisores) {
 		this.listOfRevisoresParaRevisar = revisores;
 		revisoresRestantes -= revisores.size();
 	}
 
 	public boolean canBeEditable() {
-		return state == ArticleState.CREATED || state == ArticleState.ACCEPTED_WITH_CHANGES;
+		return state == ArticleState.CREATED || changesNeeded();
+	}
+
+	public boolean changesNeeded() {
+		return state == ArticleState.ACCEPTED_WITH_GREATER_CHANGES || state == ArticleState.ACCEPTED_WITH_MINOR_CHANGES;
+	}
+
+	public boolean isAccepted() {
+		return state == ArticleState.ACCEPTED;
 	}
 
 	public void setRevisoresRecomendados(List<Revisor> revisoresRecomendados) {
 		listRevisoresRecomendados = revisoresRecomendados;
-
 	}
+
+	public boolean isRevised() {
+		return state == ArticleState.ACCEPTED || state == ArticleState.ACCEPTED_WITH_GREATER_CHANGES
+				|| state == ArticleState.ACCEPTED_WITH_MINOR_CHANGES || state == ArticleState.REJECTED;
+	}
+
+	public boolean hasBeenRevised() {
+		return version != ArticleVersion.NEW || isRevised();
+	}
+	public void cambiarComentario(String texto,Revisor revisor) {
+		for (Comentario comentario : comentarios) {
+			if(comentario.getIdRevisor().equals(revisor.getId()))
+				comentario.setTexto(texto);
+		}
+	}
+	public Comentario getComentarioDeUnRevisor(Revisor revisor) {
+		for (Comentario comentario : comentarios) {
+			if(comentario.getIdRevisor().equals(revisor.getId()))
+				return comentario;
+		}
+		return null;
+	}
+
 
 }

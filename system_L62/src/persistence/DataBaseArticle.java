@@ -11,6 +11,7 @@ import java.util.List;
 
 import business.Articulo;
 import business.Articulo.ArticleState;
+import business.Articulo.ArticleVersion;
 import business.Autor;
 import business.Revisor;
 
@@ -25,11 +26,12 @@ public class DataBaseArticle {
 	 * @return si se subió el artículo
 	 */
 	public static boolean uploadArticle(Articulo article) {
-		String queryInsertArticle = "insert into articles (id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state) values ('"
+		String queryInsertArticle = "insert into articles (id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state, tema, version) values ('"
 				+ article.getId() + "', '" + article.getTitle() + "', '" + article.getAuthor().getName() + "', '"
 				+ article.listAuthors() + "', '" + article.getResumen() + "', '" + article.listKeywords() + "', '"
 				+ article.getSrcFile() + "', '" + article.getPresentationCard() + "', '" + article.listCVAuthors()
-				+ "', '" + article.getState() + "')";
+				+ "', '" + article.getState() + "', '" + article.getTema().getNombre() + "', '" + article.getVersion()
+				+ "')";
 
 		Connection conn = null;
 		Statement st = null;
@@ -125,6 +127,8 @@ public class DataBaseArticle {
 						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
 						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
 						toArticleState(rs.getString("state")));
+				article.setTema(rs.getString("tema"));
+				article.setVersion(toArticleVersion(rs.getString("version")));
 			}
 		} catch (SQLException e) {
 			article = null;
@@ -150,6 +154,56 @@ public class DataBaseArticle {
 		}
 
 		return article;
+	}
+	public static List<Articulo> findAllArticles() {
+		String querySearchArticle = "select * from articles  " ;
+		List<Articulo>list=new ArrayList<>();
+		Articulo article = null;
+
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
+
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			rs = st.executeQuery(querySearchArticle);
+
+			if (rs.next()) {
+				article = new Articulo(rs.getString("id_articles"), rs.getString("title"),
+						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
+						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
+						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
+						toArticleState(rs.getString("state")));
+				article.setTema(rs.getString("tema"));
+				article.setVersion(toArticleVersion(rs.getString("version")));
+				list.add(article);
+			}
+		} catch (SQLException e) {
+			article = null;
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return list;
 	}
 
 	public static Articulo searchArticleConTodosLosAtributos(String id) {
@@ -241,6 +295,46 @@ public class DataBaseArticle {
 	}
 
 	/**
+	 * Envía un artículo creado para ser evaluado por segunda vez
+	 * 
+	 * @param id
+	 * @return si se envió el artículo
+	 */
+	public static boolean sendArticleToAproveAgain(String id, String version) {
+		String queryUpdateArticle = "update articles set state = '" + Articulo.ArticleState.SENT + "', version = '"
+				+ version + "' where id_articles = '" + id + "'";
+
+		Connection conn = null;
+		Statement st = null;
+
+		boolean result;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			st.executeUpdate(queryUpdateArticle);
+			result = true;
+		} catch (SQLException e) {
+			result = false;
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return result;
+	}
+
+	/**
 	 * Envía un artículo al editor para que decida publicarlo
 	 * 
 	 * @param id
@@ -248,7 +342,40 @@ public class DataBaseArticle {
 	 */
 	public static boolean publishArticle(String id) {
 		String queryPublishArticle = "update articles set state = '" + Articulo.ArticleState.IN_EDITION
-				+ "' where id_articles = '" + id + "'";
+				+ "', version = '" + ArticleVersion.FINAL + "' where id_articles = '" + id + "'";
+
+		Connection conn = null;
+		Statement st = null;
+
+		boolean result;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			st.executeUpdate(queryPublishArticle);
+			result = true;
+		} catch (SQLException e) {
+			result = false;
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return result;
+	}
+	public static boolean publishArticleState(Articulo a) {
+		String queryPublishArticle = "update articles set state = '" + a.getState()
+				+  "' where id_articles = '" + a.getId() + "'";
 
 		Connection conn = null;
 		Statement st = null;
@@ -457,10 +584,18 @@ public class DataBaseArticle {
 			queryUpdateArticle += " cv_authors = '" + article.listCVAuthors() + "'";
 			elements++;
 		}
+		if (article.getTema() != null && !article.getTema().getNombre().isEmpty()) {
+			if (elements > 0)
+				queryUpdateArticle += ",";
+			queryUpdateArticle += " tema = '" + article.getTema().getNombre() + "'";
+			elements++;
+		}
 
 		if (elements > 0)
 			queryUpdateArticle += ",";
 		queryUpdateArticle += " state = '" + article.getState() + "'";
+
+		queryUpdateArticle += ", version = '" + article.getVersion() + "'";
 
 		queryUpdateArticle += " where id_articles = '" + article.getId() + "'";
 
@@ -513,16 +648,19 @@ public class DataBaseArticle {
 			StringBuilder query = new StringBuilder();
 			st = conn.createStatement();
 			query.append(
-					"select id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state from articles");
+					"select id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, state, tema, version from articles");
 
 			rs = st.executeQuery(query.toString());
 
 			while (rs.next()) {
-				listOfArticulos.add(new Articulo(rs.getString("id_articles"), rs.getString("title"),
+				Articulo a = new Articulo(rs.getString("id_articles"), rs.getString("title"),
 						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
 						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
 						rs.getString("srcfile"), toList(rs.getString("cv_authors")),
-						toArticleState(rs.getString("state"))));
+						toArticleState(rs.getString("state")));
+				a.setTema(rs.getString("tema"));
+				a.setVersion(toArticleVersion(rs.getString("version")));
+				listOfArticulos.add(a);
 			}
 			rs.close();
 			conn.close();
@@ -634,14 +772,37 @@ public class DataBaseArticle {
 			return ArticleState.IN_REVISION;
 		case "ACCEPTED":
 			return ArticleState.ACCEPTED;
-		case "ACCEPTED_WITH_CHANGES":
-			return ArticleState.ACCEPTED_WITH_CHANGES;
+		case "ACCEPTED_WITH_MINOR_CHANGES":
+			return ArticleState.ACCEPTED_WITH_MINOR_CHANGES;
+		case "ACCEPTED_WITH_GREATER_CHANGES":
+			return ArticleState.ACCEPTED_WITH_GREATER_CHANGES;
 		case "REJECTED":
 			return ArticleState.REJECTED;
 		case "IN_EDITION":
 			return ArticleState.IN_EDITION;
 		case "PUBLISHED":
 			return ArticleState.PUBLISHED;
+		default:
+			return null;
+		}
+	}
+
+	/**
+	 * Transforma una cadena de texto en un estado de artículo
+	 * 
+	 * @param state
+	 * @return estado del artículo
+	 */
+	private static ArticleVersion toArticleVersion(String version) {
+		switch (version) {
+		case "NEW":
+			return ArticleVersion.NEW;
+		case "GREATER_CHANGES":
+			return ArticleVersion.GREATER_CHANGES;
+		case "MINOR_CHANGES":
+			return ArticleVersion.MINOR_CHANGES;
+		case "FINAL":
+			return ArticleVersion.FINAL;
 		default:
 			return null;
 		}

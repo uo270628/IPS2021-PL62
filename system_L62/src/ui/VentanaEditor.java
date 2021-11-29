@@ -34,7 +34,6 @@ public class VentanaEditor extends JFrame {
 	private JButton btnFiltrarPorTitulo;
 	private JButton btnFiltrarPorAutor;
 
-
 	private JPanel panelANuevos;
 	private JLabel lblArticulosNuevos;
 	private JComboBox<Articulo> comboBoxArticulosEnviados;
@@ -61,6 +60,7 @@ public class VentanaEditor extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					VentanaEditor window = new VentanaEditor();
@@ -76,17 +76,27 @@ public class VentanaEditor extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaEditor() {
-		articulos = DataBaseArticle.loadArticles();
+		articulos = DataBaseArticle.findAllArticles();
+		cambiarArticulosAWithEditor();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 498, 324);
 		panelCard = new JPanel();
 		panelCard.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(panelCard);
 		panelCard.setLayout(new CardLayout(0, 0));
-		
+
 		panelCard.add(getPanelANuevos(), "a_nuevos");
 		panelCard.add(getPanelGestor(), "gestion");
 		panelCard.add(getPanel(), "aceptarCC");
+	}
+
+	private void cambiarArticulosAWithEditor() {
+		for(Articulo a: articulos) {
+			a.setState(ArticleState.WITH_EDITOR);
+			DataBaseArticle.publishArticleState(a);
+		}
+		
+		
 	}
 
 	private JPanel getPanelGestor() {
@@ -113,19 +123,23 @@ public class VentanaEditor extends JFrame {
 		}
 		return panelGestor;
 	}
+
 	private JComboBox<Articulo> getComboBoxArticulosConEditor() {
 		if (comboBoxArticulosConEditor == null) {
 			comboBoxArticulosConEditor = new JComboBox<Articulo>();
 			comboBoxArticulosConEditor.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					textField.setText(((Articulo) getComboBoxArticulosConEditor().getSelectedItem()).getResumen());
 				}
 			});
-			comboBoxArticulosConEditor.setModel(new DefaultComboBoxModel<Articulo>(articulos.toArray( new Articulo[articulos.size()])));
+			comboBoxArticulosConEditor
+					.setModel(new DefaultComboBoxModel<Articulo>(articulos.toArray(new Articulo[articulos.size()])));
 			comboBoxArticulosConEditor.setBounds(10, 64, 349, 22);
 		}
 		return comboBoxArticulosConEditor;
 	}
+
 	private JTextField getTextFieldFiltrarPorTitulo() {
 		if (textFieldFiltrarPorTitulo == null) {
 			textFieldFiltrarPorTitulo = new JTextField();
@@ -134,6 +148,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return textFieldFiltrarPorTitulo;
 	}
+
 	private JTextField getTextFieldFiltrarPorAutor() {
 		if (textFieldFiltrarPorAutor == null) {
 			textFieldFiltrarPorAutor = new JTextField();
@@ -142,47 +157,53 @@ public class VentanaEditor extends JFrame {
 		}
 		return textFieldFiltrarPorAutor;
 	}
+
 	private JButton getBtnFiltrarPorTitulo() {
 		if (btnFiltrarPorTitulo == null) {
 			btnFiltrarPorTitulo = new JButton("Filtrar");
 			btnFiltrarPorTitulo.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					String titulo = getTextFieldFiltrarPorTitulo().getText();
 					ArrayList<Articulo> articulo = new ArrayList<Articulo>();
-					for(Articulo art:articulos) {
-						if(art.getTitle().equals(titulo)) {
+					for (Articulo art : articulos) {
+						if (art.getTitle().equals(titulo)) {
 							articulo.add(art);
 						}
 					}
-					comboBoxArticulosConEditor.setModel(new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])))
-					;
+					comboBoxArticulosConEditor.setModel(
+							new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])));
 				}
 			});
 			btnFiltrarPorTitulo.setBounds(147, 118, 89, 23);
 		}
 		return btnFiltrarPorTitulo;
 	}
+
 	private JButton getBtnFiltrarPorAutor() {
 		if (btnFiltrarPorAutor == null) {
 			btnFiltrarPorAutor = new JButton("Filtrar");
 			btnFiltrarPorAutor.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					String autor = getTextFieldFiltrarPorAutor().getText();
 
 					ArrayList<Articulo> articulo = new ArrayList<Articulo>();
-					for(Articulo art:articulos) {
-						if(art.getAuthor().getName().equals(autor) && !art.getState().equals(ArticleState.SENT.toString())) {
+					for (Articulo art : articulos) {
+						if (art.getAuthor().getName().equals(autor)
+								&& !art.getState().equals(ArticleState.SENT.toString())) {
 							articulo.add(art);
 						}
 					}
-					comboBoxArticulosConEditor.setModel(new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])));
+					comboBoxArticulosConEditor.setModel(
+							new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])));
 				}
 			});
 			btnFiltrarPorAutor.setBounds(147, 180, 89, 23);
 		}
 		return btnFiltrarPorAutor;
 	}
-	
+
 	private JPanel getPanelANuevos() {
 		if (panelANuevos == null) {
 			panelANuevos = new JPanel();
@@ -196,7 +217,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return panelANuevos;
 	}
-	
+
 	private JLabel getLblArticulosNuevos() {
 		if (lblArticulosNuevos == null) {
 			lblArticulosNuevos = new JLabel("Art\u00EDculos nuevos");
@@ -205,38 +226,41 @@ public class VentanaEditor extends JFrame {
 		}
 		return lblArticulosNuevos;
 	}
-	
+
 	private JComboBox<Articulo> getComboBoxArticulosEnviados() {
 		if (comboBoxArticulosEnviados == null) {
 			comboBoxArticulosEnviados = new JComboBox<Articulo>();
 			comboBoxArticulosEnviados.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
-					textFieldResumen.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
+					textFieldResumen
+							.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
 				}
 			});
 			ArrayList<Articulo> articulo = new ArrayList<Articulo>();
-			for(Articulo art:articulos) {
-				if(art.getState().equals(ArticleState.WITH_EDITOR.toString())) {
+			for (Articulo art : articulos) {
+				if (art.getState().equals(ArticleState.WITH_EDITOR.toString())) {
 					articulo.add(art);
 				}
 			}
-			comboBoxArticulosEnviados.setModel(new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()]) ));
+			comboBoxArticulosEnviados
+					.setModel(new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])));
 			comboBoxArticulosEnviados.setBounds(10, 47, 452, 25);
 		}
 		return comboBoxArticulosEnviados;
 	}
-	
+
 	private JTextField getTextFieldResumen() {
 		if (textFieldResumen == null) {
 			textFieldResumen = new JTextField();
 			textFieldResumen.setEditable(false);
 			textFieldResumen.setBounds(10, 129, 452, 78);
 			textFieldResumen.setColumns(10);
-			textFieldResumen.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
+			//textFieldResumen.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
 		}
 		return textFieldResumen;
 	}
-	
+
 	private JLabel getLblResumen() {
 		if (lblResumen == null) {
 			lblResumen = new JLabel("Resumen");
@@ -245,10 +269,12 @@ public class VentanaEditor extends JFrame {
 		}
 		return lblResumen;
 	}
+
 	private JButton getBtnElegirRevisores() {
 		if (btnElegirRevisores == null) {
 			btnElegirRevisores = new JButton("Elegir revisores");
 			btnElegirRevisores.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					chooseRevisores();
 				}
@@ -258,12 +284,14 @@ public class VentanaEditor extends JFrame {
 		}
 		return btnElegirRevisores;
 	}
+
 	private JButton getBtnVerNuevosArticulos() {
 		if (btnVerNuevosArticulos == null) {
 			btnVerNuevosArticulos = new JButton("Ver articulos nuevos");
 			btnVerNuevosArticulos.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
-					CardLayout cl = (CardLayout)panelCard.getLayout();
+					CardLayout cl = (CardLayout) panelCard.getLayout();
 					cl.show(panelCard, "a_nuevos");
 
 				}
@@ -272,12 +300,14 @@ public class VentanaEditor extends JFrame {
 		}
 		return btnVerNuevosArticulos;
 	}
+
 	private JButton getBtnAtras() {
 		if (btnAtras == null) {
 			btnAtras = new JButton("Ver todos");
 			btnAtras.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
-					CardLayout cl = (CardLayout)panelCard.getLayout();
+					CardLayout cl = (CardLayout) panelCard.getLayout();
 					cl.show(panelCard, "gestion");
 				}
 			});
@@ -291,6 +321,7 @@ public class VentanaEditor extends JFrame {
 		InterfazElegirRevisores interfaz = new InterfazElegirRevisores(a);
 		interfaz.setVisible(true);
 	}
+
 	private JTextField getTextField() {
 		if (textField == null) {
 			textField = new JTextField();
@@ -301,6 +332,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return textField;
 	}
+
 	private JLabel getLblNewLabel_2() {
 		if (lblNewLabel_2 == null) {
 			lblNewLabel_2 = new JLabel("Resumen:");
@@ -309,6 +341,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return lblNewLabel_2;
 	}
+
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
@@ -322,12 +355,14 @@ public class VentanaEditor extends JFrame {
 		}
 		return panel;
 	}
+
 	private JButton getBtnNewButton() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("Detalles");
 			btnNewButton.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
-					CardLayout cl = (CardLayout)panelCard.getLayout();
+					CardLayout cl = (CardLayout) panelCard.getLayout();
 					cl.show(panelCard, "aceptarCC");
 					lblNewLabel_3.setText(((Articulo) getComboBoxArticulosConEditor().getSelectedItem()).getResumen());
 					textField_1.setText(mostrarComentarios());
@@ -337,6 +372,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return btnNewButton;
 	}
+
 	private JLabel getLblNewLabel_3() {
 		if (lblNewLabel_3 == null) {
 			lblNewLabel_3 = new JLabel();
@@ -345,6 +381,7 @@ public class VentanaEditor extends JFrame {
 		}
 		return lblNewLabel_3;
 	}
+
 	private JTextField getTextField_1() {
 		if (textField_1 == null) {
 			textField_1 = new JTextField();
@@ -357,25 +394,27 @@ public class VentanaEditor extends JFrame {
 	}
 
 	private String mostrarComentarios() {
-		Articulo art = (Articulo)getComboBoxArticulosConEditor().getSelectedItem();
+		Articulo art = (Articulo) getComboBoxArticulosConEditor().getSelectedItem();
 		String tmp = "";
-		for(Comentario c:art.getComentarios()) {
+		for (Comentario c : art.getComentarios()) {
 			tmp += "-" + c.getIdRevisor() + ": " + c.getTexto() + "\n";
 		}
 		return tmp;
 	}
+
 	private JButton getBtnNewButton_1() {
 		if (btnNewButton_1 == null) {
 			btnNewButton_1 = new JButton("Aceptar");
 			btnNewButton_1.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null, "El articulo ha sido aceptado");
-					
-					((Articulo)getComboBoxArticulosConEditor().getSelectedItem()).setState(ArticleState.ACCEPTED);					
-					Articulo a = ((Articulo)getComboBoxArticulosConEditor().getSelectedItem());
+
+					((Articulo) getComboBoxArticulosConEditor().getSelectedItem()).setState(ArticleState.ACCEPTED);
+					Articulo a = ((Articulo) getComboBoxArticulosConEditor().getSelectedItem());
 					DataBaseArticle.updateArticle(a);
-					
-					CardLayout cl = (CardLayout)panelCard.getLayout();
+
+					CardLayout cl = (CardLayout) panelCard.getLayout();
 					cl.show(panelCard, "gestion");
 				}
 			});
@@ -383,18 +422,21 @@ public class VentanaEditor extends JFrame {
 		}
 		return btnNewButton_1;
 	}
+
 	private JButton getBtnNewButton_2() {
 		if (btnNewButton_2 == null) {
 			btnNewButton_2 = new JButton("Cambios menores");
 			btnNewButton_2.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null, "El articulo ha sido aceptado con cambios menores");
-					
-					((Articulo)getComboBoxArticulosConEditor().getSelectedItem()).setState(ArticleState.ACCEPTED_WITH_CHANGES);					
-					Articulo a = ((Articulo)getComboBoxArticulosConEditor().getSelectedItem());
+
+					((Articulo) getComboBoxArticulosConEditor().getSelectedItem())
+							.setState(ArticleState.ACCEPTED_WITH_MINOR_CHANGES);
+					Articulo a = ((Articulo) getComboBoxArticulosConEditor().getSelectedItem());
 					DataBaseArticle.updateArticle(a);
-					
-					CardLayout cl = (CardLayout)panelCard.getLayout();
+
+					CardLayout cl = (CardLayout) panelCard.getLayout();
 					cl.show(panelCard, "gestion");
 				}
 			});
@@ -402,18 +444,21 @@ public class VentanaEditor extends JFrame {
 		}
 		return btnNewButton_2;
 	}
+
 	private JButton getBtnNewButton_3() {
 		if (btnNewButton_3 == null) {
 			btnNewButton_3 = new JButton("Cambios mayores");
 			btnNewButton_3.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null, "El articulo ha sido aceptado con cambios mayores");
-					
-					((Articulo)getComboBoxArticulosConEditor().getSelectedItem()).setState(ArticleState.ACCEPTED_WITH_CHANGES);					
-					Articulo a = ((Articulo)getComboBoxArticulosConEditor().getSelectedItem());
+
+					((Articulo) getComboBoxArticulosConEditor().getSelectedItem())
+							.setState(ArticleState.ACCEPTED_WITH_GREATER_CHANGES);
+					Articulo a = ((Articulo) getComboBoxArticulosConEditor().getSelectedItem());
 					DataBaseArticle.updateArticle(a);
-					
-					CardLayout cl = (CardLayout)panelCard.getLayout();
+
+					CardLayout cl = (CardLayout) panelCard.getLayout();
 					cl.show(panelCard, "gestion");
 				}
 			});
@@ -421,18 +466,20 @@ public class VentanaEditor extends JFrame {
 		}
 		return btnNewButton_3;
 	}
+
 	private JButton getBtnNewButton_4() {
 		if (btnNewButton_4 == null) {
 			btnNewButton_4 = new JButton("Rechazar");
 			btnNewButton_4.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null, "El articulo ha sido rechazado");
-					
-					((Articulo)getComboBoxArticulosConEditor().getSelectedItem()).setState(ArticleState.REJECTED);					
-					Articulo a = ((Articulo)getComboBoxArticulosConEditor().getSelectedItem());
+
+					((Articulo) getComboBoxArticulosConEditor().getSelectedItem()).setState(ArticleState.REJECTED);
+					Articulo a = ((Articulo) getComboBoxArticulosConEditor().getSelectedItem());
 					DataBaseArticle.updateArticle(a);
-					
-					CardLayout cl = (CardLayout)panelCard.getLayout();
+
+					CardLayout cl = (CardLayout) panelCard.getLayout();
 					cl.show(panelCard, "gestion");
 				}
 			});

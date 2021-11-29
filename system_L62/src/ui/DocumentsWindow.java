@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
 import business.Articulo.ArticleState;
+import business.Articulo.ArticleVersion;
 import persistence.DataBaseArticle;
 
 public class DocumentsWindow extends JDialog {
@@ -361,14 +362,23 @@ public class DocumentsWindow extends JDialog {
 	}
 
 	/**
-	 * Envía el artículo al editor para que decida si publicarlo
+	 * Finaliza el artículo para que un editor lo pueda evaluar de nuevo
 	 * 
 	 * @param article
 	 */
-	private void publishArticle(Articulo article) {
-		DataBaseArticle.publishArticle(article.getId());
-		JOptionPane.showMessageDialog(null, "El artículo está en proceso de ser publicado.");
-		disposeWindows();
+	private void sendArticleToApproveAgain(Articulo article) {
+		if (article.isComplete()) {
+			if (article.getState().equals(ArticleState.ACCEPTED_WITH_GREATER_CHANGES.toString())) {
+				article.setVersion(ArticleVersion.GREATER_CHANGES);
+			} else {
+				article.setVersion(ArticleVersion.MINOR_CHANGES);
+			}
+			DataBaseArticle.sendArticleToAproveAgain(article.getId(), article.getVersion());
+			JOptionPane.showMessageDialog(null, "El artículo está listo para ser evaluado.");
+			disposeWindows();
+		} else {
+			JOptionPane.showMessageDialog(null, "Faltan campos del artículo por rellenar.");
+		}
 	}
 
 	/**
@@ -404,8 +414,13 @@ public class DocumentsWindow extends JDialog {
 		if (made) {
 			if (newArticle.getState().equals(ArticleState.CREATED.toString())) {
 				sendArticleToApprove(newArticle);
-			} else if (newArticle.getState().equals(ArticleState.ACCEPTED_WITH_CHANGES.toString())) {
-				publishArticle(newArticle);
+			} else if (newArticle.changesNeeded()) {
+				if (newArticle.getState().equals(ArticleState.ACCEPTED_WITH_MINOR_CHANGES.toString())) {
+					newArticle.setVersion(ArticleVersion.MINOR_CHANGES);
+				} else {
+					newArticle.setVersion(ArticleVersion.GREATER_CHANGES);
+				}
+				sendArticleToApproveAgain(newArticle);
 			}
 			disposeWindows();
 		} else {

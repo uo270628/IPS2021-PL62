@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 import business.Articulo;
 import business.Articulo.ArticleState;
 import business.Autor;
+import business.Carta;
 import business.Comentario;
 import business.Mensaje;
 import business.Revisor;
@@ -175,7 +177,7 @@ public class DataBaseManager {
 							preparedStatement2.setString(1, articulo.getId());
 							preparedStatement2.execute();
 						}
-					}
+					}	
 				}
 			}
 		} catch (SQLException e) {
@@ -189,7 +191,7 @@ public class DataBaseManager {
 		List<Articulo> ret = new LinkedList<Articulo>();
 		ret = SelectAllArticlesForRevisor(revisor);
 		for (Articulo articulo : ret) {
-			if (!articulo.getState().equals(ArticleState.PENDING_REVISION.toString())) {
+			if (!articulo.getState().equals(ArticleState.WITH_EDITOR.toString())) {
 				ret.remove(articulo);
 			}
 		}
@@ -318,7 +320,6 @@ public class DataBaseManager {
 		}
 		return null;
 	}
-
 	public static void addMensajeToDebate(String text, String idDebate, String redactor, int id) {
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -381,5 +382,48 @@ public class DataBaseManager {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public static Carta getCartaArticulo(String id) {
+		String querySearchCarta = "select * from carta where idarticulo = '" + id + "'";
+
+		Carta carta = null;
+
+		Connection conn = null;
+		Statement st = null;
+		ResultSet rs = null;
+
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			st = conn.createStatement();
+
+			rs = st.executeQuery(querySearchCarta);
+
+			if (rs.next()) {
+				carta = new Carta(rs.getString("texto"));
+			}
+		} catch (SQLException e) {
+			carta = null;
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+				}
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+
+		return carta;
 	}
 }

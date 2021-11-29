@@ -1,10 +1,14 @@
 package ui;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -13,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
 import business.Autor;
+import persistence.DataBaseArticle;
 
 public class ShowArticleWindow extends JDialog {
 
@@ -40,19 +45,23 @@ public class ShowArticleWindow extends JDialog {
 	private JTextArea textAreaCVAuthors;
 	private JLabel lblState;
 	private JTextField textFieldState;
+	private JButton btnPublish;
 
 	private Articulo article;
+	private ArticlesByAuthorWindow window;
+	private JButton btnSeeRevisionComments;
 
 	/**
 	 * Create the frame.
 	 */
-	public ShowArticleWindow(Articulo article) {
+	public ShowArticleWindow(Articulo article, ArticlesByAuthorWindow window) {
 		this.article = article;
+		this.window = window;
 
 		setTitle("Mostrar art\u00EDculo");
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 357, 468);
+		setBounds(100, 100, 357, 506);
 		setLocationRelativeTo(null);
 		setModal(true);
 		contentPane = new JPanel();
@@ -77,6 +86,8 @@ public class ShowArticleWindow extends JDialog {
 		contentPane.add(getScrollPaneCVAuthors());
 		contentPane.add(getLblState());
 		contentPane.add(getTextFieldState());
+		contentPane.add(getBtnPublish());
+		contentPane.add(getBtnSeeRevisionComments());
 	}
 
 	public JLabel getLblTitle() {
@@ -296,6 +307,46 @@ public class ShowArticleWindow extends JDialog {
 		return textFieldState;
 	}
 
+	public JButton getBtnPublish() {
+		if (btnPublish == null) {
+			btnPublish = new JButton("Publicar");
+			btnPublish.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					publishArticle();
+				}
+			});
+			btnPublish.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnPublish.setBounds(187, 434, 129, 21);
+			if (article.isAccepted()) {
+				btnPublish.setEnabled(true);
+			} else {
+				btnPublish.setEnabled(false);
+			}
+		}
+		return btnPublish;
+	}
+
+	public JButton getBtnSeeRevisionComments() {
+		if (btnSeeRevisionComments == null) {
+			btnSeeRevisionComments = new JButton("Comentarios de revisi\u00F3n");
+			btnSeeRevisionComments.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					showCommentsForAuthor();
+				}
+			});
+			btnSeeRevisionComments.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnSeeRevisionComments.setBounds(10, 435, 167, 21);
+			if (article.hasBeenRevised()) {
+				btnSeeRevisionComments.setEnabled(true);
+			} else {
+				btnSeeRevisionComments.setEnabled(false);
+			}
+		}
+		return btnSeeRevisionComments;
+	}
+
 	private String listStringCollection(List<String> list) {
 		String str = "";
 		for (String s : list) {
@@ -311,4 +362,17 @@ public class ShowArticleWindow extends JDialog {
 		}
 		return str.trim();
 	}
+
+	private void publishArticle() {
+		DataBaseArticle.publishArticle(article.getId());
+		JOptionPane.showMessageDialog(null, "El artículo está en proceso de ser publicado.");
+		this.dispose();
+		this.window.updateListArticles();
+	}
+
+	private void showCommentsForAuthor() {
+		SeeRevisionCommentsForAuthorWindow srcWindow = new SeeRevisionCommentsForAuthorWindow(article);
+		srcWindow.setVisible(true);
+	}
+
 }
