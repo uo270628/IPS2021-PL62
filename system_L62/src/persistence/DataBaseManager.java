@@ -133,8 +133,6 @@ public class DataBaseManager {
 			return ArticleState.IN_EDITION;
 		case "PUBLISHED":
 			return ArticleState.PUBLISHED;
-		case "PENDING_REVISION":
-			return ArticleState.PENDING_REVISION;
 		default:
 			return null;
 		}
@@ -177,7 +175,7 @@ public class DataBaseManager {
 							preparedStatement2.setString(1, articulo.getId());
 							preparedStatement2.execute();
 						}
-					}	
+					}
 				}
 			}
 		} catch (SQLException e) {
@@ -320,6 +318,7 @@ public class DataBaseManager {
 		}
 		return null;
 	}
+
 	public static void addMensajeToDebate(String text, String idDebate, String redactor, int id) {
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -368,10 +367,9 @@ public class DataBaseManager {
 			preparedStatement.setString(1, idArticle);
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
-				if(rs.getString("state").equals("ACTIVE")) {
-				return rs.getString("idArticle");
-				}
-				else {
+				if (rs.getString("state").equals("ACTIVE")) {
+					return rs.getString("idArticle");
+				} else {
 					return null;
 				}
 			}
@@ -383,6 +381,7 @@ public class DataBaseManager {
 		}
 		return null;
 	}
+
 	public static Carta getCartaArticulo(String id) {
 		String querySearchCarta = "select * from carta where idarticulo = '" + id + "'";
 
