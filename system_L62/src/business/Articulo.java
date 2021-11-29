@@ -422,18 +422,19 @@ public class Articulo {
 	public boolean hasBeenRevised() {
 		return version != ArticleVersion.NEW || isRevised();
 	}
-	public void cambiarComentario(String texto,Revisor revisor) {
+	public void cambiarComentario(String texto,	Comentario com) {
 		for (Comentario comentario : comentarios) {
-			if(comentario.getIdRevisor().equals(revisor.getId()))
+			if(comentario.getId()==com.getId())
 				comentario.setTexto(texto);
 		}
 	}
-	public Comentario getComentarioDeUnRevisor(Revisor revisor) {
+	public List<Comentario> getComentariosDeUnRevisor(Revisor revisor) {
+		List<Comentario>list = new ArrayList<Comentario>();
 		for (Comentario comentario : comentarios) {
 			if(comentario.getIdRevisor().equals(revisor.getId()))
-				return comentario;
+				list.add(comentario);
 		}
-		return null;
+		return list;
 	}
 
 

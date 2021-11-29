@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
-import business.Revisor;
+import business.Comentario;
 import persistence.DataBaseComentario;
 
 import javax.swing.JLabel;
@@ -31,15 +31,14 @@ public class InterfazModificarComentariosRevision extends JDialog {
 	private JTextField textField;
 	private JButton btnEnviar;
 	private JButton btnVolver;
-	private Revisor revisor;
+	private Comentario comentario;
 	private Articulo articulo;
-
 
 	/**
 	 * Create the dialog.
 	 */
-	public InterfazModificarComentariosRevision(Revisor revisor,Articulo articulo) {
-		
+	public InterfazModificarComentariosRevision(Comentario comentario,Articulo articulo) {
+		this.comentario=comentario;
 		setResizable(false);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
@@ -50,8 +49,7 @@ public class InterfazModificarComentariosRevision extends JDialog {
 		contentPanel.add(getTextField());
 		contentPanel.add(getBtnEnviar());
 		contentPanel.add(getBtnVolver());
-		this.revisor=revisor;
-		this.articulo=articulo;
+		
 		
 	}
 	private JLabel getLblComentario() {
@@ -68,7 +66,7 @@ public class InterfazModificarComentariosRevision extends JDialog {
 			textField = new JTextField();
 			textField.setBounds(200, 46, 210, 66);
 			textField.setColumns(10);
-			textField.setText(articulo.getComentarioDeUnRevisor(revisor).getTexto());
+			textField.setText(comentario.getTexto());
 		}
 		return textField;
 	}
@@ -77,7 +75,7 @@ public class InterfazModificarComentariosRevision extends JDialog {
 			btnEnviar = new JButton("Enviar");
 			btnEnviar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					articulo.cambiarComentario(textField.getText(), revisor);
+					articulo.cambiarComentario(textField.getText(), comentario);
 					DataBaseComentario.enviarComentariosAlAutor(articulo);
 					JOptionPane.showMessageDialog(null,
 							"Se ha actualizado el comentario", "Comentario",
