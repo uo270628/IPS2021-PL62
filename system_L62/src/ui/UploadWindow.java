@@ -385,7 +385,7 @@ public class UploadWindow extends JDialog {
 			});
 			btnSeeRevisionComments.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			btnSeeRevisionComments.setBounds(37, 419, 172, 21);
-			if (article.hasBeenRevised()) {
+			if (article != null && article.hasBeenRevised()) {
 				btnSeeRevisionComments.setEnabled(true);
 			} else {
 				btnSeeRevisionComments.setEnabled(false);
