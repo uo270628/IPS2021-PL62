@@ -71,6 +71,6 @@ public class Comentario {
 
 	@Override
 	public String toString() {
-		return id + "";
+		return texto + "";
 	}
 }

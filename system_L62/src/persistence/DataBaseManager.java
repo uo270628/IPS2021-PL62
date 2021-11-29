@@ -15,6 +15,7 @@ import business.Articulo.ArticleState;
 import business.Autor;
 import business.Carta;
 import business.Comentario;
+import business.Mensaje;
 import business.Revisor;
 
 public class DataBaseManager {
@@ -132,6 +133,8 @@ public class DataBaseManager {
 			return ArticleState.IN_EDITION;
 		case "PUBLISHED":
 			return ArticleState.PUBLISHED;
+		case "PENDING_REVISION":
+			return ArticleState.PENDING_REVISION;
 		default:
 			return null;
 		}
@@ -152,21 +155,29 @@ public class DataBaseManager {
 				revisor = rs3.getString("idREVISOR");
 			}
 			while (rs.next()) {
-				if (articulo.getListOfRevisoresParaRevisar().get(0).getId().equals(revisor)) {
-					String sql2 = "UPDATE ARTICLES SET idREVISOR1=(NULL) WHERE id_articles=(?) ;";
-					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
-					preparedStatement2.setString(1, articulo.getId());
-					preparedStatement2.execute();
-				} else if (articulo.getListOfRevisoresParaRevisar().get(1).getId().equals(revisor)) {
-					String sql2 = "UPDATE ARTICLES SET idREVISOR2=(NULL) WHERE id_articles=(?) ;";
-					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
-					preparedStatement2.setString(1, articulo.getId());
-					preparedStatement2.execute();
-				} else if (articulo.getListOfRevisoresParaRevisar().get(2).getId().equals(revisor)) {
-					String sql2 = "UPDATE ARTICLES SET idREVISOR3=(NULL) WHERE id_articles=(?) ;";
-					PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
-					preparedStatement2.setString(1, articulo.getId());
-					preparedStatement2.execute();
+				if (articulo.getListOfRevisoresParaRevisar().get(0) != null) {
+					if (articulo.getListOfRevisoresParaRevisar().get(0).getId().equals(revisor)) {
+						String sql2 = "UPDATE ARTICLES SET idREVISOR1=(NULL) WHERE id_articles=(?) ;";
+						PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
+						preparedStatement2.setString(1, articulo.getId());
+						preparedStatement2.execute();
+					}
+					if (articulo.getListOfRevisoresParaRevisar().get(1).getId().equals(revisor)) {
+						if (articulo.getListOfRevisoresParaRevisar().get(1).getId().equals(revisor)) {
+							String sql2 = "UPDATE ARTICLES SET idREVISOR2=(NULL) WHERE id_articles=(?) ;";
+							PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
+							preparedStatement2.setString(1, articulo.getId());
+							preparedStatement2.execute();
+						}
+					}
+					if (articulo.getListOfRevisoresParaRevisar().get(2).getId().equals(revisor)) {
+						if (articulo.getListOfRevisoresParaRevisar().get(2).getId().equals(revisor)) {
+							String sql2 = "UPDATE ARTICLES SET idREVISOR3=(NULL) WHERE id_articles=(?) ;";
+							PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
+							preparedStatement2.setString(1, articulo.getId());
+							preparedStatement2.execute();
+						}
+					}	
 				}
 			}
 		} catch (SQLException e) {
@@ -191,7 +202,7 @@ public class DataBaseManager {
 	public static List<Comentario> SelectComentsVisibleForRevisor(String revisor) {
 		List<Articulo> articulos = SelectAllArticlesForRevisor(revisor);
 		List<Comentario> comentarios = new LinkedList<Comentario>();
-		String sql = "SELECT * FROM COMENTARIOSREVISOR  WHERE idArticulo=(?) AND TYPE = 'Decision propuesta';";
+		String sql = "SELECT * FROM COMENTARIOSREVISOR  WHERE idArticulo=(?) AND (TYPE = 'Decision propuesta' OR TYPE = 'Comentario para autor');";
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -309,7 +320,69 @@ public class DataBaseManager {
 		}
 		return null;
 	}
+	public static void addMensajeToDebate(String text, String idDebate, String redactor, int id) {
+		try {
+			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			String sql = "INSERT INTO mensajes (idMensaje, idArticle,texto,redactor) VALUES (?,?,?,?)";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+			preparedStatement.setString(2, idDebate);
+			preparedStatement.setString(3, text);
+			preparedStatement.setString(4, redactor);
+			preparedStatement.execute();
+		} catch (SQLException e) {
+			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
+	}
+
+	public static List<Mensaje> SelectAlMensajesForChat(String text) {
+		try {
+			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			String sql = "SELECT * FROM mensajes WHERE idArticle = (?)";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, text);
+			ResultSet rs = preparedStatement.executeQuery();
+			List<Mensaje> mensajes = new LinkedList<>();
+			while (rs.next()) {
+				Mensaje msg = new Mensaje(rs.getInt("idMensaje"), rs.getString("idArticle"), rs.getString("texto"),
+						rs.getString("redactor"));
+				mensajes.add(msg);
+			}
+			return mensajes;
+		} catch (SQLException e) {
+			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static String getDebate(String idArticle) {
+		try {
+			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			String sql = "SELECT * FROM Debates WHERE idArticle = (?)";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setString(1, idArticle);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				if(rs.getString("state").equals("ACTIVE")) {
+				return rs.getString("idArticle");
+				}
+				else {
+					return null;
+				}
+			}
+			return null;
+		} catch (SQLException e) {
+			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public static Carta getCartaArticulo(String id) {
 		String querySearchCarta = "select * from carta where idarticulo = '" + id + "'";
 
@@ -353,5 +426,4 @@ public class DataBaseManager {
 
 		return carta;
 	}
-
 }

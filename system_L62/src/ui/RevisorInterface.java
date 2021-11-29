@@ -1,34 +1,47 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JButton;
-import javax.swing.JTextPane;
+import java.awt.Font;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
 
-import ui.listeners.ActionListenerCrearVentanaComentarioRevisor;
-import ui.listeners.ActionListenerCrearVentanaRevisorArticulDisplay;
-import ui.listeners.ActionListenerCrearVentanaRevisorValorarArticulos;
+import javax.swing.JFrame;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.JComponent;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+
+import business.Articulo;
+import persistence.DataBaseManager;
 
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-public class RevisorInterface {
+public class RevisorInterface extends JFrame {
 
-	private JFrame frmRevisor;
-	private JButton btnComentario;
-	private JTextPane nombreTextPane;
-	private JButton btnVerArticulos;
-	private JLabel lblNombre;
-	private JButton btnNewButton;
+	private static final long serialVersionUID = 1L;
+	private DefaultListModel<Articulo> articlesModel;
 
-	/**
-	 * Launch the application.
-	 */
+	private JPanel contentPane;
+	private JLabel lblRevisor;
+	private JTextField textFieldRevisor;
+	private JList<Articulo> listArticlesByRevisor;
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
-					RevisorInterface window = new RevisorInterface();
-					window.frmRevisor.setVisible(true);
+					RevisorInterface frame = new RevisorInterface();
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -37,72 +50,108 @@ public class RevisorInterface {
 	}
 
 	/**
-	 * Create the application.
+	 * Create the frame.
 	 */
 	public RevisorInterface() {
-		initialize();
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				updateListArticles();
+			}
+		});
+		
+		setResizable(false);
+		this.articlesModel = new DefaultListModel<>();
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		setLocationRelativeTo(null);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		contentPane.add(getLblRevisor());
+		contentPane.add(getTextFieldRevisor());
+		contentPane.add(getListArticlesByRevisor());
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frmRevisor = new JFrame();
-		frmRevisor.setTitle("Revisor");
-		frmRevisor.setResizable(false);
-		frmRevisor.setBounds(100, 100, 450, 300);
-		frmRevisor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmRevisor.getContentPane().setLayout(null);
-		frmRevisor.getContentPane().add(getBtnComentario());	
-		frmRevisor.getContentPane().add(getNombreTextPane());		
-		frmRevisor.getContentPane().add(getBtnVerArticulos());
-		frmRevisor.getContentPane().add(getLblNombre());
-		frmRevisor.getContentPane().add(getBtnNewButton());
+	public JLabel getLblRevisor() {
+		if (lblRevisor == null) {
+			lblRevisor = new JLabel("Revisor:");
+			lblRevisor.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lblRevisor.setBounds(10, 10, 45, 13);
+		}
+		return lblRevisor;
 	}
-	private JButton getBtnComentario() {
-		if (btnComentario == null) {
-			btnComentario = new JButton("Iniciar Comentario");
-			btnComentario.addActionListener(new ActionListenerCrearVentanaComentarioRevisor(this) {
+
+	public JTextField getTextFieldRevisor() {
+		if (textFieldRevisor == null) {
+			textFieldRevisor = new JTextField();
+			textFieldRevisor.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if (textFieldRevisor.getText() != null && !textFieldRevisor.getText().trim().isEmpty()) {
+						updateListArticles();
+					}
+				}
 			});
-			btnComentario.setBounds(228, 222, 191, 23);
+			textFieldRevisor.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			textFieldRevisor.setBounds(61, 8, 365, 19);
+			textFieldRevisor.setColumns(10);
 		}
-		return btnComentario;
+		return textFieldRevisor;
 	}
-	private JTextPane getNombreTextPane() {
-		if (nombreTextPane == null) {
-			nombreTextPane = new JTextPane();
-			nombreTextPane.setBounds(79, 11, 140, 20);
-		}
-		return nombreTextPane;
-	}
-	private JButton getBtnVerArticulos() {
-		if (btnVerArticulos == null) {
-			btnVerArticulos = new JButton("Ver Articulos Propios");
-			btnVerArticulos.addActionListener(new ActionListenerCrearVentanaRevisorArticulDisplay(this) {
+
+	public JList<Articulo> getListArticlesByRevisor() {
+		if (listArticlesByRevisor == null) {
+			listArticlesByRevisor = new JList<Articulo>(articlesModel);
+			listArticlesByRevisor.addMouseListener(new MouseAdapter() {		
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (listArticlesByRevisor.getSelectedIndex() != -1) {
+						RevisorArticuloActions rac = new RevisorArticuloActions(listArticlesByRevisor.getSelectedValue(),textFieldRevisor.getText());
+						rac.setVisible(true);
+					}
+				}
 			});
-			btnVerArticulos.setBounds(228, 183, 191, 23);
+			listArticlesByRevisor.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			listArticlesByRevisor.setBorder(new LineBorder(new Color(0, 0, 0)));
+			listArticlesByRevisor.setBounds(10, 33, 416, 192);
+			listArticlesByRevisor.setCellRenderer(new ArticleListCellRenderer());
 		}
-		return btnVerArticulos;
+		return listArticlesByRevisor;
 	}
-	private JLabel getLblNombre() {
-		if (lblNombre == null) {
-			lblNombre = new JLabel("Nombre:");
-			lblNombre.setBounds(10, 11, 59, 20);
+
+	
+	public void updateListArticles() {
+		listArticlesByRevisor.setSelectedIndex(-1);
+		articlesModel.removeAllElements();
+		if (!textFieldRevisor.getText().isEmpty()) {
+			List<Articulo> articles = DataBaseManager.SelectAllArticlesForRevisor(textFieldRevisor.getText());
+			for (Articulo a : articles)
+				articlesModel.addElement(a);
 		}
-		return lblNombre;
 	}
+
+	
+	private class ArticleListCellRenderer extends DefaultListCellRenderer {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public JComponent getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			Articulo article = (Articulo) value;
+			String toString = article.getTitle() + " - " + article.getState();
+			JLabel label = (JLabel) super.getListCellRendererComponent(list, toString, index, isSelected, cellHasFocus);
+
+			label.setText(label.getText());
+
+			return label;
+
+		}
+	}
+
+
 	public String getNombre() {
-		return nombreTextPane.getText();
-		
-	}
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("Ver Articulos Propuestos");
-			btnNewButton.addActionListener(new ActionListenerCrearVentanaRevisorValorarArticulos(this) {
-			});
-			btnNewButton.setBounds(228, 183, 191, 23);
-			btnNewButton.setBounds(228, 149, 191, 23);
-		}
-		return btnNewButton;
+		return textFieldRevisor.getText();
 	}
 }
