@@ -26,7 +26,6 @@ public class MainWindow extends JFrame {
 			@Override
 			public void run() {
 				try {
-					 
 					MainWindow frame = new MainWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
