@@ -20,3 +20,23 @@ insert into revisa(id_revisor,id_tema) values(8,1);
 insert into revisa(id_revisor,id_tema) values(7,2);
 insert into revisa(id_revisor,id_tema) values(6,2);
 
+insert into articles(id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, tema, state, version) values ('534gh45hi6664', 'Peque', 'Manolo', '', 'Una pequeña', '', 'peque.docx', 'present.pdf', 'manolo.pdf', '', 'ACCEPTED_WITH_GREATER_CHANGES', 'NEW')
+
+insert into articles(id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, tema, state, version) values ('hf48hg93hgfg83', 'Gran', 'Manolo', '', 'Una grande', '', 'gran.docx', 'presenta.pdf', 'manolo.pdf', '', 'ACCEPTED', 'NEW')
+
+insert into articles(idrevisor1,idrevisor2,idrevisor3,id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, tema, state, version) values (1,2,3,'534g234fsi6664', 'Paco', 'Roberti', '', ' ala', '', 're.docx', 's.pdf', 'a.pdf', '', 'ACCEPTED_WITH_MINOR_CHANGES', 'NEW')
+
+
+INSERT INTO ARTICLES(idrevisor1,idrevisor2,idrevisor3,id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors,tema, state, version)
+VALUES(1,2,3,'14','tit4','au','none','sum','key','sr','pc','cv','','WITH_EDITOR','NEW')
+INSERT INTO ARTICLES(idrevisor1,idrevisor2,idrevisor3,id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors,tema, state, version)
+VALUES(1,2,3,'10','tit','au','none','sum','key','sr','pc','cv','','ACCEPTED','NEW')
+INSERT INTO ARTICLES(idrevisor1,idrevisor2,idrevisor3,id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors,tema, state, version)
+VALUES(1,2,3,'11','tit2','au','none','sum','key','sr','pc','cv','','IN_REVISION','NEW')
+INSERT INTO ARTICLES(idrevisor1,idrevisor2,idrevisor3,id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors,tema, state, version)
+VALUES(3,2,1,'15','tit3','au','none','sum','key','sr','pc','cv','','IN_REVISION','NEW')
+
+ 
+
+INSERT INTO Debates(idArticle,state)
+VALUES('14','ACTIVE')
