@@ -1,6 +1,8 @@
 package business;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Revisor {
 
@@ -11,6 +13,21 @@ public class Revisor {
 
 	public Revisor(String id) {
 		this.id = id;
+	}
+	
+	
+	public Revisor(int tiempoDeRevision, String nombre) {
+		this.id = UUID.randomUUID().toString();
+		this.listOfTemas = new ArrayList<Tema>();
+		this.tiempoDeRevision = tiempoDeRevision;
+		this.nombre = nombre;
+	}
+
+	public Revisor(int id, int tiempoDeRevision, String nombre) {
+		this.id = id + "";
+		this.listOfTemas = new ArrayList<Tema>();
+		this.tiempoDeRevision = tiempoDeRevision;
+		this.nombre = nombre;
 	}
 
 	public Revisor(List<Tema> temas, int tiempoDeRevision, String nombre, String id) {

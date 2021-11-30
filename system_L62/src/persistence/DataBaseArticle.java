@@ -170,7 +170,7 @@ public class DataBaseArticle {
 
 			rs = st.executeQuery(querySearchArticle);
 
-			if (rs.next()) {
+			while (rs.next()) {
 				article = new Articulo(rs.getString("id_articles"), rs.getString("title"),
 						new Autor(rs.getString("author")), authorsToList(rs.getString("other_authors")),
 						rs.getString("summary"), toList(rs.getString("keywords")), rs.getString("presentation_card"),
