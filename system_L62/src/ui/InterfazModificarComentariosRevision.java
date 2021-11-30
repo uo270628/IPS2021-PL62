@@ -32,14 +32,12 @@ public class InterfazModificarComentariosRevision extends JDialog {
 	private JButton btnEnviar;
 	private JButton btnVolver;
 	private Comentario comentario;
-	private Articulo articulo;
 
 	/**
 	 * Create the dialog.
 	 */
 	public InterfazModificarComentariosRevision(Comentario comentario,Articulo articulo) {
 		this.comentario=comentario;
-		this.articulo=articulo;
 		setResizable(false);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
@@ -76,7 +74,7 @@ public class InterfazModificarComentariosRevision extends JDialog {
 			btnEnviar = new JButton("Enviar");
 			btnEnviar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					articulo.cambiarComentario(textField.getText(), comentario);
+					comentario.setTexto(textField.getText());
 					DataBaseComentario.updateComentarios(comentario);
 					JOptionPane.showMessageDialog(null,
 							"Se ha actualizado el comentario", "Comentario",

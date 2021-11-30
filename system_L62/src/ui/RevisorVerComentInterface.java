@@ -74,7 +74,8 @@ public class RevisorVerComentInterface extends JFrame {
 						i.setVisible(true);
 					}
 				}
-			});}
+			});
+			}
 			else
 			{
 				listCommentsByRevisor.addMouseListener(new MouseAdapter() {       
