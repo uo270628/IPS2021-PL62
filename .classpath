@@ -11,6 +11,5 @@
 	<classpathentry kind="lib" path="system_L62/lib/mchange-commons-java-0.2.10.jar"/>
 	<classpathentry kind="lib" path="system_L62/lib/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="system_L62/lib/ojdbc8.jar"/>
-	<classpathentry kind="lib" path="/system_L62/lib/JTattoo-1.6.13.jar"/>
 	<classpathentry kind="output" path="system_L62/bin"/>
 </classpath>

@@ -6,10 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 public class MainWindow extends JFrame {
@@ -28,9 +26,7 @@ public class MainWindow extends JFrame {
 			@Override
 			public void run() {
 				try {
-					 JFrame.setDefaultLookAndFeelDecorated(true);
-					 JDialog.setDefaultLookAndFeelDecorated(true);
-					  UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+					 
 					MainWindow frame = new MainWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
