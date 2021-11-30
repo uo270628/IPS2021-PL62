@@ -49,7 +49,7 @@ public class InterfazAceptarConCambiosMenores extends JDialog {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					articulo.setState(ArticleState.ACCEPTED_WITH_MINOR_CHANGES);
+					articulo.setState(ArticleState.ACCEPTED);
 					DataBaseArticle.updateArticle(articulo);
 					dispose();
 				}

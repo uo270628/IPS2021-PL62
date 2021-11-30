@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
 import business.Articulo.ArticleState;
+import business.Articulo.ArticleVersion;
 import persistence.DataBaseManager;
 
 import javax.swing.JLabel;
@@ -71,7 +72,7 @@ public class InterfazFuncionesEditor extends JDialog {
 			btnValidarArticulo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 
-					if (articulo.getStateEnum() == ArticleState.WITH_EDITOR) {
+					if (articulo.getStateEnum() == ArticleState.WITH_EDITOR ) {
 						InterfazAvisarAlAutor i = new InterfazAvisarAlAutor(articulo);
 						i.setVisible(true);
 					}
@@ -117,8 +118,7 @@ public class InterfazFuncionesEditor extends JDialog {
 		return btnDecisionFinal;
 	}
 	private boolean comprobarSiEstaParaEnviar() {
-		if(articulo.getStateEnum()==ArticleState.IN_REVISION || articulo.getStateEnum()==ArticleState.ACCEPTED_WITH_GREATER_CHANGES|| 
-				articulo.getStateEnum()==ArticleState.ACCEPTED_WITH_MINOR_CHANGES)
+		if(articulo.getStateEnum()==ArticleState.IN_EDITION)
 			return true;
 		return false;
 	}
@@ -154,7 +154,7 @@ public class InterfazFuncionesEditor extends JDialog {
 			btnRevisores = new JButton("Asignar Revisores");
 			btnRevisores.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(articulo.getStateEnum()==ArticleState.ACCEPTED&& articulo.getListOfRevisoresParaRevisar().isEmpty()) {
+					if(articulo.getStateEnum()==ArticleState.ACCEPTED&& articulo.getListOfRevisoresParaRevisar().isEmpty()&&!articulo.getVersion().equals(ArticleVersion.GREATER_CHANGES.toString())) {
 						InterfazElegirRevisores i = new InterfazElegirRevisores(articulo);
 						i.setVisible(true);}
 					else 
@@ -227,7 +227,7 @@ public class InterfazFuncionesEditor extends JDialog {
 			btnNewButton_1 = new JButton("Aceptar cambios menores");
 			btnNewButton_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(articulo.getStateEnum()==ArticleState.IN_REVISION && !articulo.getComentarios().isEmpty()) {
+					if(articulo.getStateEnum()==ArticleState.ACCEPTED_WITH_MINOR_CHANGES) {
 					InterfazAceptarConCambiosMenores i = new InterfazAceptarConCambiosMenores(articulo);
 					i.setVisible(true);}
 					else {
@@ -235,7 +235,7 @@ public class InterfazFuncionesEditor extends JDialog {
 							JOptionPane.showMessageDialog(null, "El articulo ya ha sido rechazado", "Articulo",
 							JOptionPane.ERROR_MESSAGE);
 						else
-							JOptionPane.showMessageDialog(null, "El articulo no puede ser aceptado con cambios menores todavia", "Articulo",
+							JOptionPane.showMessageDialog(null, "El articulo no fue aceptado con cambios menores todavia", "Articulo",
 									JOptionPane.ERROR_MESSAGE);}
 					}
 						
