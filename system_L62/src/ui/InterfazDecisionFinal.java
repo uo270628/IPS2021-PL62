@@ -133,6 +133,7 @@ public class InterfazDecisionFinal extends JDialog {
 
 					interfazPublicar i = new interfazPublicar(articulo);
 					i.setVisible(true);
+					dispose();
 				}
 
 			});
