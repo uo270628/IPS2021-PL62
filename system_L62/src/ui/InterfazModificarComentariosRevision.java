@@ -77,7 +77,7 @@ public class InterfazModificarComentariosRevision extends JDialog {
 			btnEnviar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					articulo.cambiarComentario(textField.getText(), comentario);
-					DataBaseComentario.enviarComentariosAlAutor(articulo);
+					DataBaseComentario.updateComentarios(comentario);
 					JOptionPane.showMessageDialog(null,
 							"Se ha actualizado el comentario", "Comentario",
 							JOptionPane.INFORMATION_MESSAGE);

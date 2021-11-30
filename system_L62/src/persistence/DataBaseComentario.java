@@ -98,4 +98,35 @@ public class DataBaseComentario {
 		}
 
 	}
+	public static void updateComentarios(Comentario comentario) {
+		
+
+			String query = "update ComentariosRevisor set comentario="+"'"+comentario.getTexto()+"'";
+			Connection conn = null;
+			Statement st = null;
+			
+			try {
+				conn = DriverManager.getConnection(URL, USER, PASSWORD);
+				st = conn.createStatement();
+
+				st.executeUpdate(query);
+			} catch (SQLException e) {
+			} finally {
+				if (st != null) {
+					try {
+						st.close();
+					} catch (SQLException e) {
+					}
+				}
+				if (conn != null) {
+					try {
+						conn.close();
+					} catch (SQLException e) {
+					}
+				}
+			}
+
+		
+
+	}
 }
