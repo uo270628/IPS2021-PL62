@@ -43,6 +43,7 @@ public class InterfazFuncionesEditor extends JDialog {
 	 * Create the dialog.
 	 */
 	public InterfazFuncionesEditor(Articulo articulo) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.articulo = articulo;
 		setResizable(false);
 		setBounds(100, 100, 605, 384);

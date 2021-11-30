@@ -62,6 +62,7 @@ public class interfazPublicar extends JDialog {
 	 * Create the dialog.
 	 */
 	public interfazPublicar(Articulo articulo) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		this.articulo=articulo;
 		setBounds(100, 100, 450, 300);

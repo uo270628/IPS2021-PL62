@@ -67,7 +67,7 @@ public class ArticlesByAuthorWindow extends JFrame {
 
 		setResizable(false);
 		setTitle("Visualizar art\u00EDculos");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();

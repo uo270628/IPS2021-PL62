@@ -90,7 +90,7 @@ public class VentanaEditor extends JFrame {
 		cargarComentarios();
 		
 		cambiarArticulosAWithEditor();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 540, 653);
 		panelCard = new JPanel();
 		panelCard.setBorder(new EmptyBorder(5, 5, 5, 5));

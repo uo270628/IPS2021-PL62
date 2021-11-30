@@ -28,6 +28,7 @@ public class AsignarRevisoresRecomendados extends JFrame {
     private JButton btnNewButton;
 
     public AsignarRevisoresRecomendados(Articulo a) {
+    	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	dbr = new DatabaseRecomendacion(a);
 	revisoresRecomendados = dbr.getRecomendaciones();
 	getContentPane().setLayout(null);

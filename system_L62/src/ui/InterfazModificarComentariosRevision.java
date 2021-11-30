@@ -37,6 +37,7 @@ public class InterfazModificarComentariosRevision extends JDialog {
 	 * Create the dialog.
 	 */
 	public InterfazModificarComentariosRevision(Comentario comentario,Articulo articulo) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.comentario=comentario;
 		setResizable(false);
 		setBounds(100, 100, 450, 300);

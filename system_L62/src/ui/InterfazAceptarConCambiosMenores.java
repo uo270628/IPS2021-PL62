@@ -31,6 +31,7 @@ public class InterfazAceptarConCambiosMenores extends JDialog {
 	 * Create the dialog.
 	 */
 	public InterfazAceptarConCambiosMenores(Articulo articulo) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		this.articulo=articulo;

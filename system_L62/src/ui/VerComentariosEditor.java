@@ -71,7 +71,7 @@ public class VerComentariosEditor extends JFrame{
 		frame.getContentPane().add(getLblNewLabel());
 		frame.getContentPane().add(getLblNewLabel_1());
 		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 
 	}
