@@ -8,7 +8,6 @@ import business.Articulo;
 import business.Carta;
 import business.Comentario;
 import business.Tema;
-import business.Articulo.ArticleState;
 import persistence.DataBaseArticle;
 import persistence.DataBaseComentario;
 
