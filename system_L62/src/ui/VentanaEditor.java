@@ -23,6 +23,7 @@ import business.Articulo;
 import business.Articulo.ArticleState;
 import business.Comentario;
 import persistence.DataBaseArticle;
+import persistence.DataBaseManager;
 
 public class VentanaEditor extends JFrame {
 
@@ -86,6 +87,8 @@ public class VentanaEditor extends JFrame {
 	 */
 	public VentanaEditor() {
 		articulos = DataBaseArticle.findAllArticles();
+		cargarComentarios();
+		
 		cambiarArticulosAWithEditor();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 540, 653);
@@ -98,6 +101,17 @@ public class VentanaEditor extends JFrame {
 		panelCard.add(getPanelGestor(), "gestion");
 		panelCard.add(getPanel(), "aceptarCC");
 	}
+
+	private void cargarComentarios() {
+		for (Articulo articulo : articulos) {
+			List<Comentario>listOfComentarios = DataBaseManager.SelectComentsVisibleForEditor(articulo.getId());
+			for (Comentario comentario : listOfComentarios) {
+				articulo.addComentario(comentario);
+			}
+		}
+		
+	}
+
 
 	private void cambiarArticulosAWithEditor() {		
 		for(Articulo a: articulos) {

@@ -205,9 +205,9 @@ public class Articulo {
 	}
 
 	@Override
-	public String toString() {
-		return title;
-	}
+    public String toString() {
+    return "Título: " + title + ". Autor: " + author + ". Estado: " + state.toString();
+    }
 
 	public List<String> getKeywords() {
 		return new ArrayList<>(keywords);
