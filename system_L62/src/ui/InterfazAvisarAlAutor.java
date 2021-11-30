@@ -7,11 +7,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
-import business.Autor;
 import business.Articulo.ArticleState;
 import persistence.DataBaseArticle;
 import persistence.DataBaseRevisor;
-import business.Tema;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -20,8 +18,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.awt.event.ActionEvent;
 
 public class InterfazAvisarAlAutor extends JDialog {
@@ -40,26 +37,7 @@ public class InterfazAvisarAlAutor extends JDialog {
 	private JLabel lblNewLabel;
 	private JLabel lblRevisoresDisponibles;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			List<Autor>list= new ArrayList<Autor>();
-			List<String>list2 = new ArrayList<>();
-			list.add(new Autor("Pepe"));
-			list2.add("a");
-			Articulo a = new Articulo("a", "e", new Autor("Pedro"), list, "a", list2,list2, new Tema( "Peces"));
-			//Articulo a = new Articulo("a", "e", new Autor("Pedro"), list, "a", list2,list2, new Tema( "Biologia"));
 
-			DataBaseArticle.uploadArticle(a);
-			InterfazAvisarAlAutor dialog = new InterfazAvisarAlAutor(a);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.

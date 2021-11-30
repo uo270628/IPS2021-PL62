@@ -443,6 +443,10 @@ public class Articulo {
 		}
 		return list;
 	}
+	
+	public ArticleState getStateEnum() {
+		return state;
+	}
 
 
 }
