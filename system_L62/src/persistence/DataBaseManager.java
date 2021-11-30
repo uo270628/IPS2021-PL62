@@ -15,6 +15,7 @@ import business.Articulo.ArticleState;
 import business.Autor;
 import business.Carta;
 import business.Comentario;
+import business.Debate;
 import business.Mensaje;
 import business.Revisor;
 
@@ -50,6 +51,24 @@ public class DataBaseManager {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public static void crearDebate(Articulo a, Debate d) {
+		try {
+			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			StringBuilder query = new StringBuilder();
+			query.append("insert into debates values('");
+			query.append(a.getId());
+			query.append("','" + d.getId() + "',TO_DATE('");
+			query.append(d.getFechaLimite().getDayOfMonth() + "/" + d.getFechaLimite().getMonthValue() + d.getFechaLimite().getYear());
+			query.append("', 'DD/MM/YYYY') ");
+			
+			Statement at = conn.createStatement();
+			at.executeUpdate(query.toString());
+			
+		} catch (SQLException e) {
+			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+		}
 	}
 
 	public static List<Articulo> SelectAllArticlesForRevisor(String revisor) {
