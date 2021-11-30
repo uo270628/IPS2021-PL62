@@ -3,7 +3,10 @@ package persistence;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,5 +61,37 @@ public class DatabaseRecomendacion {
 			e.printStackTrace();
 		}
 	}
+	
+	public List<Revisor> getRecomendaciones() {
+		List<Revisor> revisores = new ArrayList<Revisor>();
+
+		try {
+		    con = DriverManager.getConnection(URL, USER, PASSWORD);
+
+		    StringBuilder query = new StringBuilder();
+
+		    Statement st = con.createStatement();
+
+		    query.append(
+			    "SELECT idREVISOR, nombre, tiempo from recomendaciones_revisores where id_articulo = " + a.getId());
+
+		    ResultSet rs = st.executeQuery(query.toString());
+
+		    while (rs.next()) {
+		    	revisores.add(new Revisor(rs.getInt(1), rs.getInt(3), rs.getString(2)));
+		    }
+
+		    st.close();
+		    con.close();
+
+		} catch (
+
+		SQLException e) {
+		    e.printStackTrace();
+		}
+
+		return revisores;
+
+	    }
 
 }

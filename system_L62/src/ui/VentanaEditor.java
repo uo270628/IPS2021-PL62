@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -39,11 +40,9 @@ public class VentanaEditor extends JFrame {
 	private JComboBox<Articulo> comboBoxArticulosEnviados;
 	private JTextField textFieldResumen;
 	private JLabel lblResumen;
-	private JButton btnElegirRevisores;
 
 	private List<Articulo> articulos;
 	private JButton btnVerNuevosArticulos;
-	private JButton btnAtras;
 	private JTextField textField;
 	private JLabel lblNewLabel_2;
 	private JPanel panel;
@@ -54,6 +53,14 @@ public class VentanaEditor extends JFrame {
 	private JButton btnNewButton_2;
 	private JButton btnNewButton_3;
 	private JButton btnNewButton_4;
+	private JLabel lblNewLabel_4;
+	private JTextField textField_2;
+	private JLabel lblNewLabel_5;
+	private JTextField textField_3;
+	private JLabel lblNewLabel_6;
+	private JLabel lblNewLabel_8;
+	private JTextField textField_5;
+	private JButton btnNewButton_6;
 
 	/**
 	 * Launch the application.
@@ -71,15 +78,16 @@ public class VentanaEditor extends JFrame {
 			}
 		});
 	}
+	
 
 	/**
 	 * Create the frame.
 	 */
 	public VentanaEditor() {
-		articulos = DataBaseArticle.findAllArticles();
+		articulos = DataBaseArticle.loadArticles();
 		cambiarArticulosAWithEditor();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 498, 324);
+		setBounds(100, 100, 540, 653);
 		panelCard = new JPanel();
 		panelCard.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(panelCard);
@@ -90,15 +98,15 @@ public class VentanaEditor extends JFrame {
 		panelCard.add(getPanel(), "aceptarCC");
 	}
 
-	private void cambiarArticulosAWithEditor() {
+	private void cambiarArticulosAWithEditor() {		
 		for(Articulo a: articulos) {
 			a.setState(ArticleState.WITH_EDITOR);
 			DataBaseArticle.publishArticleState(a);
 		}
-		
-		
 	}
-
+	
+	
+	
 	private JPanel getPanelGestor() {
 		if (panelGestor == null) {
 			panelGestor = new JPanel();
@@ -111,11 +119,11 @@ public class VentanaEditor extends JFrame {
 			panelGestor.add(getBtnVerNuevosArticulos());
 
 			JLabel lblNewLabel = new JLabel("T\u00EDtulo");
-			lblNewLabel.setBounds(41, 97, 96, 14);
+			lblNewLabel.setBounds(10, 97, 96, 14);
 			panelGestor.add(lblNewLabel);
 
 			JLabel lblNewLabel_1 = new JLabel("Autor");
-			lblNewLabel_1.setBounds(41, 156, 96, 14);
+			lblNewLabel_1.setBounds(10, 156, 96, 14);
 			panelGestor.add(lblNewLabel_1);
 			panelGestor.add(getTextField());
 			panelGestor.add(getLblNewLabel_2());
@@ -134,7 +142,7 @@ public class VentanaEditor extends JFrame {
 				}
 			});
 			comboBoxArticulosConEditor
-					.setModel(new DefaultComboBoxModel<Articulo>(articulos.toArray(new Articulo[articulos.size()])));
+			.setModel(new DefaultComboBoxModel<Articulo>(articulos.toArray(new Articulo[articulos.size()])));
 			comboBoxArticulosConEditor.setBounds(10, 64, 349, 22);
 		}
 		return comboBoxArticulosConEditor;
@@ -143,7 +151,7 @@ public class VentanaEditor extends JFrame {
 	private JTextField getTextFieldFiltrarPorTitulo() {
 		if (textFieldFiltrarPorTitulo == null) {
 			textFieldFiltrarPorTitulo = new JTextField();
-			textFieldFiltrarPorTitulo.setBounds(41, 119, 96, 20);
+			textFieldFiltrarPorTitulo.setBounds(10, 119, 96, 20);
 			textFieldFiltrarPorTitulo.setColumns(10);
 		}
 		return textFieldFiltrarPorTitulo;
@@ -152,7 +160,7 @@ public class VentanaEditor extends JFrame {
 	private JTextField getTextFieldFiltrarPorAutor() {
 		if (textFieldFiltrarPorAutor == null) {
 			textFieldFiltrarPorAutor = new JTextField();
-			textFieldFiltrarPorAutor.setBounds(41, 181, 96, 20);
+			textFieldFiltrarPorAutor.setBounds(10, 181, 96, 20);
 			textFieldFiltrarPorAutor.setColumns(10);
 		}
 		return textFieldFiltrarPorAutor;
@@ -175,7 +183,7 @@ public class VentanaEditor extends JFrame {
 							new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])));
 				}
 			});
-			btnFiltrarPorTitulo.setBounds(147, 118, 89, 23);
+			btnFiltrarPorTitulo.setBounds(116, 118, 89, 23);
 		}
 		return btnFiltrarPorTitulo;
 	}
@@ -199,7 +207,7 @@ public class VentanaEditor extends JFrame {
 							new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])));
 				}
 			});
-			btnFiltrarPorAutor.setBounds(147, 180, 89, 23);
+			btnFiltrarPorAutor.setBounds(116, 180, 89, 23);
 		}
 		return btnFiltrarPorAutor;
 	}
@@ -212,8 +220,24 @@ public class VentanaEditor extends JFrame {
 			panelANuevos.add(getComboBoxArticulosEnviados());
 			panelANuevos.add(getTextFieldResumen());
 			panelANuevos.add(getLblResumen());
-			panelANuevos.add(getBtnElegirRevisores());
-			panelANuevos.add(getBtnAtras());
+
+			JButton btnNewButton_5 = new JButton("Ver todos");
+			btnNewButton_5.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardLayout cl = (CardLayout) panelCard.getLayout();
+					cl.show(panelCard, "gestion");
+				}
+			});
+			btnNewButton_5.setBounds(409, 349, 89, 23);
+			panelANuevos.add(btnNewButton_5);
+			panelANuevos.add(getLblNewLabel_4());
+			panelANuevos.add(getTextField_2());
+			panelANuevos.add(getLblNewLabel_5());
+			panelANuevos.add(getTextField_3());
+			panelANuevos.add(getLblNewLabel_6());
+			panelANuevos.add(getLblNewLabel_8());
+			panelANuevos.add(getTextField_5());
+			panelANuevos.add(getBtnNewButton_6());
 		}
 		return panelANuevos;
 	}
@@ -234,7 +258,15 @@ public class VentanaEditor extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					textFieldResumen
-							.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
+					.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
+					textField_2.setText(
+							((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getAuthors().toString());
+					textField_3.setText(
+							((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getPresentationCard());
+					textField_5.setText(
+							((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getComentarios().toString());
+					lblNewLabel_6.setText(getLblNewLabel_6().getText()
+							+ ((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getSrcFile());
 				}
 			});
 			ArrayList<Articulo> articulo = new ArrayList<Articulo>();
@@ -244,7 +276,7 @@ public class VentanaEditor extends JFrame {
 				}
 			}
 			comboBoxArticulosEnviados
-					.setModel(new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])));
+			.setModel(new DefaultComboBoxModel<Articulo>(articulo.toArray(new Articulo[articulo.size()])));
 			comboBoxArticulosEnviados.setBounds(10, 47, 452, 25);
 		}
 		return comboBoxArticulosEnviados;
@@ -254,9 +286,9 @@ public class VentanaEditor extends JFrame {
 		if (textFieldResumen == null) {
 			textFieldResumen = new JTextField();
 			textFieldResumen.setEditable(false);
-			textFieldResumen.setBounds(10, 129, 452, 78);
+			textFieldResumen.setBounds(272, 108, 226, 148);
 			textFieldResumen.setColumns(10);
-			//textFieldResumen.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
+			textFieldResumen.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getResumen());
 		}
 		return textFieldResumen;
 	}
@@ -265,24 +297,9 @@ public class VentanaEditor extends JFrame {
 		if (lblResumen == null) {
 			lblResumen = new JLabel("Resumen");
 			lblResumen.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 14));
-			lblResumen.setBounds(10, 83, 118, 35);
+			lblResumen.setBounds(272, 83, 118, 14);
 		}
 		return lblResumen;
-	}
-
-	private JButton getBtnElegirRevisores() {
-		if (btnElegirRevisores == null) {
-			btnElegirRevisores = new JButton("Elegir revisores");
-			btnElegirRevisores.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					chooseRevisores();
-				}
-			});
-			btnElegirRevisores.setFont(new Font("Source Serif Pro Semibold", Font.BOLD, 12));
-			btnElegirRevisores.setBounds(324, 234, 138, 23);
-		}
-		return btnElegirRevisores;
 	}
 
 	private JButton getBtnVerNuevosArticulos() {
@@ -296,30 +313,9 @@ public class VentanaEditor extends JFrame {
 
 				}
 			});
-			btnVerNuevosArticulos.setBounds(307, 229, 139, 23);
+			btnVerNuevosArticulos.setBounds(10, 349, 139, 23);
 		}
 		return btnVerNuevosArticulos;
-	}
-
-	private JButton getBtnAtras() {
-		if (btnAtras == null) {
-			btnAtras = new JButton("Ver todos");
-			btnAtras.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					CardLayout cl = (CardLayout) panelCard.getLayout();
-					cl.show(panelCard, "gestion");
-				}
-			});
-			btnAtras.setBounds(10, 235, 89, 23);
-		}
-		return btnAtras;
-	}
-
-	private void chooseRevisores() {
-		Articulo a = (Articulo) getComboBoxArticulosEnviados().getSelectedItem();
-		InterfazElegirRevisores interfaz = new InterfazElegirRevisores(a);
-		interfaz.setVisible(true);
 	}
 
 	private JTextField getTextField() {
@@ -431,9 +427,10 @@ public class VentanaEditor extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null, "El articulo ha sido aceptado con cambios menores");
 
-					((Articulo) getComboBoxArticulosConEditor().getSelectedItem())
-							.setState(ArticleState.ACCEPTED_WITH_MINOR_CHANGES);
 					Articulo a = ((Articulo) getComboBoxArticulosConEditor().getSelectedItem());
+
+					a.setState(ArticleState.ACCEPTED_WITH_MINOR_CHANGES);
+
 					DataBaseArticle.updateArticle(a);
 
 					CardLayout cl = (CardLayout) panelCard.getLayout();
@@ -454,7 +451,7 @@ public class VentanaEditor extends JFrame {
 					JOptionPane.showMessageDialog(null, "El articulo ha sido aceptado con cambios mayores");
 
 					((Articulo) getComboBoxArticulosConEditor().getSelectedItem())
-							.setState(ArticleState.ACCEPTED_WITH_GREATER_CHANGES);
+					.setState(ArticleState.ACCEPTED_WITH_GREATER_CHANGES);
 					Articulo a = ((Articulo) getComboBoxArticulosConEditor().getSelectedItem());
 					DataBaseArticle.updateArticle(a);
 
@@ -487,4 +484,91 @@ public class VentanaEditor extends JFrame {
 		}
 		return btnNewButton_4;
 	}
+
+	private JLabel getLblNewLabel_4() {
+		if (lblNewLabel_4 == null) {
+			lblNewLabel_4 = new JLabel("Otros autores");
+			lblNewLabel_4.setBounds(10, 83, 89, 14);
+		}
+		return lblNewLabel_4;
+	}
+
+	private JTextField getTextField_2() {
+		if (textField_2 == null) {
+			textField_2 = new JTextField();
+			textField_2.setEditable(false);
+			textField_2.setBounds(10, 108, 226, 25);
+			textField_2.setColumns(10);
+			textField_2.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getAuthors().toString());
+		}
+		return textField_2;
+	}
+
+	private JLabel getLblNewLabel_5() {
+		if (lblNewLabel_5 == null) {
+			lblNewLabel_5 = new JLabel("Carta de presentacion");
+			lblNewLabel_5.setBounds(10, 144, 125, 14);
+		}
+		return lblNewLabel_5;
+	}
+
+	private JTextField getTextField_3() {
+		if (textField_3 == null) {
+			textField_3 = new JTextField();
+			textField_3.setEditable(false);
+			textField_3.setBounds(10, 169, 226, 87);
+			textField_3.setColumns(10);
+			textField_3.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getPresentationCard());
+		}
+		return textField_3;
+	}
+
+	private JLabel getLblNewLabel_6() {
+		if (lblNewLabel_6 == null) {
+			lblNewLabel_6 = new JLabel("Fichero fuente: ");
+			lblNewLabel_6.setBounds(272, 267, 226, 14);
+			lblNewLabel_6.setText(getLblNewLabel_6().getText()
+					+ ((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getSrcFile());
+		}
+		return lblNewLabel_6;
+	}
+
+	private JLabel getLblNewLabel_8() {
+		if (lblNewLabel_8 == null) {
+			lblNewLabel_8 = new JLabel("Comentarios");
+			lblNewLabel_8.setBounds(10, 267, 125, 14);
+		}
+		return lblNewLabel_8;
+	}
+
+	private JTextField getTextField_5() {
+		if (textField_5 == null) {
+			textField_5 = new JTextField();
+			textField_5.setEditable(false);
+			textField_5.setBounds(10, 292, 226, 80);
+			textField_5.setColumns(10);
+			textField_5
+			.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getComentarios().toString());
+		}
+		return textField_5;
+	}
+
+	private JButton getBtnNewButton_6() {
+		if (btnNewButton_6 == null) {
+			btnNewButton_6 = new JButton("Gestion de revisores");
+			btnNewButton_6.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					AsignarRevisoresRecomendados dialog = new AsignarRevisoresRecomendados(
+							((Articulo) getComboBoxArticulosEnviados().getSelectedItem()));
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
+				}
+			});
+			btnNewButton_6.setBounds(268, 349, 131, 23);
+		}
+		return btnNewButton_6;
+	}
+	
+	
 }
+
