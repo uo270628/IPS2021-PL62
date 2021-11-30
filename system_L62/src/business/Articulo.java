@@ -32,7 +32,7 @@ public class Articulo {
 	private ArticleVersion version;
 
 	private List<Revisor> listOfRevisoresParaRevisar;
-	private List<Revisor> listRevisoresRecomendados = new ArrayList<Revisor>();
+
 	private int revisoresRestantes = 3;
 	private Carta carta;
 	private List<Comentario> comentarios;
@@ -417,9 +417,6 @@ public class Articulo {
 		return state == ArticleState.ACCEPTED;
 	}
 
-	public void setRevisoresRecomendados(List<Revisor> revisoresRecomendados) {
-		listRevisoresRecomendados = revisoresRecomendados;
-	}
 
 	public boolean isRevised() {
 		return state == ArticleState.ACCEPTED || state == ArticleState.ACCEPTED_WITH_GREATER_CHANGES

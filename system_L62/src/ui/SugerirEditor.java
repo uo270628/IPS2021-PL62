@@ -28,7 +28,6 @@ public class SugerirEditor extends JDialog {
     private JButton btnNewButton;
 
     private List<Revisor> revisoresRecomendados = new ArrayList<Revisor>();
-    private int nRevisores = 0;
     private JButton btnNewButton_1;
     private Articulo article;
     private JLabel lblNewLabel;
@@ -145,10 +144,11 @@ public class SugerirEditor extends JDialog {
 	return lblNewLabel_2;
     }
 
-    private JSpinner getSpinner() {
+    
+	private JSpinner getSpinner() {
 	if (spinner == null) {
 	    spinner = new JSpinner();
-	    spinner.setModel(new SpinnerNumberModel(new Integer(1), new Integer(0), null, new Integer(1)));
+	    spinner.setModel(new SpinnerNumberModel(1, 0, null, 1));
 	    spinner.setBounds(135, 58, 30, 20);
 	}
 	return spinner;
