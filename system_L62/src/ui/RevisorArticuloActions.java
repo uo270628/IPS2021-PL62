@@ -163,7 +163,7 @@ public class RevisorArticuloActions extends JFrame {
 			btnNewButton_4.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					@SuppressWarnings("unused")
-					RevisorVerComentInterface r = new RevisorVerComentInterface(revisor);
+					RevisorVerComentInterface r = new RevisorVerComentInterface(revisor,articulo);
 				}
 			});
 			btnNewButton_4.setBounds(10, 141, 136, 23);

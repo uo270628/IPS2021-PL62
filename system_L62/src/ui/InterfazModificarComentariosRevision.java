@@ -39,6 +39,7 @@ public class InterfazModificarComentariosRevision extends JDialog {
 	 */
 	public InterfazModificarComentariosRevision(Comentario comentario,Articulo articulo) {
 		this.comentario=comentario;
+		this.articulo=articulo;
 		setResizable(false);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
