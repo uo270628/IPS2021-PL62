@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
 public class InterfazFuncionesEditor extends JDialog {
 
@@ -35,6 +36,8 @@ public class InterfazFuncionesEditor extends JDialog {
 	private JButton btnEnviarComentarios;
 	private JButton btnNewButton;
 	private JButton btnNewButton_1;
+	private JButton btnNewButton_2;
+	private JButton btnNewButton_3;
 
 	/**
 	 * Create the dialog.
@@ -42,7 +45,7 @@ public class InterfazFuncionesEditor extends JDialog {
 	public InterfazFuncionesEditor(Articulo articulo) {
 		this.articulo = articulo;
 		setResizable(false);
-		setBounds(100, 100, 567, 384);
+		setBounds(100, 100, 605, 384);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -55,13 +58,16 @@ public class InterfazFuncionesEditor extends JDialog {
 		contentPanel.add(getBtnEnviarComentarios());
 		contentPanel.add(getBtnNewButton());
 		contentPanel.add(getBtnNewButton_1());
+		contentPanel.add(getBtnNewButton_2());
+		contentPanel.add(getBtnNewButton_3());
 	}
 
 	private JLabel getLblArticulo() {
 		if (lblArticulo == null) {
 			lblArticulo = new JLabel("Articulo: " + articulo.getTitle());
+			lblArticulo.setHorizontalAlignment(SwingConstants.CENTER);
 			lblArticulo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lblArticulo.setBounds(59, 21, 312, 26);
+			lblArticulo.setBounds(39, 21, 493, 26);
 		}
 		return lblArticulo;
 	}
@@ -87,8 +93,8 @@ public class InterfazFuncionesEditor extends JDialog {
 					}
 				}
 			});
-			btnValidarArticulo.setFont(new Font("Tahoma", Font.PLAIN, 10));
-			btnValidarArticulo.setBounds(47, 190, 118, 23);
+			btnValidarArticulo.setFont(new Font("Tahoma", Font.PLAIN, 11));
+			btnValidarArticulo.setBounds(10, 133, 183, 34);
 		}
 		return btnValidarArticulo;
 	}
@@ -113,7 +119,7 @@ public class InterfazFuncionesEditor extends JDialog {
 
 				
 			});
-			btnDecisionFinal.setBounds(223, 190, 148, 23);
+			btnDecisionFinal.setBounds(203, 133, 183, 34);
 		}
 		return btnDecisionFinal;
 	}
@@ -139,8 +145,8 @@ public class InterfazFuncionesEditor extends JDialog {
 				}
 			});
 
-			btnVerComentarios.setFont(new Font("Tahoma", Font.PLAIN, 10));
-			btnVerComentarios.setBounds(408, 190, 118, 23);
+			btnVerComentarios.setFont(new Font("Tahoma", Font.PLAIN, 11));
+			btnVerComentarios.setBounds(203, 243, 183, 34);
 		}
 		return btnVerComentarios;
 	}
@@ -154,7 +160,7 @@ public class InterfazFuncionesEditor extends JDialog {
 			btnRevisores = new JButton("Asignar Revisores");
 			btnRevisores.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(articulo.getStateEnum()==ArticleState.ACCEPTED&& articulo.getListOfRevisoresParaRevisar().isEmpty()&&!articulo.getVersion().equals(ArticleVersion.GREATER_CHANGES.toString())) {
+					if(articulo.getStateEnum()==ArticleState.ACCEPTED&& articulo.getListOfRevisoresParaRevisar().isEmpty()&&!articulo.getVersion().equals(ArticleVersion.MINOR_CHANGES.toString())) {
 						InterfazElegirRevisores i = new InterfazElegirRevisores(articulo);
 						i.setVisible(true);}
 					else 
@@ -170,8 +176,8 @@ public class InterfazFuncionesEditor extends JDialog {
 									JOptionPane.ERROR_MESSAGE);}
 				}
 			});
-			btnRevisores.setFont(new Font("Tahoma", Font.PLAIN, 10));
-			btnRevisores.setBounds(31, 243, 148, 23);
+			btnRevisores.setFont(new Font("Tahoma", Font.PLAIN, 11));
+			btnRevisores.setBounds(10, 191, 183, 34);
 		}
 		return btnRevisores;
 	}
@@ -195,8 +201,8 @@ public class InterfazFuncionesEditor extends JDialog {
 				}
 					
 			});
-			btnEnviarComentarios.setFont(new Font("Tahoma", Font.PLAIN, 8));
-			btnEnviarComentarios.setBounds(233, 244, 138, 23);
+			btnEnviarComentarios.setFont(new Font("Tahoma", Font.PLAIN, 11));
+			btnEnviarComentarios.setBounds(203, 191, 183, 34);
 		}
 		return btnEnviarComentarios;
 	}
@@ -217,7 +223,7 @@ public class InterfazFuncionesEditor extends JDialog {
 								JOptionPane.ERROR_MESSAGE);
 				}
 			});
-			btnNewButton.setBounds(411, 243, 100, 23);
+			btnNewButton.setBounds(396, 243, 183, 34);
 		}
 		return btnNewButton;
 	}
@@ -241,9 +247,27 @@ public class InterfazFuncionesEditor extends JDialog {
 						
 				
 			});
-			btnNewButton_1.setBounds(59, 301, 187, 23);
+			btnNewButton_1.setBounds(10, 243, 183, 34);
 		}
 		return btnNewButton_1;
+	}
+	private JButton getBtnNewButton_2() {
+		if (btnNewButton_2 == null) {
+			btnNewButton_2 = new JButton("Crear debate");
+			btnNewButton_2.setBounds(396, 133, 183, 34);
+		}
+		return btnNewButton_2;
+	}
+	private JButton getBtnNewButton_3() {
+		if (btnNewButton_3 == null) {
+			btnNewButton_3 = new JButton("Finalizar debate");
+			btnNewButton_3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			btnNewButton_3.setBounds(396, 191, 183, 34);
+		}
+		return btnNewButton_3;
 	}
 }
 

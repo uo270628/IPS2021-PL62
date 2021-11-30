@@ -184,7 +184,7 @@ public class InterfazElegirRevisores extends JFrame {
 	private JLabel getLblRevisoresRestantes() {
 		if (lblRevisoresRestantes == null) {
 			lblRevisoresRestantes = new JLabel("Revisores restantes por elegir:");
-			lblRevisoresRestantes.setBounds(10, 35, 198, 34);
+			lblRevisoresRestantes.setBounds(0, 35, 198, 34);
 		}
 		return lblRevisoresRestantes;
 	}
@@ -194,7 +194,7 @@ public class InterfazElegirRevisores extends JFrame {
 			lblNumeroRevisoresRestantes = new JLabel("3");
 			lblNumeroRevisoresRestantes.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			lblNumeroRevisoresRestantes.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNumeroRevisoresRestantes.setBounds(156, 39, 27, 24);
+			lblNumeroRevisoresRestantes.setBounds(55, 74, 27, 24);
 		}
 		return lblNumeroRevisoresRestantes;
 	}
