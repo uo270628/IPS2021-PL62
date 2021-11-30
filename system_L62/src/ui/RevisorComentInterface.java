@@ -133,6 +133,7 @@ public class RevisorComentInterface extends JFrame implements Ventana {
 					} else {
 						throw new IllegalArgumentException();
 					}
+					frame.dispose();
 				}
 			});
 			btnAceptar.setBounds(232, 227, 89, 23);

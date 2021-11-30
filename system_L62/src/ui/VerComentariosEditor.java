@@ -16,8 +16,12 @@ import business.Articulo;
 import business.Comentario;
 import persistence.DataBaseManager;
 
-public class VerComentariosEditor {
+public class VerComentariosEditor extends JFrame{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JFrame frame;
 	private JComboBox<Comentario> comboBox;
 	private JLabel lblNewLabel;
