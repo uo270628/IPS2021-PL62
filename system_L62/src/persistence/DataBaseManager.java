@@ -197,23 +197,29 @@ public class DataBaseManager {
 		return ret;
 	}
 
-	public static List<Comentario> SelectComentsVisibleForRevisor(String revisor) {
-		List<Articulo> articulos = SelectAllArticlesForRevisor(revisor);
+	public static List<Comentario> SelectComentsVisibleForRevisor(String revisor,String idArticulo) {
 		List<Comentario> comentarios = new LinkedList<Comentario>();
-		String sql = "SELECT * FROM COMENTARIOSREVISOR  WHERE idArticulo=(?) AND (TYPE = 'Decision propuesta' OR TYPE = 'Comentario para autor');";
+		int rev = -1;
+		String sql = "SELECT * FROM revisores WHERE nombre=(?);";
+		String sql2 = "SELECT * FROM COMENTARIOSREVISOR  WHERE idArticulo=(?) AND idREVISOR =(?);";
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			PreparedStatement preparedStatement = conn.prepareStatement(sql);
-			for (Articulo articulo : articulos) {
-				preparedStatement.setString(1, articulo.getId());
+			PreparedStatement preparedStatement2 = conn.prepareStatement(sql2);
+				preparedStatement.setString(1, revisor);
 				ResultSet rs = preparedStatement.executeQuery();
 				while (rs.next()) {
-					Comentario c = new Comentario(rs.getInt("idCOMENTARIOREVISOR"), rs.getString("Comentario"),
-							rs.getString("idRevisor"), rs.getString("recomendacion"), rs.getString("idArticulo"),
-							rs.getString("TYPE"));
+					 rev = rs.getInt("idRevisor");
+				}
+				preparedStatement2.setString(1, idArticulo);
+				preparedStatement2.setInt(2, rev);
+				ResultSet rs2 = preparedStatement2.executeQuery();
+				while (rs2.next()) {
+					Comentario c = new Comentario(rs2.getInt("idCOMENTARIOREVISOR"), rs2.getString("Comentario"),
+							rs2.getString("idRevisor"), rs2.getString("recomendacion"), rs2.getString("idArticulo"),
+							rs2.getString("TYPE"));
 					comentarios.add(c);
 				}
-			}
 		} catch (SQLException e) {
 			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
 		} catch (Exception e) {

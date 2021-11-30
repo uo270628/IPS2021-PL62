@@ -102,7 +102,7 @@ public class RevisorVerComentInterface extends JFrame {
 	public void updateList() {
 		listCommentsByRevisor.setSelectedIndex(-1);
 		commentsModel.removeAllElements();
-		List<Comentario> list = DataBaseManager.SelectComentsVisibleForRevisor(revisor);
+		List<Comentario> list = DataBaseManager.SelectComentsVisibleForRevisor(revisor,articulo.getId());
 		for (Comentario a : list)
 			if (a.getTexto() != "") {
 				commentsModel.addElement(a);
