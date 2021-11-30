@@ -84,6 +84,7 @@ public class VentanaEditor extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaEditor() {
+		
 		articulos = DataBaseArticle.loadArticles();
 		cambiarArticulosAWithEditor();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
