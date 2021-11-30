@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
 
 public class UseDebate extends JFrame {
 
@@ -32,11 +33,13 @@ public class UseDebate extends JFrame {
 	private String idArticulo;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JList<Mensaje> listMensaje;
 	private JTextField textField;
 	private DefaultListModel<Mensaje> Model;
 	private JButton btnNewButton;
-
+	private JScrollPane scrollPane;
+	private JList<Mensaje> listMensaje_1;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -70,31 +73,11 @@ public class UseDebate extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		contentPane.add(getlistMensaje());
 		contentPane.add(getTextField());
 		contentPane.add(getBtnNewButton());
+		contentPane.add(getScrollPane());
 	}
 
-	private JList<Mensaje> getlistMensaje() {
-		if (listMensaje == null) {
-			listMensaje = new JList<Mensaje>((ListModel<Mensaje>) Model);
-			listMensaje.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					if (listMensaje.getSelectedIndex() != -1) {
-						JOptionPane.showMessageDialog(listMensaje, listMensaje.getSelectedValue().getTexto());
-					}
-				}
-			});
-
-			listMensaje.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			listMensaje.setSelectedIndex(-1);
-			listMensaje.setBorder(new LineBorder(new Color(0, 0, 0)));
-			listMensaje.setBounds(10, 11, 416, 192);
-			update();
-		}
-		return listMensaje;
-	}
 
 	private JTextField getTextField() {
 		if (textField == null) {
@@ -121,10 +104,38 @@ public class UseDebate extends JFrame {
 	}
 
 	public void update() {
-		listMensaje.setSelectedIndex(-1);
+		listMensaje_1.setSelectedIndex(-1);
 		Model.removeAllElements();
 		List<Mensaje> mensajes = DataBaseManager.SelectAlMensajesForChat(idArticulo);
 		for (Mensaje a : mensajes)
 			Model.addElement(a);
+	}
+	private JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setBounds(10, 11, 416, 192);
+			scrollPane.setViewportView(getListMensaje_1());
+		}
+		return scrollPane;
+	}
+	private JList<Mensaje> getListMensaje_1() {
+		if (listMensaje_1 == null) {
+			listMensaje_1 = new JList<Mensaje>((ListModel<Mensaje>) Model);
+			listMensaje_1.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (listMensaje_1.getSelectedIndex() != -1) {
+						JOptionPane.showMessageDialog(listMensaje_1, listMensaje_1.getSelectedValue().getTexto());
+					}
+				}
+			});
+
+			listMensaje_1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			listMensaje_1.setSelectedIndex(-1);
+			listMensaje_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+			listMensaje_1.setBounds(10, 11, 416, 192);
+			update();
+		}
+		return listMensaje_1;
 	}
 }

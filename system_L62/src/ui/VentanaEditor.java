@@ -102,6 +102,7 @@ public class VentanaEditor extends JFrame {
 		panelCard.add(getPanel(), "aceptarCC");
 	}
 
+
 	private void cargarComentarios() {
 		for (Articulo articulo : articulos) {
 			List<Comentario>listOfComentarios = DataBaseManager.SelectComentsVisibleForEditor(articulo.getId());
@@ -120,8 +121,6 @@ public class VentanaEditor extends JFrame {
 			DataBaseArticle.publishArticleState(a);
 		}
 	}
-	
-	
 	
 	private JPanel getPanelGestor() {
 		if (panelGestor == null) {
