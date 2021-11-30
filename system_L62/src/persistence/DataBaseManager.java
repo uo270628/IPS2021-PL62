@@ -450,4 +450,22 @@ public class DataBaseManager {
 
 		return carta;
 	}
+
+	public static void finalizarDebate(String idArticulo) {
+		
+		try {
+			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+			String sql = "update Debates SET STATE = 'FINISHED' WHERE idArticle = " + idArticulo;
+			
+			Statement st = conn.createStatement();
+			
+			st.executeUpdate(sql);
+			
+		} catch (SQLException e) {
+			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 }

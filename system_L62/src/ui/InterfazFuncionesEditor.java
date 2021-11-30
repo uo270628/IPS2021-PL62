@@ -270,6 +270,15 @@ public class InterfazFuncionesEditor extends JDialog {
 	private JButton getBtnNewButton_3() {
 		if (btnNewButton_3 == null) {
 			btnNewButton_3 = new JButton("Finalizar debate");
+			btnNewButton_3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String aux = DataBaseManager.getDebate(articulo.getId());
+					if( aux != null) {
+						DataBaseManager.finalizarDebate(articulo.getId());
+					}
+					
+				}
+			});
 			btnNewButton_3.setBounds(396, 191, 183, 34);
 		}
 		return btnNewButton_3;
