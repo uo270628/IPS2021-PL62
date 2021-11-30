@@ -127,7 +127,10 @@ public class InterfazFuncionesEditor extends JDialog {
 			btnVerComentarios = new JButton("Ver Comentarios");
 			btnVerComentarios.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (!articulo.getComentarios().isEmpty()) {
+					if(articulo.getStateEnum()==ArticleState.REJECTED)
+						JOptionPane.showMessageDialog(null, "El articulo ya ha sido rechazado", "Articulo",
+						JOptionPane.ERROR_MESSAGE);
+					else if (!articulo.getComentarios().isEmpty()) {
 						VerComentariosEditor i = new VerComentariosEditor(articulo.getId());
 						i.setVisible(true);
 					} else
@@ -159,6 +162,9 @@ public class InterfazFuncionesEditor extends JDialog {
 						if(articulo.getStateEnum()==ArticleState.REJECTED)
 							JOptionPane.showMessageDialog(null, "El articulo ya ha sido rechazado", "Articulo",
 							JOptionPane.ERROR_MESSAGE);
+						else if(articulo.getStateEnum()==ArticleState.WITH_EDITOR)
+							JOptionPane.showMessageDialog(null, "Hay que aceptar el articulo para poder asignar revisores", "Articulo",
+									JOptionPane.ERROR_MESSAGE);
 						else
 							JOptionPane.showMessageDialog(null, "Ya estan los revisores asignados", "Articulo",
 									JOptionPane.ERROR_MESSAGE);}
@@ -200,7 +206,10 @@ public class InterfazFuncionesEditor extends JDialog {
 			btnNewButton = new JButton("Ver debate");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (DataBaseManager.getDebate(articulo.getId()) != null) {
+					if(articulo.getStateEnum()==ArticleState.REJECTED)
+						JOptionPane.showMessageDialog(null, "El articulo ya ha sido rechazado", "Articulo",
+						JOptionPane.ERROR_MESSAGE);
+					else if (DataBaseManager.getDebate(articulo.getId()) != null) {
 						UseDebate i = new UseDebate(articulo.getId(), "Editor");
 						i.setVisible(true);
 					} else

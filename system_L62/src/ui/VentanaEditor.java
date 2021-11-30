@@ -130,6 +130,7 @@ public class VentanaEditor extends JFrame {
 			panelGestor.add(getTextField());
 			panelGestor.add(getLblNewLabel_2());
 			panelGestor.add(getBtnNewButton());
+			panelGestor.add(getBtnGestionDeFunciones_1());
 		}
 		return panelGestor;
 	}
@@ -240,7 +241,6 @@ public class VentanaEditor extends JFrame {
 			panelANuevos.add(getLblNewLabel_8());
 			panelANuevos.add(getTextField_5());
 			panelANuevos.add(getBtnNewButton_6());
-			panelANuevos.add(getBtnGestionDeFunciones());
 		}
 		return panelANuevos;
 	}
@@ -272,7 +272,7 @@ public class VentanaEditor extends JFrame {
 							+ ((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getSrcFile());
 				}
 			});
-			ArrayList<Articulo> articulo = new ArrayList<Articulo>();
+ 			ArrayList<Articulo> articulo = new ArrayList<Articulo>();
 			for (Articulo art : articulos) {
 				if (art.getState().equals(ArticleState.WITH_EDITOR.toString())) {
 					articulo.add(art);
@@ -571,17 +571,17 @@ public class VentanaEditor extends JFrame {
 		}
 		return btnNewButton_6;
 	}
-	private JButton getBtnGestionDeFunciones() {
+	private JButton getBtnGestionDeFunciones_1() {
 		if (btnGestionDeFunciones == null) {
 			btnGestionDeFunciones = new JButton("Gestion de funciones");
 			btnGestionDeFunciones.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					InterfazFuncionesEditor i= new InterfazFuncionesEditor((Articulo) getComboBoxArticulosEnviados().getSelectedItem());
+					InterfazFuncionesEditor i = new InterfazFuncionesEditor((Articulo) getComboBoxArticulosConEditor().getSelectedItem());
 					i.setVisible(true);
 				}
 			});
 			btnGestionDeFunciones.setFont(new Font("Tahoma", Font.PLAIN, 17));
-			btnGestionDeFunciones.setBounds(128, 427, 245, 60);
+			btnGestionDeFunciones.setBounds(133, 446, 245, 60);
 		}
 		return btnGestionDeFunciones;
 	}
