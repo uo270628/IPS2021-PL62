@@ -62,7 +62,7 @@ create table recomendaciones_revisores(
 	tiempo integer,
 	constraint pk_recomendacion primary key (id_articulo, idREVISOR)
 );
-
+ 
 create table debates(
 	idArticle varchar(20) primary key FOREIGN key REFERENCES articles(id_articles),
 	fecha_limite date,
