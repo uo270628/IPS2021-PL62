@@ -46,6 +46,8 @@ public class Articulo {
 		this.keywords = keywords;
 		this.state = ArticleState.CREATED;
 		this.version = ArticleVersion.NEW;
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+
 		
 	}
 
@@ -77,6 +79,7 @@ public class Articulo {
 		this.cvAuthors = cvAuthors;
 		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
 		this.comentarios = new ArrayList<Comentario>();
+		
 	}
 
 	public Articulo(String id, String title, Autor author, List<Autor> authors, String resumen, List<String> keywords,
@@ -93,6 +96,9 @@ public class Articulo {
 		this.state = state;
 		this.version = ArticleVersion.NEW;
 		this.comentarios = new ArrayList<Comentario>();
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+		
+
 
 	}
 
@@ -106,7 +112,8 @@ public class Articulo {
 		this.version = ArticleVersion.NEW;
 		this.comentarios = new ArrayList<Comentario>();
 		this.authors=new ArrayList<>();
-	
+		this.listOfRevisoresParaRevisar = new ArrayList<Revisor>();
+
 
 	}
 
