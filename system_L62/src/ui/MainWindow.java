@@ -88,7 +88,7 @@ public class MainWindow extends JFrame {
 			btnEditor.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					EditorStarUp.main(null);
+					VentanaEditor.main(null);
 				}
 			});
 			btnEditor.setFont(new Font("Tahoma", Font.PLAIN, 12));
