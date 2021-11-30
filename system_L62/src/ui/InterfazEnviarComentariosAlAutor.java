@@ -8,6 +8,8 @@ import business.Articulo;
 import business.Carta;
 import business.Comentario;
 import business.Tema;
+import business.Articulo.ArticleState;
+import persistence.DataBaseArticle;
 import persistence.DataBaseComentario;
 
 import javax.swing.JButton;
@@ -82,8 +84,9 @@ public class InterfazEnviarComentariosAlAutor extends JFrame {
 	protected void enviar() {
 		String carta= getTextPaneCarta().getText();
 		articulo.setCarta(new Carta(carta));
+		DataBaseArticle.publishArticleState(articulo);
 		DataBaseComentario.enviarCartaAlAutor(articulo);
-		DataBaseComentario.enviarComentariosAlAutor(articulo);
+		//DataBaseComentario.enviarComentariosAlAutor(articulo);
 	}
 
 	private JButton getBtnAceptarArticulo() {
