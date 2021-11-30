@@ -31,6 +31,8 @@ public class InterfazAceptarConCambiosMenores extends JDialog {
 	 * Create the dialog.
 	 */
 	public InterfazAceptarConCambiosMenores(Articulo articulo) {
+		setResizable(false);
+		setLocationRelativeTo(null);
 		this.articulo=articulo;
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
