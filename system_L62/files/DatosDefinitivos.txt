@@ -40,3 +40,6 @@ VALUES(3,2,1,'15','tit3','au','none','sum','key','sr','pc','cv','','IN_REVISION'
 
 INSERT INTO Debates(idArticle,state)
 VALUES('14','ACTIVE')
+
+insert into recomendaciones_revisores (id_articulo, idREVISOR, nombre, tiempo)
+values ('hf48hg93hgfg83', '27', 'Rogelio', 1)
