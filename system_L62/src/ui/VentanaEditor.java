@@ -61,6 +61,7 @@ public class VentanaEditor extends JFrame {
 	private JLabel lblNewLabel_8;
 	private JTextField textField_5;
 	private JButton btnNewButton_6;
+	private JButton btnGestionDeFunciones;
 
 	/**
 	 * Launch the application.
@@ -84,7 +85,7 @@ public class VentanaEditor extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaEditor() {
-		articulos = DataBaseArticle.loadArticles();
+		articulos = DataBaseArticle.findAllArticles();
 		cambiarArticulosAWithEditor();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 540, 653);
@@ -100,7 +101,8 @@ public class VentanaEditor extends JFrame {
 
 	private void cambiarArticulosAWithEditor() {		
 		for(Articulo a: articulos) {
-			a.setState(ArticleState.WITH_EDITOR);
+			if(a.getStateEnum()==ArticleState.SENT) {
+			a.setState(ArticleState.WITH_EDITOR);}
 			DataBaseArticle.publishArticleState(a);
 		}
 	}
@@ -238,6 +240,7 @@ public class VentanaEditor extends JFrame {
 			panelANuevos.add(getLblNewLabel_8());
 			panelANuevos.add(getTextField_5());
 			panelANuevos.add(getBtnNewButton_6());
+			panelANuevos.add(getBtnGestionDeFunciones());
 		}
 		return panelANuevos;
 	}
@@ -568,7 +571,19 @@ public class VentanaEditor extends JFrame {
 		}
 		return btnNewButton_6;
 	}
-	
-	
+	private JButton getBtnGestionDeFunciones() {
+		if (btnGestionDeFunciones == null) {
+			btnGestionDeFunciones = new JButton("Gestion de funciones");
+			btnGestionDeFunciones.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					InterfazFuncionesEditor i= new InterfazFuncionesEditor((Articulo) getComboBoxArticulosEnviados().getSelectedItem());
+					i.setVisible(true);
+				}
+			});
+			btnGestionDeFunciones.setFont(new Font("Tahoma", Font.PLAIN, 17));
+			btnGestionDeFunciones.setBounds(128, 427, 245, 60);
+		}
+		return btnGestionDeFunciones;
+	}
 }
 

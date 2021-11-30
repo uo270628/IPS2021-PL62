@@ -97,7 +97,7 @@ public class InterfazFuncionesEditor extends JDialog {
 			btnDecisionFinal = new JButton("Decision final");
 			btnDecisionFinal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(comprobarSiEstaParaEnviar() && !articulo.getListOfRevisoresParaRevisar().isEmpty()) {
+					if(comprobarSiEstaParaEnviar() && !articulo.getComentarios().isEmpty()) {
 						InterfazDecisionFinal i = new InterfazDecisionFinal(articulo);
 						i.setVisible(true);}
 					else {
@@ -218,7 +218,7 @@ public class InterfazFuncionesEditor extends JDialog {
 			btnNewButton_1 = new JButton("Aceptar cambios menores");
 			btnNewButton_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(articulo.getStateEnum()==ArticleState.IN_REVISION) {
+					if(articulo.getStateEnum()==ArticleState.IN_REVISION && !articulo.getComentarios().isEmpty()) {
 					InterfazAceptarConCambiosMenores i = new InterfazAceptarConCambiosMenores(articulo);
 					i.setVisible(true);}
 					else {
