@@ -29,6 +29,8 @@ public class InterfazFuncionesEditor extends JDialog {
 	private JButton btnVerComentarios;
 	private JButton btnRevisores;
 	private JButton btnEnviarComentarios;
+	private JButton btnNewButton;
+	private JButton btnNewButton_1;
 
 
 	/**
@@ -48,6 +50,8 @@ public class InterfazFuncionesEditor extends JDialog {
 		contentPanel.add(getBtnVerComentarios());
 		contentPanel.add(getBtnRevisores());
 		contentPanel.add(getBtnEnviarComentarios());
+		contentPanel.add(getBtnNewButton());
+		contentPanel.add(getBtnNewButton_1());
 	}
 	private JLabel getLblArticulo() {
 		if (lblArticulo == null) {
@@ -135,5 +139,31 @@ public class InterfazFuncionesEditor extends JDialog {
 			btnEnviarComentarios.setBounds(233, 244, 138, 23);
 		}
 		return btnEnviarComentarios;
+	}
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("Ver debate");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					UseDebate i = new UseDebate(articulo.getId(), "Editor");
+					i.setVisible(true);
+				}
+			});
+			btnNewButton.setBounds(411, 243, 100, 23);
+		}
+		return btnNewButton;
+	}
+	private JButton getBtnNewButton_1() {
+		if (btnNewButton_1 == null) {
+			btnNewButton_1 = new JButton("Aceptar cambios menores");
+			btnNewButton_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					InterfazAceptarConCambiosMenores i = new InterfazAceptarConCambiosMenores(articulo);
+					i.setVisible(true);
+				}
+			});
+			btnNewButton_1.setBounds(59, 301, 187, 23);
+		}
+		return btnNewButton_1;
 	}
 }
