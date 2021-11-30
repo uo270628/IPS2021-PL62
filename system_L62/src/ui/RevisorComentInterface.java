@@ -65,6 +65,8 @@ public class RevisorComentInterface extends JFrame implements Ventana {
 		frame.getContentPane().add(getBtnAceptar());
 
 		frame.setVisible(true);
+		setLocationRelativeTo(null);
+
 	}
 
 	private JTextArea getComentarioTextField() {

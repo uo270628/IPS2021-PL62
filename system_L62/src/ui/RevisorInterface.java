@@ -72,6 +72,8 @@ public class RevisorInterface extends JFrame {
 		contentPane.add(getLblRevisor());
 		contentPane.add(getTextFieldRevisor());
 		contentPane.add(getListArticlesByRevisor());
+		setLocationRelativeTo(null);
+
 	}
 
 	public JLabel getLblRevisor() {

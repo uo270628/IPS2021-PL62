@@ -100,6 +100,8 @@ public class VentanaEditor extends JFrame {
 		panelCard.add(getPanelANuevos(), "a_nuevos");
 		panelCard.add(getPanelGestor(), "gestion");
 		panelCard.add(getPanel(), "aceptarCC");
+		setLocationRelativeTo(null);
+
 	}
 
 

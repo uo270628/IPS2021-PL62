@@ -59,6 +59,8 @@ public class SugerirEditor extends JDialog {
 	contentPane.add(getTextField_2());
 	contentPane.add(getLblNewLabel_3());
 	setModal(true);
+	setLocationRelativeTo(null);
+
     }
 
     private JButton getBtnNewButton() {

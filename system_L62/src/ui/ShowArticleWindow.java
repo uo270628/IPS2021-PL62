@@ -88,6 +88,8 @@ public class ShowArticleWindow extends JDialog {
 		contentPane.add(getTextFieldState());
 		contentPane.add(getBtnPublish());
 		contentPane.add(getBtnSeeRevisionComments());
+		setLocationRelativeTo(null);
+
 	}
 
 	public JLabel getLblTitle() {

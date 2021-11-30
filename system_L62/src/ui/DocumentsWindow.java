@@ -84,6 +84,8 @@ public class DocumentsWindow extends JDialog {
 		contentPane.add(getBtnBack());
 		contentPane.add(getBtnSend());
 		contentPane.add(getBtnNewButton());
+		setLocationRelativeTo(null);
+
 	}
 
 	public JLabel getLblPresentationCard() {

@@ -39,6 +39,7 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow() {
+		setLocationRelativeTo(null);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -49,6 +50,8 @@ public class MainWindow extends JFrame {
 		contentPane.add(getBtnAuthor());
 		contentPane.add(getBtnRevisor());
 		contentPane.add(getBtnEditor());
+		setLocationRelativeTo(null);
+
 	}
 
 	public JButton getBtnAuthor() {

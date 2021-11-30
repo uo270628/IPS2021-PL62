@@ -63,6 +63,7 @@ public class ArticlesByAuthorWindow extends JFrame {
 	 */
 	public ArticlesByAuthorWindow() {
 		this.articlesModel = new DefaultListModel<>();
+		setLocationRelativeTo(null);
 
 		setResizable(false);
 		setTitle("Visualizar art\u00EDculos");

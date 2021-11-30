@@ -103,6 +103,8 @@ public class UploadWindow extends JDialog {
 		contentPane.add(getLblTema());
 		contentPane.add(getTextFieldTema());
 		contentPane.add(getBtnSeeRevisionComments());
+		setLocationRelativeTo(null);
+
 	}
 
 	public JTextField getTextFieldTitle() {

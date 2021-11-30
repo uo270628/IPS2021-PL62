@@ -79,6 +79,8 @@ public class RevisorArticuloActions extends JFrame {
 		if (articulo.getState().equals("WITH_EDITOR")) {
 			contentPane.add(getBtnNewButton_3());
 		}
+		setLocationRelativeTo(null);
+
 	}
 
 	private JLabel getLblNewLabel() {

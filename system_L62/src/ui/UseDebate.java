@@ -76,6 +76,8 @@ public class UseDebate extends JFrame {
 		contentPane.add(getTextField());
 		contentPane.add(getBtnNewButton());
 		contentPane.add(getScrollPane());
+		setLocationRelativeTo(null);
+
 	}
 
 

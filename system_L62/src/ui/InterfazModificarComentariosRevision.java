@@ -48,6 +48,8 @@ public class InterfazModificarComentariosRevision extends JDialog {
 		contentPanel.add(getTextField());
 		contentPanel.add(getBtnEnviar());
 		contentPanel.add(getBtnVolver());
+		setLocationRelativeTo(null);
+
 		
 		
 	}

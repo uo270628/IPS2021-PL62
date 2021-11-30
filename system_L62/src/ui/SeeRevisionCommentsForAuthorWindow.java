@@ -71,6 +71,8 @@ public class SeeRevisionCommentsForAuthorWindow extends JDialog {
 		contentPane.add(getLblCommentInfo());
 		contentPane.add(getLblComments());
 		contentPane.add(getBtnShowCard());
+		setLocationRelativeTo(null);
+
 	}
 
 	public JButton getBtnBack() {

@@ -89,6 +89,7 @@ public class interfazPublicar extends JDialog {
 				int year= date.getYear()+1900;
 				lblFecha.setText(date.getDate()+"/"+month+"/"+year);
 				btnGenerar.setVisible(false);
+				setLocationRelativeTo(null);
 
 			}
 		});

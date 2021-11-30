@@ -60,6 +60,8 @@ public class InterfazFuncionesEditor extends JDialog {
 		contentPanel.add(getBtnNewButton_1());
 		contentPanel.add(getBtnNewButton_2());
 		contentPanel.add(getBtnNewButton_3());
+		setLocationRelativeTo(null);
+
 	}
 
 	private JLabel getLblArticulo() {

@@ -51,7 +51,8 @@ public class RevisorVerComentInterface extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
+		setLocationRelativeTo(null);
+
 		frame = new JFrame();
 		this.commentsModel = new DefaultListModel<>();
 		frame.getContentPane().setEnabled(false);
