@@ -54,9 +54,9 @@ create table revisa(
 );
 
 create table recomendaciones_revisores(
-	id_rec varchar(20) PRIMARY KEY,
-	id_article varchar(20) FOREIGN key REFERENCES articles(id_articles),
-	id_revisor_1 Integer FOREIGN key REFERENCES revisores(idREVISOR),
-	id_revisor_2 Integer FOREIGN key REFERENCES revisores(idREVISOR),
-	id_revisor_3 Integer FOREIGN key REFERENCES revisores(idREVISOR)
+	id_articulo varchar(20),
+	idREVISOR Integer,
+	nombre varchar(100),
+	tiempo integer,
+	constraint pk_recomendacion primary key (id_articulo, idREVISOR)
 );

@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -59,6 +60,7 @@ public class VentanaEditor extends JFrame {
     private JLabel lblNewLabel_6;
     private JLabel lblNewLabel_8;
     private JTextField textField_5;
+    private JButton btnNewButton_6;
 
     /**
      * Launch the application.
@@ -83,7 +85,7 @@ public class VentanaEditor extends JFrame {
     public VentanaEditor() {
 	articulos = DataBaseArticle.loadArticles();
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	setBounds(100, 100, 537, 432);
+	setBounds(100, 100, 540, 653);
 	panelCard = new JPanel();
 	panelCard.setBorder(new EmptyBorder(5, 5, 5, 5));
 	setContentPane(panelCard);
@@ -224,6 +226,7 @@ public class VentanaEditor extends JFrame {
 	    panelANuevos.add(getLblNewLabel_6());
 	    panelANuevos.add(getLblNewLabel_8());
 	    panelANuevos.add(getTextField_5());
+	    panelANuevos.add(getBtnNewButton_6());
 	}
 	return panelANuevos;
     }
@@ -537,5 +540,21 @@ public class VentanaEditor extends JFrame {
 		    .setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getComentarios().toString());
 	}
 	return textField_5;
+    }
+
+    private JButton getBtnNewButton_6() {
+	if (btnNewButton_6 == null) {
+	    btnNewButton_6 = new JButton("Gestion de revisores");
+	    btnNewButton_6.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+		    AsignarRevisoresRecomendados dialog = new AsignarRevisoresRecomendados(
+			    ((Articulo) getComboBoxArticulosEnviados().getSelectedItem()));
+		    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		    dialog.setVisible(true);
+		}
+	    });
+	    btnNewButton_6.setBounds(268, 349, 131, 23);
+	}
+	return btnNewButton_6;
     }
 }

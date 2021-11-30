@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,8 +16,6 @@ import javax.swing.border.EmptyBorder;
 
 import business.Articulo;
 import business.Revisor;
-import business.Tema;
-import persistence.DataBaseRevisor;
 import persistence.DatabaseRecomendacion;
 
 public class SugerirEditor extends JDialog {
@@ -30,9 +27,6 @@ public class SugerirEditor extends JDialog {
     private JPanel contentPane;
     private JButton btnNewButton;
 
-    private List<Tema> temas;
-
-    private DataBaseRevisor dbRevisores = new DataBaseRevisor();
     private List<Revisor> revisoresRecomendados = new ArrayList<Revisor>();
     private int nRevisores = 0;
     private JButton btnNewButton_1;
@@ -40,9 +34,6 @@ public class SugerirEditor extends JDialog {
     private JLabel lblNewLabel;
     private JTextField textField;
     private JLabel lblNewLabel_1;
-    private JComboBox<Tema> comboBox;
-    private JButton btnNewButton_2;
-    private JTextField textField_1;
     private JLabel lblNewLabel_2;
     private JSpinner spinner;
     private JTextField textField_2;
@@ -54,7 +45,7 @@ public class SugerirEditor extends JDialog {
     public SugerirEditor(Articulo article) {
 	this.article = article;
 	setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-	setBounds(100, 100, 522, 311);
+	setBounds(100, 100, 460, 251);
 	contentPane = new JPanel();
 	contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 	setContentPane(contentPane);
@@ -64,9 +55,6 @@ public class SugerirEditor extends JDialog {
 	contentPane.add(getLblNewLabel());
 	contentPane.add(getTextField_1());
 	contentPane.add(getLblNewLabel_1());
-	contentPane.add(getComboBox_1());
-	contentPane.add(getBtnNewButton_2());
-	contentPane.add(getTextField_1_1());
 	contentPane.add(getLblNewLabel_2());
 	contentPane.add(getSpinner());
 	contentPane.add(getTextField_2());
@@ -82,13 +70,11 @@ public class SugerirEditor extends JDialog {
 		public void actionPerformed(ActionEvent e) {
 		    if (revisoresRecomendados.size() < 3) {
 			if (!comprobarCampos()) {
-			    Revisor r = new Revisor(temas, (Integer) getSpinner().getValue(),
-				    getTextField_1().getText());
-			    temas = new ArrayList<Tema>();
+			    Revisor r = new Revisor((Integer) getSpinner().getValue(), getTextField_1().getText());
 			    revisoresRecomendados.add(r);
 
 			    getTextField_1().setText("");
-			    getTextField_1_1().setText("");
+
 			    getSpinner().setValue(1);
 			    getTextField_2().setText(revisoresRecomendados.toString() + '\n');
 			}
@@ -102,7 +88,7 @@ public class SugerirEditor extends JDialog {
     }
 
     protected boolean comprobarCampos() {
-	return this.getTextField_1().getText().isBlank() || this.getTextField_1_1().getText().isBlank();
+	return this.getTextField_1().getText().isBlank();
     }
 
     private JButton getBotonHecho() {
@@ -117,7 +103,7 @@ public class SugerirEditor extends JDialog {
 		    disposeDialog();
 		}
 	    });
-	    btnNewButton_1.setBounds(407, 238, 89, 23);
+	    btnNewButton_1.setBounds(343, 173, 89, 23);
 	}
 	return btnNewButton_1;
     }
@@ -151,44 +137,10 @@ public class SugerirEditor extends JDialog {
 	return lblNewLabel_1;
     }
 
-    private JComboBox<Tema> getComboBox_1() {
-	if (comboBox == null) {
-	    comboBox = new JComboBox<Tema>();
-	    comboBox.setBounds(10, 61, 175, 23);
-	}
-	return comboBox;
-    }
-
-    private JButton getBtnNewButton_2() {
-	if (btnNewButton_2 == null) {
-	    btnNewButton_2 = new JButton("A\u00F1adir");
-	    btnNewButton_2.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		    Tema t = (Tema) getComboBox_1().getSelectedItem();
-		    if (!temas.contains(t)) {
-			temas.add(t);
-		    }
-		}
-	    });
-	    btnNewButton_2.setBounds(195, 61, 89, 23);
-	}
-	return btnNewButton_2;
-    }
-
-    private JTextField getTextField_1_1() {
-	if (textField_1 == null) {
-	    textField_1 = new JTextField();
-	    textField_1.setEditable(false);
-	    textField_1.setBounds(10, 95, 175, 36);
-	    textField_1.setColumns(10);
-	}
-	return textField_1;
-    }
-
     private JLabel getLblNewLabel_2() {
 	if (lblNewLabel_2 == null) {
 	    lblNewLabel_2 = new JLabel("Tiempo de revision");
-	    lblNewLabel_2.setBounds(10, 145, 115, 14);
+	    lblNewLabel_2.setBounds(10, 61, 115, 14);
 	}
 	return lblNewLabel_2;
     }
@@ -197,7 +149,7 @@ public class SugerirEditor extends JDialog {
 	if (spinner == null) {
 	    spinner = new JSpinner();
 	    spinner.setModel(new SpinnerNumberModel(new Integer(1), new Integer(0), null, new Integer(1)));
-	    spinner.setBounds(155, 142, 30, 20);
+	    spinner.setBounds(135, 58, 30, 20);
 	}
 	return spinner;
     }
@@ -206,7 +158,7 @@ public class SugerirEditor extends JDialog {
 	if (textField_2 == null) {
 	    textField_2 = new JTextField();
 	    textField_2.setEditable(false);
-	    textField_2.setBounds(298, 142, 198, 85);
+	    textField_2.setBounds(10, 111, 198, 85);
 	    textField_2.setColumns(10);
 	}
 	return textField_2;
@@ -215,7 +167,7 @@ public class SugerirEditor extends JDialog {
     private JLabel getLblNewLabel_3() {
 	if (lblNewLabel_3 == null) {
 	    lblNewLabel_3 = new JLabel("Revisores:");
-	    lblNewLabel_3.setBounds(298, 117, 66, 14);
+	    lblNewLabel_3.setBounds(10, 86, 66, 14);
 	}
 	return lblNewLabel_3;
     }
