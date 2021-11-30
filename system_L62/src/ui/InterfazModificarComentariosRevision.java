@@ -90,10 +90,13 @@ public class InterfazModificarComentariosRevision extends JDialog {
 		return btnEnviar;
 	}
 	private JButton getBtnVolver() {
+		
 		if (btnVolver == null) {
 			btnVolver = new JButton("Volver");
 			btnVolver.addActionListener(new ActionListener() {
+				
 				public void actionPerformed(ActionEvent e) {
+					
 					dispose();
 				}
 			});
