@@ -1,6 +1,7 @@
 package persistence;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -56,15 +57,11 @@ public class DataBaseManager {
 	public static void crearDebate(Articulo a, Debate d) {
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-			StringBuilder query = new StringBuilder();
-			query.append("insert into debates values('");
-			query.append(a.getId());
-			query.append("','" + d.getId() + "',TO_DATE('");
-			query.append(d.getFechaLimite().getDayOfMonth() + "/" + d.getFechaLimite().getMonthValue() + d.getFechaLimite().getYear());
-			query.append("', 'DD/MM/YYYY') ");
+			PreparedStatement pst = conn.prepareStatement("insert into debates values('" + a.getId() + "','" + d.getId() + "', ? )");
+			Date date =   java.sql.Date.valueOf(d.getFechaLimite().toLocalDate());
+			pst.setDate(1, date);
 			
-			Statement at = conn.createStatement();
-			at.executeUpdate(query.toString());
+			pst.executeUpdate();
 			
 		} catch (SQLException e) {
 			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());

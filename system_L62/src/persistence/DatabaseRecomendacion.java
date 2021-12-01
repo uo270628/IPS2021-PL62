@@ -2,13 +2,11 @@ package persistence;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import business.Articulo;
 import business.Revisor;
@@ -68,7 +66,7 @@ public class DatabaseRecomendacion {
 			Statement st = con.createStatement();
 
 			query.append(
-					"SELECT idREVISOR, nombre, tiempo from recomendaciones_revisores where id_articulo = " + a.getId());
+					"SELECT idREVISOR, nombre, tiempo from recomendaciones_revisores where id_articulo = '" + a.getId() +  "'");
 
 			ResultSet rs = st.executeQuery(query.toString());
 

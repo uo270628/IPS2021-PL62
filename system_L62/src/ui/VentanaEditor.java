@@ -11,7 +11,6 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -61,7 +60,6 @@ public class VentanaEditor extends JFrame {
 	private JLabel lblNewLabel_6;
 	private JLabel lblNewLabel_8;
 	private JTextField textField_5;
-	private JButton btnNewButton_6;
 	private JButton btnGestionDeFunciones;
 
 	/**
@@ -146,6 +144,16 @@ public class VentanaEditor extends JFrame {
 			panelGestor.add(getLblNewLabel_2());
 			panelGestor.add(getBtnNewButton());
 			panelGestor.add(getBtnGestionDeFunciones_1());
+			
+			JButton btnNewButton_6 = new JButton("Gestion de revisores");
+			btnNewButton_6.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					AsignarRevisoresRecomendados arr = new AsignarRevisoresRecomendados(((Articulo) getComboBoxArticulosConEditor().getSelectedItem()));
+					arr.setVisible(true);
+				}
+			});
+			btnNewButton_6.setBounds(331, 349, 131, 23);
+			panelGestor.add(btnNewButton_6);
 		}
 		return panelGestor;
 	}
@@ -190,7 +198,12 @@ public class VentanaEditor extends JFrame {
 			btnFiltrarPorTitulo.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+
 					String titulo = getTextFieldFiltrarPorTitulo().getText();
+					if(titulo.isBlank()) {
+						comboBoxArticulosConEditor
+						.setModel(new DefaultComboBoxModel<Articulo>(articulos.toArray(new Articulo[articulos.size()])));
+					}
 					ArrayList<Articulo> articulo = new ArrayList<Articulo>();
 					for (Articulo art : articulos) {
 						if (art.getTitle().equals(titulo)) {
@@ -213,6 +226,11 @@ public class VentanaEditor extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					String autor = getTextFieldFiltrarPorAutor().getText();
+					
+					if(autor.isEmpty()) {
+						comboBoxArticulosConEditor
+						.setModel(new DefaultComboBoxModel<Articulo>(articulos.toArray(new Articulo[articulos.size()])));
+					}
 
 					ArrayList<Articulo> articulo = new ArrayList<Articulo>();
 					for (Articulo art : articulos) {
@@ -255,7 +273,6 @@ public class VentanaEditor extends JFrame {
 			panelANuevos.add(getLblNewLabel_6());
 			panelANuevos.add(getLblNewLabel_8());
 			panelANuevos.add(getTextField_5());
-			panelANuevos.add(getBtnNewButton_6());
 		}
 		return panelANuevos;
 	}
@@ -569,22 +586,6 @@ public class VentanaEditor extends JFrame {
 			.setText(((Articulo) getComboBoxArticulosEnviados().getSelectedItem()).getComentarios().toString());
 		}
 		return textField_5;
-	}
-
-	private JButton getBtnNewButton_6() {
-		if (btnNewButton_6 == null) {
-			btnNewButton_6 = new JButton("Gestion de revisores");
-			btnNewButton_6.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					AsignarRevisoresRecomendados dialog = new AsignarRevisoresRecomendados(
-							((Articulo) getComboBoxArticulosEnviados().getSelectedItem()));
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					dialog.setVisible(true);
-				}
-			});
-			btnNewButton_6.setBounds(268, 349, 131, 23);
-		}
-		return btnNewButton_6;
 	}
 	private JButton getBtnGestionDeFunciones_1() {
 		if (btnGestionDeFunciones == null) {

@@ -158,8 +158,8 @@ public class DataBaseRevisor {
 			con = DriverManager.getConnection(URL, USER, PASSWORD);
 			StringBuilder query = new StringBuilder();
 			Statement st = con.createStatement();
-			query.append("insert into revisores VALUES ('" + r.getId() + "','" + r.getNombre() + "','"
-					+ r.getTiempoDeRevision());
+			query.append("insert into revisores VALUES (" + r.getId() + ",'" + r.getNombre() + "',"
+					+ r.getTiempoDeRevision() + ")");
 
 			st.executeUpdate(query.toString());
 		} catch (SQLException e) {

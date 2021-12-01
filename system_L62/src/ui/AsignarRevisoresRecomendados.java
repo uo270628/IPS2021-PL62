@@ -28,13 +28,13 @@ public class AsignarRevisoresRecomendados extends JFrame {
     private JButton btnNewButton;
 
     public AsignarRevisoresRecomendados(Articulo a) {
-    	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	dbr = new DatabaseRecomendacion(a);
-	revisoresRecomendados = dbr.getRecomendaciones();
-	getContentPane().setLayout(null);
-	getContentPane().add(getLblNewLabel());
-	getContentPane().add(getComboBox());
-	getContentPane().add(getBtnNewButton());
+	    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		dbr = new DatabaseRecomendacion(a);
+		revisoresRecomendados = dbr.getRecomendaciones();
+		getContentPane().setLayout(null);
+		getContentPane().add(getLblNewLabel());
+		getContentPane().add(getComboBox());
+		getContentPane().add(getBtnNewButton());
     }
 
     private JLabel getLblNewLabel() {

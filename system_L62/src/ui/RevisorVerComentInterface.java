@@ -1,26 +1,21 @@
 package ui;
 
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.LineBorder;
 
 import business.Articulo;
 import business.Comentario;
 import persistence.DataBaseManager;
-
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.ListSelectionModel;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class RevisorVerComentInterface extends JFrame {
 

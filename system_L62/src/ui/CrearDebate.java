@@ -90,7 +90,7 @@ public class CrearDebate extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					Debate debate = new Debate(UUID.randomUUID().toString(), a.getId(), LocalDateTime.now().plusDays((Integer)getSpinner().getValue()));
 					DataBaseManager.crearDebate(a, debate);
-					dispose();
+
 				}
 			});
 			btnNewButton.setBounds(183, 81, 203, 23);
@@ -105,8 +105,5 @@ public class CrearDebate extends JFrame {
 		}
 		return lblNewLabel_3;
 	}
-	
-	public void dispose() {
-		this.dispose();
-	}
+
 }
