@@ -351,6 +351,9 @@ public class Articulo {
 	public String getCarta() {
 		return carta.getTexto();
 	}
+	public Carta getCartaObject() {
+		return carta;
+	}
 
 	public void setCarta(Carta carta) {
 		this.carta = carta;

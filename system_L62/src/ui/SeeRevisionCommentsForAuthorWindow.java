@@ -160,7 +160,7 @@ public class SeeRevisionCommentsForAuthorWindow extends JDialog {
 			});
 			btnShowCard.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			btnShowCard.setBounds(341, 201, 85, 21);
-			if(article.getCarta()==null)
+			if(article.getCartaObject()==null)
 				btnShowCard.setEnabled(false);
 			else
 				btnShowCard.setEnabled(true);
