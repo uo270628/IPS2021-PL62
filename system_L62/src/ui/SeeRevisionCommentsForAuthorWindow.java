@@ -154,11 +154,16 @@ public class SeeRevisionCommentsForAuthorWindow extends JDialog {
 			btnShowCard.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					
 					textAreaCommentInfo.setText(article.getCarta());
 				}
 			});
 			btnShowCard.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			btnShowCard.setBounds(341, 201, 85, 21);
+			if(article.getCartaObject()==null)
+				btnShowCard.setEnabled(false);
+			else
+				btnShowCard.setEnabled(true);
 		}
 		return btnShowCard;
 	}

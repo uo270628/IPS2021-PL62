@@ -20,7 +20,7 @@ insert into revisa(id_revisor,id_tema) values(8,1);
 insert into revisa(id_revisor,id_tema) values(7,2);
 insert into revisa(id_revisor,id_tema) values(6,2);
 
-insert into articles(id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, tema, state, version) values ('534gh45hi6664', 'Peque', 'Manolo', '', 'Una pequeña', '', 'peque.docx', 'present.pdf', 'manolo.pdf', '', 'ACCEPTED_WITH_GREATER_CHANGES', 'NEW')
+insert into articles(id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, tema, state, version) values ('534gh45hi6664', 'Peque', 'Manolo', '', 'Una pequeÃ±a', '', 'peque.docx', 'present.pdf', 'manolo.pdf', '', 'ACCEPTED_WITH_GREATER_CHANGES', 'NEW')
 
 insert into articles(id_articles, title, author, other_authors, summary, keywords, srcfile, presentation_card, cv_authors, tema, state, version) values ('hf48hg93hgfg83', 'Gran', 'Manolo', '', 'Una grande', '', 'gran.docx', 'presenta.pdf', 'manolo.pdf', '', 'ACCEPTED', 'NEW')
 
@@ -39,7 +39,7 @@ VALUES(3,2,1,'15','tit3','au','none','sum','key','sr','pc','cv','','IN_REVISION'
  
 
 INSERT INTO Debates(idArticle,state)
-VALUES('14','ACTIVE')
+VALUES('15','ACTIVE')
 
 insert into recomendaciones_revisores (id_articulo, idREVISOR, nombre, tiempo)
 values ('hf48hg93hgfg83', '27', 'Rogelio', 1)

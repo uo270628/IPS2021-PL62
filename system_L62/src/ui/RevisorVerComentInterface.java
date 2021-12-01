@@ -17,6 +17,7 @@ import business.Articulo;
 import business.Comentario;
 import persistence.DataBaseManager;
 
+
 public class RevisorVerComentInterface extends JFrame {
 
 	/**
