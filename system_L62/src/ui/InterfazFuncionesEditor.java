@@ -140,8 +140,8 @@ public class InterfazFuncionesEditor extends JDialog {
 						JOptionPane.showMessageDialog(null, "El articulo ya ha sido rechazado", "Articulo",
 						JOptionPane.ERROR_MESSAGE);
 					else if (!articulo.getComentarios().isEmpty()) {
-						VerComentariosEditor i = new VerComentariosEditor(articulo.getId());
-						i.setVisible(true);
+						 new VerComentariosEditor(articulo.getId());
+						//i.setVisible(true);
 					} else
 						JOptionPane.showMessageDialog(null, "Todavia no hay comentarios para este artículo",
 								"Comentarios", JOptionPane.ERROR_MESSAGE);

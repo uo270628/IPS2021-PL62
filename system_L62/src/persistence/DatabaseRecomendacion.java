@@ -33,25 +33,20 @@ public class DatabaseRecomendacion {
 		try {
 			con = DriverManager.getConnection(URL, USER, PASSWORD);
 
-			StringBuilder query = new StringBuilder();
+			StringBuilder query;
 
-			query.append("insert into recomendaciones_revisores VALUES (?,?");
+			Statement st = con.createStatement();
 
-			for (int i = 0; i < revisores.size(); i++) {
-				query.append(",?");
+			if (!revisores.isEmpty()) {
+				for (Revisor r : revisores) {
+					query = new StringBuilder();
+					query.append("insert into recomendaciones_revisores (id_articulo, idREVISOR, nombre, tiempo) "
+							+ "VALUES ('" + a.getId() + "','" + r.getId() + "','" + r.getNombre() + "'," + r.getTiempoDeRevision() + ")");
+
+					st.executeUpdate(query.toString());
+				}
 			}
-			query.append(")");
 
-			PreparedStatement st = con.prepareStatement(query.toString());
-
-			st.setString(1, UUID.randomUUID().toString());
-			st.setString(2, a.getId());
-
-			int param = 3;
-			for (Revisor r : revisores) {
-				st.setString(param, r.getId());
-				param++;
-			}
 			st.close();
 			con.close();
 
@@ -61,37 +56,37 @@ public class DatabaseRecomendacion {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public List<Revisor> getRecomendaciones() {
 		List<Revisor> revisores = new ArrayList<Revisor>();
 
 		try {
-		    con = DriverManager.getConnection(URL, USER, PASSWORD);
+			con = DriverManager.getConnection(URL, USER, PASSWORD);
 
-		    StringBuilder query = new StringBuilder();
+			StringBuilder query = new StringBuilder();
 
-		    Statement st = con.createStatement();
+			Statement st = con.createStatement();
 
-		    query.append(
-			    "SELECT idREVISOR, nombre, tiempo from recomendaciones_revisores where id_articulo = " + a.getId());
+			query.append(
+					"SELECT idREVISOR, nombre, tiempo from recomendaciones_revisores where id_articulo = " + a.getId());
 
-		    ResultSet rs = st.executeQuery(query.toString());
+			ResultSet rs = st.executeQuery(query.toString());
 
-		    while (rs.next()) {
-		    	revisores.add(new Revisor(rs.getInt(1), rs.getInt(3), rs.getString(2)));
-		    }
+			while (rs.next()) {
+				revisores.add(new Revisor(rs.getInt(1), rs.getInt(3), rs.getString(2)));
+			}
 
-		    st.close();
-		    con.close();
+			st.close();
+			con.close();
 
 		} catch (
 
 		SQLException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
 
 		return revisores;
 
-	    }
+	}
 
 }

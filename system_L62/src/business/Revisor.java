@@ -2,7 +2,6 @@ package business;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Revisor {
 
@@ -17,7 +16,7 @@ public class Revisor {
 	
 	
 	public Revisor(int tiempoDeRevision, String nombre) {
-		this.id = UUID.randomUUID().toString();
+		this.id = String.valueOf(Math.random()* 200);;
 		this.listOfTemas = new ArrayList<Tema>();
 		this.tiempoDeRevision = tiempoDeRevision;
 		this.nombre = nombre;

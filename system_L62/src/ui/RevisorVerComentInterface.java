@@ -33,7 +33,6 @@ public class RevisorVerComentInterface extends JFrame {
 	private JList<Comentario> listCommentsByRevisor;
 	private DefaultListModel<Comentario> commentsModel;
 	private Articulo articulo;
-	private JButton btnActualizar;
 
 	/**
 	 * Create the application.
@@ -58,7 +57,6 @@ public class RevisorVerComentInterface extends JFrame {
 		frame.getContentPane().setEnabled(false);
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(getListCommentsByRevisor());
-		frame.getContentPane().add(getBtnActualizar());
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
@@ -108,17 +106,5 @@ public class RevisorVerComentInterface extends JFrame {
 			if (a.getTexto() != "") {
 				commentsModel.addElement(a);
 			}
-	}
-	private JButton getBtnActualizar() {
-		if (btnActualizar == null) {
-			btnActualizar = new JButton("Actualizar");
-			btnActualizar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					updateList();
-				}
-			});
-			btnActualizar.setBounds(313, 227, 97, 23);
-		}
-		return btnActualizar;
 	}
 }
